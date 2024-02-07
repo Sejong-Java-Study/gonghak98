@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ExcelData {
+public class ExcelDomain {
     private Integer student_id; //학번
     private Integer course_id; //학수번호
     private Integer year; //수강년도

@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+
+    <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"
+    />
+</head>
+<body>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">수강년도</th>
+        <th scope="col">학기</th>
+        <th scope="col">학수번호</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="data : ${datas}">
+        <td th:text="${data.year}"></td>
+        <td th:text="${data.semester}"></td>
+        <td th:text="${data.course_id}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
