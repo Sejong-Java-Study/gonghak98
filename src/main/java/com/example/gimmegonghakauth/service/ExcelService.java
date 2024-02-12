@@ -49,7 +49,7 @@ public class ExcelService {
     }
 
     //업로드 파일 검증
-    private void validateExcelFile(MultipartFile file, String extension) throws FileException {
+    public void validateExcelFile(MultipartFile file, String extension) throws FileException {
         if (file.isEmpty()) { // 파일이 비어있으면
             throw new FileException("파일이 비어 있습니다.");
         }
@@ -59,7 +59,10 @@ public class ExcelService {
     }
 
     // 엑셀 내용 검증
-    private void validateExcelContent(Sheet workSheet, DataFormatter dataFormatter) throws FileException {
+    public void validateExcelContent(Sheet workSheet, DataFormatter dataFormatter) throws FileException {
+        if (workSheet == null) {
+            throw new FileException("엑셀파일이 비어있습니다.");
+        }
         Row row = workSheet.getRow(0);
         if (row == null) { //엑셀파일이 비어있으면
             throw new FileException("엑셀파일이 비어있습니다.");
