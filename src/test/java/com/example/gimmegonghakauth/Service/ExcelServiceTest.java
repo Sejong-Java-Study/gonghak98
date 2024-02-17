@@ -25,23 +25,29 @@ class ExcelServiceTest {
     @Mock
     private Workbook workbook;
 
-    @Test // 빈 파일 업로드
+    @Test
+        // 빈 파일 업로드
     void testValidateExcelFileEmptyFile() {
         // 빈 파일(MockMultipartFile) 생성
-        MockMultipartFile emptyFile = new MockMultipartFile("file", "test.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", new byte[0]);
+        MockMultipartFile emptyFile = new MockMultipartFile("file", "test.xlsx",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", new byte[0]);
         // FileException이 발생하는지 확인
         assertThrows(FileException.class, () -> excelService.validateExcelFile(emptyFile, "xlsx"));
     }
 
-    @Test // 확장자가 다른 파일 업로드
+    @Test
+        // 확장자가 다른 파일 업로드
     void testValidateExcelFileInvalidExtension() {
         // 확장자가 잘못된 파일(MockMultipartFile) 생성
-        MockMultipartFile invalidExtensionFile = new MockMultipartFile("file", "test.txt", "text/plain", "Some content".getBytes());
+        MockMultipartFile invalidExtensionFile = new MockMultipartFile("file", "test.txt",
+            "text/plain", "Some content".getBytes());
         // FileException이 발생하는지 확인
-        assertThrows(FileException.class, () -> excelService.validateExcelFile(invalidExtensionFile, "txt"));
+        assertThrows(FileException.class,
+            () -> excelService.validateExcelFile(invalidExtensionFile, "txt"));
     }
 
-    @Test //빈 엑셀파일 업로드
+    @Test
+        //빈 엑셀파일 업로드
     void testValidateExcelContentEmptyWorksheet() {
         // 빈 시트 생성
         Sheet emptySheet = workbook.createSheet("TestSheet");
@@ -50,10 +56,12 @@ class ExcelServiceTest {
         lenient().when(workbook.getSheetAt(0)).thenReturn(emptySheet);
 
         // FileException이 발생하는지 확인
-        assertThrows(FileException.class, () -> excelService.validateExcelContent(emptySheet, null));
+        assertThrows(FileException.class,
+            () -> excelService.validateExcelContent(emptySheet, null));
     }
 
-    @Test // 기이수성적 파일이 아닌 엑셀파일 업로드
+    @Test
+        // 기이수성적 파일이 아닌 엑셀파일 업로드
     void testValidateExcelContentInvalidHeader() {
         // 엑셀 워크북 목 객체 생성
         Workbook workbookMock = mock(Workbook.class);
@@ -79,7 +87,8 @@ class ExcelServiceTest {
         when(workbookMock.getSheetAt(0)).thenReturn(sheetWithInvalidHeader);
 
         // FileException이 발생하는지 확인
-        assertThrows(FileException.class, () -> excelService.validateExcelContent(workbookMock.getSheetAt(0), null));
+        assertThrows(FileException.class,
+            () -> excelService.validateExcelContent(workbookMock.getSheetAt(0), null));
     }
 
 }

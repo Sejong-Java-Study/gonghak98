@@ -18,6 +18,9 @@ import java.util.List;
 
 @Service
 public class ExcelService {
+
+    final int FIRST_ROW = 4;
+
     public List<ExcelDomain> extractExcelFile(MultipartFile file) throws IOException { //엑셀 데이터 추출
         List<ExcelDomain> dataList = new ArrayList<>();
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
@@ -30,7 +33,7 @@ public class ExcelService {
 
         validateExcelContent(worksheet, dataFormatter);//엑셀 내용 검증
 
-        for (int i = 4; i < worksheet.getPhysicalNumberOfRows(); i++) { //데이터 추출
+        for (int i = FIRST_ROW; i < worksheet.getPhysicalNumberOfRows(); i++) { //데이터 추출
             Row row = worksheet.getRow(i);
             ExcelDomain data = new ExcelDomain();
 
@@ -41,7 +44,7 @@ public class ExcelService {
             data.setSemester(Integer.parseInt(String.valueOf(semesterAsString.charAt(0))));
 
             String course_idAsString = dataFormatter.formatCellValue(row.getCell(3));
-            data.setCourse_id(Integer.parseInt(course_idAsString));
+            data.setCourseId(Integer.parseInt(course_idAsString));
 
             dataList.add(data);
         }
@@ -59,7 +62,8 @@ public class ExcelService {
     }
 
     // 엑셀 내용 검증
-    public void validateExcelContent(Sheet workSheet, DataFormatter dataFormatter) throws FileException {
+    public void validateExcelContent(Sheet workSheet, DataFormatter dataFormatter)
+        throws FileException {
         if (workSheet == null) {
             throw new FileException("엑셀파일이 비어있습니다.");
         }
