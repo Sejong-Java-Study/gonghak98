@@ -1,6 +1,11 @@
 package com.example.gimmegonghakauth.service;
 
-import com.example.gimmegonghakauth.domain.ExcelDomain;
+import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
+import com.example.gimmegonghakauth.dao.CoursesDao;
+import com.example.gimmegonghakauth.dao.UserDao;
+import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
+import com.example.gimmegonghakauth.domain.CoursesDomain;
+import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.exception.FileException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -9,6 +14,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,12 +23,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ExcelService {
+public class CompletedCoursesService {
+
+    private final CompletedCoursesDao completedCoursesDao;
+    private final CoursesDao coursesDao; // CoursesDao 변수 선언
+    private final UserDao userDao;
+
+    @Autowired
+    public CompletedCoursesService(CompletedCoursesDao completedCoursesDao, CoursesDao coursesDao,
+        UserDao userDao) {
+        this.completedCoursesDao = completedCoursesDao;
+        this.coursesDao = coursesDao; // 생성자를 통한 CoursesDao 초기화
+        this.userDao = userDao;
+    }
 
     final int FIRST_ROW = 4;
 
-    public List<ExcelDomain> extractExcelFile(MultipartFile file) throws IOException { //엑셀 데이터 추출
-        List<ExcelDomain> dataList = new ArrayList<>();
+    public List<CompletedCoursesDomain> extractExcelFile(MultipartFile file)
+        throws IOException { //엑셀 데이터 추출
+        List<CompletedCoursesDomain> dataList = new ArrayList<>();
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 
         validateExcelFile(file, extension); //업로드 파일 검증
@@ -35,16 +54,25 @@ public class ExcelService {
 
         for (int i = FIRST_ROW; i < worksheet.getPhysicalNumberOfRows(); i++) { //데이터 추출
             Row row = worksheet.getRow(i);
-            ExcelDomain data = new ExcelDomain();
+            CompletedCoursesDomain data = new CompletedCoursesDomain();
 
             String yearAsString = dataFormatter.formatCellValue(row.getCell(1));
-            data.setYear(Integer.parseInt(yearAsString));
+            Integer year = Integer.parseInt(yearAsString);  //년도
 
             String semesterAsString = dataFormatter.formatCellValue(row.getCell(2));
-            data.setSemester(Integer.parseInt(String.valueOf(semesterAsString.charAt(0))));
+            Integer semester = Integer.parseInt(String.valueOf(semesterAsString.charAt(0))); //학기
 
-            String course_idAsString = dataFormatter.formatCellValue(row.getCell(3));
-            data.setCourseId(Integer.parseInt(course_idAsString));
+            String courseIdAsString = dataFormatter.formatCellValue(row.getCell(3));
+            Long courseId = Long.parseLong(courseIdAsString); //학수번호
+
+            CoursesDomain coursesDomain = coursesDao.findByCourseId(courseId);// 학수번호를 기반으로 Courses 테이블 검색
+            UserDomain userDomain = userDao.findByStudentId(19011684L);
+            // 원래는 로그인한 유저의 학번 데이터를 넣어줘야하지만 로그인 구현 전이라 임의로 학번을 넣어주었음.
+
+            data = CompletedCoursesDomain.builder().userDomain(userDomain)
+                .coursesDomain(coursesDomain).year(year).semester(semester).build();
+
+            completedCoursesDao.save(data);
 
             dataList.add(data);
         }

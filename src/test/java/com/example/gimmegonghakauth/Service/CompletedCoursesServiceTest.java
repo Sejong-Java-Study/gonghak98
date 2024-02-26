@@ -1,7 +1,7 @@
 package com.example.gimmegonghakauth.Service;
 
 import com.example.gimmegonghakauth.exception.FileException;
-import com.example.gimmegonghakauth.service.ExcelService;
+import com.example.gimmegonghakauth.service.CompletedCoursesService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ExcelServiceTest {
+class CompletedCoursesServiceTest {
 
     @InjectMocks
-    private ExcelService excelService;
+    private CompletedCoursesService excelService;
 
     @Mock
     private Workbook workbook;

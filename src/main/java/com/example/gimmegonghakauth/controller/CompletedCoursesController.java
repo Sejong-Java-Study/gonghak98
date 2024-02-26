@@ -1,8 +1,8 @@
 package com.example.gimmegonghakauth.controller;
 
-import com.example.gimmegonghakauth.domain.ExcelDomain;
+import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.exception.FileException;
-import com.example.gimmegonghakauth.service.ExcelService;
+import com.example.gimmegonghakauth.service.CompletedCoursesService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-public class ExcelController {
+public class CompletedCoursesController {
 
-    private final ExcelService excelService;
+    private final CompletedCoursesService excelService;
 
-    public ExcelController(ExcelService excelService) {
+    public CompletedCoursesController(CompletedCoursesService excelService) {
         this.excelService = excelService;
     }
 
@@ -30,7 +30,7 @@ public class ExcelController {
     @PostMapping("/excel/read")
     public String readExcel(@RequestParam("file") MultipartFile file, Model model) {
         try {
-            List<ExcelDomain> dataList = excelService.extractExcelFile(file);
+            List<CompletedCoursesDomain> dataList = excelService.extractExcelFile(file);
             model.addAttribute("datas", dataList);
             return "excelList";
         } catch (IOException | FileException e) {

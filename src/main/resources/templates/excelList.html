@@ -21,7 +21,7 @@
   <tr th:each="data : ${datas}">
     <td th:text="${data.year}"></td>
     <td th:text="${data.semester}"></td>
-    <td th:text="${data.course_id}"></td>
+    <td th:text="${data.coursesDomain.getCourseId()}"></td>
   </tr>
   </tbody>
 </table>
