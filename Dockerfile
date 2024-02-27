@@ -1,16 +1,13 @@
-# 소스 빌드용 Base 이미지(Gradle,JDK 17 - 알파인 버전(경량화))
-FROM gradle:8.6.0-jdk17-alpine
-WORKDIR /build
+# 소스 빌드용 Base 이미지(Maven, Gradle에 호환되는 JDK 이미지)
+FROM eclipse-temurin:17-alpine
 
-# 빌드에 필요한 파일들을 컨테이너에 복사
-COPY build.gradle settings.gradle ./
-# Gradle 빌드 명령어 실행
-RUN gradle dependencies --no-daemon
+WORKDIR /app
 
-COPY . /build
-RUN gradle build --no-daemon
+# 의존성을 가져오기 위해 필요한 파일만 우선 복사
+COPY gradle gradle
+COPY build.gradle settings.gradle gradlew ./
 
-
-ENTRYPOINT ["java", "-jar"]
+# Gradle 빌드 명령어 실행 (CI/CD 환경에서 일관된 빌드를 위해 데몬 프로세스 실행 X)
+RUN ./gradlew dependencies --no-daemon
 
 
