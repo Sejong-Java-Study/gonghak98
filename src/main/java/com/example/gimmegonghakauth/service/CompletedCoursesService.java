@@ -7,6 +7,7 @@ import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.CoursesDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.exception.FileException;
+import java.util.Optional;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -46,6 +47,11 @@ public class CompletedCoursesService {
 
         validateExcelFile(file, extension); //업로드 파일 검증
 
+        UserDomain userDomain = userDao.findByStudentId(19011684L);
+        // 원래는 로그인한 유저의 학번 데이터를 넣어줘야하지만 로그인 구현 전이라 임의로 학번을 넣어주었음.
+        // 현재 학번이 같은 유저(중복가입) 있을시 오류가 남 해결필요
+        checkUserDomain(userDomain);
+
         Workbook workbook = creatWorkbook(file, extension);
         Sheet worksheet = workbook.getSheetAt(0);
         DataFormatter dataFormatter = new DataFormatter();
@@ -65,9 +71,8 @@ public class CompletedCoursesService {
             String courseIdAsString = dataFormatter.formatCellValue(row.getCell(3));
             Long courseId = Long.parseLong(courseIdAsString); //학수번호
 
-            CoursesDomain coursesDomain = coursesDao.findByCourseId(courseId);// 학수번호를 기반으로 Courses 테이블 검색
-            UserDomain userDomain = userDao.findByStudentId(19011684L);
-            // 원래는 로그인한 유저의 학번 데이터를 넣어줘야하지만 로그인 구현 전이라 임의로 학번을 넣어주었음.
+            CoursesDomain coursesDomain = coursesDao.findByCourseId(
+                courseId);// 학수번호를 기반으로 Courses 테이블 검색
 
             data = CompletedCoursesDomain.builder().userDomain(userDomain)
                 .coursesDomain(coursesDomain).year(year).semester(semester).build();
@@ -76,6 +81,7 @@ public class CompletedCoursesService {
 
             dataList.add(data);
         }
+
         return dataList; //데이터 반환
     }
 
@@ -115,5 +121,16 @@ public class CompletedCoursesService {
         }
         return workbook;
     }
+
+    private void checkUserDomain(UserDomain userDomain) {
+        // CompletedCourses 테이블에서 파일을 업로드한 유저정보를 가지는 행들을 불러옴
+        List<CompletedCoursesDomain> coursesList = completedCoursesDao.findByUserDomain(userDomain);
+        // List가 Empty 가 아니면 (해당 유저가 파일을 업로드한 적이 있으면)
+        if (!coursesList.isEmpty()) {
+            // CompletedCourses 테이블에서 해당하는 행들을 삭제
+            completedCoursesDao.deleteAllInBatch(coursesList);
+        }
+    }
+
 
 }
