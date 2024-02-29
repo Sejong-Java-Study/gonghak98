@@ -6,6 +6,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Nested
+@DisplayName("엑셀 업로드 테스트")
 class CompletedCoursesServiceTest {
 
     @InjectMocks
@@ -25,8 +29,8 @@ class CompletedCoursesServiceTest {
     @Mock
     private Workbook workbook;
 
+    @DisplayName("빈 파일 업로드")
     @Test
-        // 빈 파일 업로드
     void testValidateExcelFileEmptyFile() {
         // 빈 파일(MockMultipartFile) 생성
         MockMultipartFile emptyFile = new MockMultipartFile("file", "test.xlsx",
@@ -35,8 +39,8 @@ class CompletedCoursesServiceTest {
         assertThrows(FileException.class, () -> excelService.validateExcelFile(emptyFile, "xlsx"));
     }
 
+    @DisplayName("확장자가 다른 파일 업로드")
     @Test
-        // 확장자가 다른 파일 업로드
     void testValidateExcelFileInvalidExtension() {
         // 확장자가 잘못된 파일(MockMultipartFile) 생성
         MockMultipartFile invalidExtensionFile = new MockMultipartFile("file", "test.txt",
@@ -46,8 +50,8 @@ class CompletedCoursesServiceTest {
             () -> excelService.validateExcelFile(invalidExtensionFile, "txt"));
     }
 
+    @DisplayName("빈 엑셀파일 업로드")
     @Test
-        //빈 엑셀파일 업로드
     void testValidateExcelContentEmptyWorksheet() {
         // 빈 시트 생성
         Sheet emptySheet = workbook.createSheet("TestSheet");
@@ -60,8 +64,8 @@ class CompletedCoursesServiceTest {
             () -> excelService.validateExcelContent(emptySheet, null));
     }
 
+    @DisplayName("이수성적 파일이 아닌 엑셀파일 업로드")
     @Test
-        // 기이수성적 파일이 아닌 엑셀파일 업로드
     void testValidateExcelContentInvalidHeader() {
         // 엑셀 워크북 목 객체 생성
         Workbook workbookMock = mock(Workbook.class);

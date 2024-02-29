@@ -122,7 +122,7 @@ public class CompletedCoursesService {
         return workbook;
     }
 
-    private void checkUserDomain(UserDomain userDomain) {
+    public void checkUserDomain(UserDomain userDomain) {
         // CompletedCourses 테이블에서 파일을 업로드한 유저정보를 가지는 행들을 불러옴
         List<CompletedCoursesDomain> coursesList = completedCoursesDao.findByUserDomain(userDomain);
         // List가 Empty 가 아니면 (해당 유저가 파일을 업로드한 적이 있으면)
