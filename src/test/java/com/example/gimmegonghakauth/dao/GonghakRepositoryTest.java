@@ -207,7 +207,5 @@ class GonghakRepositoryTest {
 
         assertThat(courseCategories).containsAnyElementsOf(List.of("MSC","전필","전선","전문교양"));
         assertThat(courseCategories).contains("MSC","전필","전선");
-
-
     }
 }

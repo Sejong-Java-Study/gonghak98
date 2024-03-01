@@ -6,6 +6,7 @@ import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.CoursesDomain;
 import com.example.gimmegonghakauth.domain.GonghakCoursesDomain;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
+import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.GonghakCompletedCoursesDto;
 import com.example.gimmegonghakauth.dto.GonghakCoursesByMajorDto;
 import com.example.gimmegonghakauth.dto.GonghakStandardDto;
@@ -37,15 +38,9 @@ public class GonghakDao implements GonghakRepository{
     }
 
     @Override
-    public MajorsDomain save(MajorsDomain majorsDomain) {
-        majorsDao.save(majorsDomain);
-        return majorsDomain;
-    }
-
-    @Override
     public Optional<GonghakStandardDto> findStandard(Long studentId, MajorsDomain majorsDomain) {
         int year = (int) (studentId/1000000);
-        log.info("year = {}",year);
+//        log.info("year = {}",year);
         return changeToGonghakStandardDto(majorsDomain, year);
     }
 
