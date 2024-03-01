@@ -2,8 +2,10 @@ package com.example.gimmegonghakauth.dao;
 
 import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
+import com.example.gimmegonghakauth.constant.CourseCategoryConst;
 import com.example.gimmegonghakauth.domain.AbeekDomain;
 import com.example.gimmegonghakauth.domain.AbeekDomain.AbeekDomainBuilder;
 import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
@@ -15,10 +17,13 @@ import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.domain.UserDomain.UserDomainBuilder;
 import com.example.gimmegonghakauth.dto.GonghakCoursesByMajorDto;
 import com.example.gimmegonghakauth.dto.GonghakStandardDto;
+import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -34,10 +39,10 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//출처: https://0soo.tistory.com/194?category=576925 [Lifealong:티스토리]
+//출처: https://0soo.tistory.com/194?category=576925
 class GonghakRepositoryTest {
 
-    private static final Long TEST_STUDENT_ID = 19000001L;
+    private static final Long TEST_STUDENT_ID = 19011706L;
 
     @Autowired
     private GonghakRepository gonghakRepository;
@@ -57,131 +62,34 @@ class GonghakRepositoryTest {
 
     private final MajorsDomain testMajorsDomain = MajorsDomain.builder()
         .id(1L)
-        .major("건설환경공학과").build();
+        .major("컴퓨터공학과").build();
 
-    @BeforeAll
-    void setTable() {
-        log.info("----set table----");
-        majorsDao.save(testMajorsDomain);
+    //출력
+    @Test
+    @DisplayName("dao 메서드 상태 출력")
+    void displayDaoMethod(){
+        List<IncompletedCoursesDto> withoutCompleteCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+            CourseCategoryConst.MAJOR_SELECTIVE, 19011706L, testMajorsDomain
+        );
 
-        //AbeekDomain
-        AbeekDomainBuilder abeek1 = AbeekDomain.builder()
-            .abeekType(AbeekTypeConst.MAJOR)
-            .majorsDomain(testMajorsDomain)
-            .note("this is a test note")
-            .year(19)
-            .minCredit(54);
-        AbeekDomainBuilder abeek2 = AbeekDomain.builder()
-            .abeekType(AbeekTypeConst.MSC)
-            .majorsDomain(testMajorsDomain)
-            .note("this is a test note")
-            .year(19)
-            .minCredit(30);
-        AbeekDomainBuilder abeek3 = AbeekDomain.builder()
-            .abeekType(AbeekTypeConst.DESIGN)
-            .majorsDomain(testMajorsDomain)
-            .note("this is a test note")
-            .year(19)
-            .minCredit(12);
-        AbeekDomainBuilder abeek4 = AbeekDomain.builder()
-            .abeekType(AbeekTypeConst.PROFESSIONAL_NON_MAJOR)
-            .majorsDomain(testMajorsDomain)
-            .note("this is a test note")
-            .year(19)
-            .minCredit(14);
-        AbeekDomainBuilder abeek5 = AbeekDomain.builder()
-            .abeekType(AbeekTypeConst.MINIMUM_CERTI)
-            .majorsDomain(testMajorsDomain)
-            .note("this is a test note")
-            .year(19)
-            .minCredit(103);
+        withoutCompleteCourses.forEach(
+            incompletedCoursesDto -> {
+                log.info("withoutCompleteCourses = {}:", incompletedCoursesDto.getCourseName());
+            }
+        );
 
-        abeekDao.save(abeek1.build());
-        abeekDao.save(abeek2.build());
-        abeekDao.save(abeek3.build());
-        abeekDao.save(abeek4.build());
-        abeekDao.save(abeek5.build());
+        List<GonghakCoursesByMajorDto> withCompletedCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithCompletedCourses(
+            TEST_STUDENT_ID, testMajorsDomain
+        );
 
-        //User
-        UserDomain userDomain = UserDomain.builder()
-            .email("testEmail")
-            .name("홍지섭")
-            .password("qwer")
-            .studentId(TEST_STUDENT_ID)
-            .majorsDomain(testMajorsDomain).build();
-        userDao.save(userDomain);
-
-        //Courses
-        CoursesDomain testCourse1 = CoursesDomain.builder()
-            .courseId(1234L)
-            .credit(3)
-            .name("testCourse1").build();
-        CoursesDomain testCourse2 = CoursesDomain.builder()
-            .courseId(2345L)
-            .credit(4)
-            .name("testCourse2").build();
-        CoursesDomain testCourse3 = CoursesDomain.builder()
-            .courseId(9000L)
-            .credit(5)
-            .name("testCourse3").build();
-        coursesDao.save(testCourse1);
-        coursesDao.save(testCourse2);
-        coursesDao.save(testCourse3);
-
-        //CompletedCourses
-        CompletedCoursesDomain coursesDomain1 = CompletedCoursesDomain.builder()
-            .year(19)
-            .semester(1)
-            .coursesDomain(testCourse1)
-            .userDomain(userDomain).build();
-        CompletedCoursesDomain coursesDomain2 = CompletedCoursesDomain.builder()
-            .year(19)
-            .semester(1)
-            .coursesDomain(testCourse2)
-            .userDomain(userDomain).build();
-        CompletedCoursesDomain coursesDomain3 = CompletedCoursesDomain.builder()
-            .year(20)
-            .semester(1)
-            .coursesDomain(testCourse3)
-            .userDomain(userDomain).build();
-
-        completedCoursesDao.save(coursesDomain1);
-        completedCoursesDao.save(coursesDomain2);
-        completedCoursesDao.save(coursesDomain3);
-
-        //gonghakCourses
-        GonghakCoursesDomain gonghakCourses1 = GonghakCoursesDomain.builder()
-            .courseCategory("전필")
-            .majorsDomain(testMajorsDomain)
-            .designCredit(1.5)
-            .coursesDomain(testCourse1)
-            .passCategory("인필")
-            .year(19).build();
-
-        GonghakCoursesDomain gonghakCourses2 = GonghakCoursesDomain.builder()
-            .courseCategory("MSC")
-            .majorsDomain(testMajorsDomain)
-            .designCredit(0.5)
-            .coursesDomain(testCourse2)
-            .passCategory("인필")
-            .year(19).build();
-
-        GonghakCoursesDomain gonghakCourses3 = GonghakCoursesDomain.builder()
-            .courseCategory("전선")
-            .majorsDomain(testMajorsDomain)
-            .designCredit(1.0)
-            .coursesDomain(testCourse1)
-            .passCategory("인선")
-            .year(19).build();
-
-        gonghakCorusesDao.save(gonghakCourses1);
-        gonghakCorusesDao.save(gonghakCourses2);
-        gonghakCorusesDao.save(gonghakCourses3);
+        withCompletedCourses.forEach(
+            gonghakCoursesByMajorDto -> {
+                log.info("withCompletedCourses = {}",gonghakCoursesByMajorDto.getCourseName());
+            }
+        );
     }
-
     //GonghakStandardDto 상태 확인
     @Test
-    @Rollback
     @DisplayName("GonghakStandardDto 5가지 상태 모두 포함되어있는지 확인")
     void findStandardKeySetTest() {
         Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(TEST_STUDENT_ID, testMajorsDomain);
@@ -190,6 +98,7 @@ class GonghakRepositoryTest {
         assertThat(testStandard.keySet()).contains(AbeekTypeConst.values());
     }
 
+
     @Test
     @DisplayName("findUserCoursesByMajorByGonghakCoursesWithCompletedCourses 테스트 ")
     void findUserCoursesByMajorByGonghakCoursesWithCompletedCoursesTest() {
@@ -197,7 +106,7 @@ class GonghakRepositoryTest {
             TEST_STUDENT_ID, testMajorsDomain);
 
         List<String> passCategories = new ArrayList<>();
-        List<String> courseCategories = new ArrayList<>();
+        List<CourseCategoryConst> courseCategories = new ArrayList<>();
         userDataForCalculate.forEach(gonghakCoursesByMajorDto -> {
             passCategories.add(gonghakCoursesByMajorDto.getPassCategory());
             courseCategories.add(gonghakCoursesByMajorDto.getCourseCategory());
@@ -205,7 +114,28 @@ class GonghakRepositoryTest {
 
         assertThat(passCategories).containsAll(List.of("인필","인선"));
 
-        assertThat(courseCategories).containsAnyElementsOf(List.of("MSC","전필","전선","전문교양"));
-        assertThat(courseCategories).contains("MSC","전필","전선");
+        assertThat(courseCategories).containsAnyElementsOf(List.of(CourseCategoryConst.MAJOR_REQUIRED,CourseCategoryConst.MAJOR_SELECTIVE,CourseCategoryConst.MSC,CourseCategoryConst.PROFESSIONAL_NON_MAJOR));
+        assertThat(courseCategories).contains(CourseCategoryConst.MSC,CourseCategoryConst.MAJOR_SELECTIVE);
+    }
+
+    @Test
+    @DisplayName("findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses")
+    void findUserCoursesByMajorByGonghakCoursesWithoutCompleteCoursesTest(){
+
+        Arrays.stream(CourseCategoryConst.values()).forEach(
+            courseCategory -> {
+                List<IncompletedCoursesDto> testCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+                    CourseCategoryConst.MAJOR_REQUIRED,
+                    19011706L,
+                    testMajorsDomain
+                );
+
+                testCourses.forEach(
+                    incompletedCoursesDto -> {
+                        assertThat(incompletedCoursesDto.getCourseCategory()).isEqualTo(CourseCategoryConst.MAJOR_REQUIRED);
+                    }
+                );
+            }
+        );
     }
 }
