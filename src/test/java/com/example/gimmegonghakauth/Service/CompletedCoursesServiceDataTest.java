@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource("classpath:application-test.properties") //test용 DB
 @Nested
-@DisplayName("DB 테스트")
+@DisplayName("DB 테스트(기이수과목)")
 @Import(CompletedCoursesService.class)
 public class CompletedCoursesServiceDataTest {
 
@@ -50,9 +50,6 @@ public class CompletedCoursesServiceDataTest {
 
     @Autowired
     private CompletedCoursesService completedCoursesService;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @BeforeEach
     public void setCourses() {
