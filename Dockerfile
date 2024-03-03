@@ -4,16 +4,16 @@ FROM amazoncorretto:17-alpine3.19 as build
 WORKDIR /app
 
 # 의존성을 가져오기 위해 필요한 파일만 우선 복사
-COPY ../gradle gradle
-COPY ../build.gradle settings.gradle ./
-COPY ../gradlew ./
+COPY gradle gradle
+COPY build.gradle settings.gradle ./
+COPY gradlew ./
 
 RUN chmod +x ./gradlew
 
 # Gradle 빌드 명령어 실행 (CI/CD 환경에서 일관된 빌드를 위해 데몬 프로세스 실행 X)
 RUN ./gradlew dependencies --no-daemon
 
-COPY ../src src
+COPY src src
 
 # 스프링부트 프로젝트를 Jar 파일로 빌드 (테스트 제외), bootJar : 스프링부트 실행에 필요한 클래스와 리소스, 의존성 등이 포함되도록 빌드
 RUN ./gradlew --no-daemon bootJar -x test
