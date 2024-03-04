@@ -31,7 +31,6 @@ public class UserController {
     }
 
 
-    @Transactional
     @PostMapping("/signup")
     public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
