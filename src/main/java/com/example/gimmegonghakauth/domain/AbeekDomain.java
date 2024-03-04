@@ -1,48 +1,50 @@
 package com.example.gimmegonghakauth.domain;
 
+import com.example.gimmegonghakauth.constant.AbeekTypeConst;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Data
-public class UserDomain {
+@Builder
+@AllArgsConstructor
+public class AbeekDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull
-    private Long studentId;
-    @NotNull
-    private String password;
-    @NotNull
-    private String email;
 
     @ManyToOne
     @JoinColumn(name = "major_id")
     private MajorsDomain majorsDomain;
 
     @NotNull
-    private String name;
+    @Range(min = 14,max = 24)
+    private int year;
 
-    @Builder
-    public UserDomain(Long studentId, String password, String email, MajorsDomain majorsDomain,
-        String name) {
-        this.studentId = studentId;
-        this.password = password;
-        this.email = email;
-        this.majorsDomain = majorsDomain;
-        this.name = name;
-    }
+    @NotNull
+    @Enumerated(value = EnumType.ORDINAL)
+    private AbeekTypeConst abeekType;
 
-    public UserDomain() {
+    @NotNull
+    private int minCredit;
+
+    @Lob
+    private String note;
+
+    public AbeekDomain() {
 
     }
 }
