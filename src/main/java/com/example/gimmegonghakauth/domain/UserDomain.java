@@ -21,7 +21,9 @@ public class UserDomain {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private Long studentId;
+
     @NotNull
     private String password;
     @NotNull

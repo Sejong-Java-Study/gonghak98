@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface UserDao extends JpaRepository<UserDomain, Long> {
 
     UserDomain findByStudentId(Long studentId);
+
+    boolean existsByStudentId(Long studentId);
 }
