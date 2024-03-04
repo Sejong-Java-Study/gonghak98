@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  nginx:
+    build:
+      dockerfile: DockerfileNginx
+    image: gonghak-proxy:1.0.0
+    ports:
+      - 80:80
+    networks:
+      - gonghak
+  springboot:
+    build: ./
+    image: gonghak-app:1.0.0
+    networks:
+      - gonghak
+
+networks:
+  gonghak:
+    driver: bridge
