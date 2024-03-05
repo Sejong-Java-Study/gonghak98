@@ -1,7 +1,7 @@
 package com.example.gimmegonghakauth.controller;
 
 import com.example.gimmegonghakauth.dao.MajorsDao;
-import com.example.gimmegonghakauth.domain.UserCreateForm;
+import com.example.gimmegonghakauth.dto.UserJoinDto;
 import com.example.gimmegonghakauth.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
@@ -25,22 +25,22 @@ public class UserController {
     private final MajorsDao majorsDao;
 
     @GetMapping("/signup")
-    public String signup(UserCreateForm userCreateForm) {
+    public String signup(UserJoinDto userJoinDto) {
         return "signup";
     }
 
 
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
+    public String signup(@Valid UserJoinDto userJoinDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "signup";
         }
-        if (!userService.joinValidation(userCreateForm, bindingResult)) {
+        if (!userService.joinValidation(userJoinDto, bindingResult)) {
             return "signup"; //회원가입 검증
         }
-        userService.create(userCreateForm.getStudentId(), userCreateForm.getPassword1(),
-            userCreateForm.getEmail(),
-            majorsDao.findByMajor(userCreateForm.getMajor()), userCreateForm.getName());
+        userService.create(userJoinDto.getStudentId(), userJoinDto.getPassword1(),
+            userJoinDto.getEmail(),
+            majorsDao.findByMajor(userJoinDto.getMajor()), userJoinDto.getName());
         //회원 정보 저장
         return "redirect:/user/login"; //성공적인 회원가입시 로그인 페이지로 이동
     }

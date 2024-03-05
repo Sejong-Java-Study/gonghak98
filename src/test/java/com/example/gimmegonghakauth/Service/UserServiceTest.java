@@ -54,7 +54,7 @@ public class UserServiceTest {
         majorsDao.save(majorsDomain);
 
         UserDomain user = userService.create(
-            19011684L
+            "19011684"
             , "1234"
             , "test@gmail.com"
             , majorsDao.findByMajor("컴퓨터공학과")

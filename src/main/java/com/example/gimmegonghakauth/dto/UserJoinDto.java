@@ -1,17 +1,19 @@
-package com.example.gimmegonghakauth.domain;
+package com.example.gimmegonghakauth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class UserCreateForm {
+public class UserJoinDto {
 
     @NotNull(message = "학번은 필수항목입니다.")
-    private Long studentId;
+    @Pattern(regexp = "\\d{8}", message = "학번은 8자리 숫자여야 합니다.")
+    private String studentId;
 
     @NotEmpty(message = "비밀번호는 필수항목입니다.")
     private String password1;

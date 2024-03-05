@@ -49,7 +49,7 @@ public class UserControllerTest {
     @DisplayName("회원가입시 비밀번호 일치 테스트 (불일치)")
     void testSignupWithMisMatchedPasswords() throws Exception {
         mockMvc.perform(post("/user//signup")
-                .param("studentId", "123456")
+                .param("studentId", "11111111")
                 .param("password1", "password123")
                 .param("password2", "mismatchedPassword")
                 .param("email", "test@example.com")
@@ -58,7 +58,7 @@ public class UserControllerTest {
                 .with(csrf()))
             .andExpect(MockMvcResultMatchers.view().name("signup"))
             .andExpect(MockMvcResultMatchers.model()
-                .attributeHasFieldErrorCode("userCreateForm", "password2", "passwordInCorrect"));
+                .attributeHasFieldErrorCode("userJoinDto", "password2", "passwordInCorrect"));
         // 가정1: 불일치로 인해 다시 회원가입 폼으로 이동
         // 가정2: password2 에서 "passwordInCorrect" 오류
     }
@@ -76,7 +76,7 @@ public class UserControllerTest {
                 .with(csrf()))
             .andExpect(MockMvcResultMatchers.view().name("signup"))
             .andExpect(MockMvcResultMatchers.model()
-                .attributeHasFieldErrorCode("userCreateForm", "studentId", "duplicate"));
+                .attributeHasFieldErrorCode("userJoinDto", "studentId", "duplicate"));
         // 가정1: 불일치로 인해 다시 회원가입 폼으로 이동,
         // 가정2: studentId 에서 "duplicate" 오류
     }

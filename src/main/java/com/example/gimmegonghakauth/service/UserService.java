@@ -2,7 +2,7 @@ package com.example.gimmegonghakauth.service;
 
 import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
-import com.example.gimmegonghakauth.domain.UserCreateForm;
+import com.example.gimmegonghakauth.dto.UserJoinDto;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,9 +20,9 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserDomain create(Long studentId, String password, String email,
+    public UserDomain create(String _studentId, String password, String email,
         MajorsDomain majorsDomain, String name) {
-
+        Long studentId = Long.parseLong(_studentId);
         UserDomain user = UserDomain.builder()
             .studentId(studentId).password(passwordEncoder.encode(password))
             .email(email).majorsDomain(majorsDomain).name(name)
@@ -31,27 +31,27 @@ public class UserService {
         return user;
     }
 
-    public boolean joinValidation(UserCreateForm userCreateForm, BindingResult bindingResult) {
-        if (checkPassword(userCreateForm)) {
+    public boolean joinValidation(UserJoinDto userJoinDto, BindingResult bindingResult) {
+        if (checkPassword(userJoinDto)) {
             bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지 않습니다.");
             return false;
         }
-        if (checkStudentId(userCreateForm.getStudentId())) {
+        if (checkStudentId(userJoinDto.getStudentId())) {
             bindingResult.rejectValue("studentId", "duplicate", "이미 등록된 학번입니다.");
             return false;
         }
         return true;
     }
 
-    public boolean checkPassword(UserCreateForm userCreateForm) {
-        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
+    public boolean checkPassword(UserJoinDto userJoinDto) {
+        if (!userJoinDto.getPassword1().equals(userJoinDto.getPassword2())) {
             return true;
         }
         return false;
     }
 
-    public boolean checkStudentId(Long studentId) {
-        return userDao.existsByStudentId(studentId);
+    public boolean checkStudentId(String studentId) {
+        return userDao.existsByStudentId(Long.parseLong(studentId));
     }
 
     public boolean withdrawal(String _studentId, String password) {
