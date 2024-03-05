@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.gimmegonghakauth.dao.MajorsDao;
 import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.UserDomain;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -32,19 +33,20 @@ public class UserControllerTest {
     @Autowired
     private UserDao userDao;
 
+    @Transactional
     @Test
     @DisplayName("회원가입시 비밀번호 일치 테스트 (일치)")
     public void testSignupWithMatchingPasswords() throws Exception {
-        mockMvc.perform(post("/user//signup")
-            .param("studentId", "123456")
-            .param("password1", "password123")
-            .param("password2", "password123")
-            .param("email", "test@example.com")
-            .param("major", "컴퓨터공학과")
-            .param("name", "Test User")
-            .with(csrf()))
+        mockMvc.perform(post("/user/signup")
+                .param("studentId", "87654321")
+                .param("password1", "password123")
+                .param("password2", "password123")
+                .param("email", "test@example.com")
+                .param("major", "컴퓨터공학과")
+                .param("name", "Test User")
+                .with(csrf()))
             .andExpect(status().is3xxRedirection()) // 가정: 성공적인 가입은 다른 페이지로 리디렉션됨
-            .andExpect(MockMvcResultMatchers.redirectedUrl("/user/signup"));
+            .andExpect(MockMvcResultMatchers.redirectedUrl("/user/login"));
     }
 
 
@@ -60,7 +62,8 @@ public class UserControllerTest {
                 .param("name", "Test User")
                 .with(csrf()))
             .andExpect(MockMvcResultMatchers.view().name("signup_form"))
-            .andExpect(MockMvcResultMatchers.model().attributeHasFieldErrorCode("userCreateForm", "password2", "passwordInCorrect"));
+            .andExpect(MockMvcResultMatchers.model()
+                .attributeHasFieldErrorCode("userCreateForm", "password2", "passwordInCorrect"));
         // 가정1: 불일치로 인해 다시 회원가입 폼으로 이동
         // 가정2: password2 에서 "passwordInCorrect" 오류
     }
@@ -77,7 +80,8 @@ public class UserControllerTest {
                 .param("name", "Test User")
                 .with(csrf()))
             .andExpect(MockMvcResultMatchers.view().name("signup_form"))
-            .andExpect(MockMvcResultMatchers.model().attributeHasFieldErrorCode("userCreateForm", "studentId", "duplicate"));
+            .andExpect(MockMvcResultMatchers.model()
+                .attributeHasFieldErrorCode("userCreateForm", "studentId", "duplicate"));
         // 가정1: 불일치로 인해 다시 회원가입 폼으로 이동,
         // 가정2: studentId 에서 "duplicate" 오류
     }

@@ -10,10 +10,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Data
+@Getter
 public class UserDomain {
 
     @Id

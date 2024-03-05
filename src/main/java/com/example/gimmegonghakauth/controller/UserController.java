@@ -36,13 +36,18 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "signup_form";
         }
-        if (!userService.joinValidation(userCreateForm,bindingResult)) {
+        if (!userService.joinValidation(userCreateForm, bindingResult)) {
             return "signup_form"; //회원가입 검증
         }
         userService.create(userCreateForm.getStudentId(), userCreateForm.getPassword1(),
             userCreateForm.getEmail(),
             majorsDao.findByMajor(userCreateForm.getMajor()), userCreateForm.getName());
         //회원 정보 저장
-        return "redirect:/user/signup"; //현재는 일시적으로 회원가입 페이지로 이동하도록 설정해놓음
+        return "redirect:/user/login"; //성공적인 회원가입시 로그인 페이지로 이동
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login_form";
     }
 }

@@ -30,25 +30,26 @@ public class UserService {
         return user;
     }
 
-    public boolean joinValidation(UserCreateForm userCreateForm, BindingResult bindingResult){
-        if(checkPassword(userCreateForm)){
+    public boolean joinValidation(UserCreateForm userCreateForm, BindingResult bindingResult) {
+        if (checkPassword(userCreateForm)) {
             bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지 않습니다.");
             return false;
         }
-        if(checkStudentId(userCreateForm.getStudentId())){
+        if (checkStudentId(userCreateForm.getStudentId())) {
             bindingResult.rejectValue("studentId", "duplicate", "이미 등록된 학번입니다.");
             return false;
         }
         return true;
     }
 
-    public boolean checkPassword(UserCreateForm userCreateForm){
+    public boolean checkPassword(UserCreateForm userCreateForm) {
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
             return true;
         }
         return false;
     }
-    public boolean checkStudentId(Long studentId){
+
+    public boolean checkStudentId(Long studentId) {
         return userDao.existsByStudentId(studentId);
     }
 }

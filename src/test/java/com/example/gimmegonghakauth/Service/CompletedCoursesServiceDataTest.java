@@ -86,7 +86,7 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터1
         CompletedCoursesDomain data1 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19011684L)).
+                userDomain(userDao.findByStudentId(19011684L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(2023).semester(1).
                 build();
@@ -94,7 +94,7 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터2
         CompletedCoursesDomain data2 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19011684L)).
+                userDomain(userDao.findByStudentId(19011684L).get()).
                 coursesDomain(coursesDao.findByCourseId(54321L)).
                 year(2023).semester(1).
                 build();
@@ -108,14 +108,14 @@ public class CompletedCoursesServiceDataTest {
         dataList.add(data1);
         dataList.add(data2);
 
-        UserDomain user = userDao.findByStudentId(19011684L);
+        UserDomain user = userDao.findByStudentId(19011684L).get();
         assertEquals(dataList, completedCoursesDao.findByUserDomain(user));
     }
 
     @Test
     @DisplayName("재업로드 테스트1(첫 업로드)")
     public void testUserUploadStatus1() {
-        UserDomain user = userDao.findByStudentId(19011684L);
+        UserDomain user = userDao.findByStudentId(19011684L).get();
 
         //데이터 확인
         completedCoursesService.checkUserDomain(user);
@@ -133,7 +133,7 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터 1
         CompletedCoursesDomain data1 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19011684L)).
+                userDomain(userDao.findByStudentId(19011684L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(2023).semester(1).
                 build();
@@ -143,7 +143,7 @@ public class CompletedCoursesServiceDataTest {
         List<CompletedCoursesDomain> dataList = new ArrayList<>();
         dataList.add(data1);
 
-        UserDomain user = userDao.findByStudentId(19011684L);
+        UserDomain user = userDao.findByStudentId(19011684L).get();
 
         //데이터 삭제
         completedCoursesService.checkUserDomain(user);
@@ -161,14 +161,14 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터 1
         CompletedCoursesDomain data1 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19011684L)).
+                userDomain(userDao.findByStudentId(19011684L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(2023).semester(1).
                 build();
         //기이수 과목 데이터 2
         CompletedCoursesDomain data2 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19011684L)).
+                userDomain(userDao.findByStudentId(19011684L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(2023).semester(1).
                 build();
@@ -180,7 +180,7 @@ public class CompletedCoursesServiceDataTest {
         dataList.add(data1);
         dataList.add(data2);
 
-        UserDomain user = userDao.findByStudentId(19011684L);
+        UserDomain user = userDao.findByStudentId(19011684L).get();
 
         //데이터 삭제
         completedCoursesService.checkUserDomain(user);

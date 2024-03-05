@@ -1,6 +1,7 @@
 package com.example.gimmegonghakauth.Service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.example.gimmegonghakauth.dao.MajorsDao;
 import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
@@ -28,6 +29,7 @@ public class UserServiceTest {
 
     @TestConfiguration
     static class TestConfig {
+
         @Bean
         public BCryptPasswordEncoder passwordEncoder() {
             return new BCryptPasswordEncoder();
@@ -53,13 +55,13 @@ public class UserServiceTest {
 
         UserDomain user = userService.create(
             19011684L
-            ,"1234"
-            ,"test@gmail.com"
-            ,majorsDao.findByMajor("컴퓨터공학과")
-            ,"testUser");
+            , "1234"
+            , "test@gmail.com"
+            , majorsDao.findByMajor("컴퓨터공학과")
+            , "testUser");
 
         userDao.save(user);
-        assertEquals(user,userDao.findByStudentId(19011684L));
+        assertEquals(user, userDao.findByStudentId(19011684L).get());
     }
 
 
