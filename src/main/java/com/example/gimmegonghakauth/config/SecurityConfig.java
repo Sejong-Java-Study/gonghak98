@@ -24,7 +24,11 @@ public class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
             .formLogin((formLogin) -> formLogin
                 .loginPage("/user/login")
-                .defaultSuccessUrl("/"))
+                .defaultSuccessUrl("/")) //로그인시 메인페이지로 되돌아감
+            .logout((logout) -> logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                .logoutSuccessUrl("/") //로그아웃시 메인페이지로 되돌아감
+                .invalidateHttpSession(true)) //로그아웃 시 생성된 사용자 세선 삭제
             .csrf().csrfTokenRepository((CookieCsrfTokenRepository.withHttpOnlyFalse()))
 
         ;
