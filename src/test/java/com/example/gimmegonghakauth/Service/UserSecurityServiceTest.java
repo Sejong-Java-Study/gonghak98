@@ -23,7 +23,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
-
 @Nested
 @DisplayName("DB 테스트(로그인)")
 public class UserSecurityServiceTest {
@@ -56,10 +55,11 @@ public class UserSecurityServiceTest {
         UserDetails userDetails = userSecurityService.loadUserByUsername(studentId.toString());
 
         // Then
-        assertEquals("test", userDetails.getUsername());
+        assertEquals("19011684", userDetails.getUsername());
         assertEquals("1234", userDetails.getPassword());
         assertEquals(1, userDetails.getAuthorities().size());  // 하나의 권한(롤)을 예상
-        assertEquals(UserRole.ADMIN.getValue(), userDetails.getAuthorities().iterator().next().getAuthority());
+        assertEquals(UserRole.ADMIN.getValue(),
+            userDetails.getAuthorities().iterator().next().getAuthority());
     }
 
     @Test
@@ -79,10 +79,11 @@ public class UserSecurityServiceTest {
         UserDetails userDetails = userSecurityService.loadUserByUsername(studentId.toString());
 
         // Then
-        assertEquals("test", userDetails.getUsername());
+        assertEquals("19011685", userDetails.getUsername());
         assertEquals("1234", userDetails.getPassword());
         assertEquals(1, userDetails.getAuthorities().size());  // 하나의 권한(롤)을 예상
-        assertEquals(UserRole.USER.getValue(), userDetails.getAuthorities().iterator().next().getAuthority());
+        assertEquals(UserRole.USER.getValue(),
+            userDetails.getAuthorities().iterator().next().getAuthority());
     }
 
     @Test

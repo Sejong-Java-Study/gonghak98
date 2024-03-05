@@ -18,24 +18,25 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class UserSecurityService implements UserDetailsService {
+
     private final UserDao userDao;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Long studentId = Long.parseLong(username);
         Optional<UserDomain> _siteUser = this.userDao.findByStudentId(studentId);
-        if(_siteUser.isEmpty()){
+        if (_siteUser.isEmpty()) {
             throw new UsernameNotFoundException("사용자를 찾을수 없습니다");
         }
         UserDomain siteUser = _siteUser.get();
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if(19011684L==studentId){
+        if (19011684L == studentId) {
             authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
-        }
-        else{
+        } else {
             authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
         }
-        return new User(siteUser.getName(), siteUser.getPassword(), authorities);
+        return new User(Long.toString(siteUser.getStudentId()), siteUser.getPassword(),
+            authorities);
 
     }
 }

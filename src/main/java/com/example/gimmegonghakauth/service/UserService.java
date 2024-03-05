@@ -4,6 +4,7 @@ import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
 import com.example.gimmegonghakauth.domain.UserCreateForm;
 import com.example.gimmegonghakauth.domain.UserDomain;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -51,5 +52,19 @@ public class UserService {
 
     public boolean checkStudentId(Long studentId) {
         return userDao.existsByStudentId(studentId);
+    }
+
+    public boolean withdrawal(String _studentId, String password) {
+        Long studentId = Long.parseLong(_studentId);
+
+        UserDomain user = userDao.findByStudentId(studentId)
+            .orElseThrow(() -> new UsernameNotFoundException("학번이 존재하지 않습니다."));
+
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            userDao.delete(user);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
