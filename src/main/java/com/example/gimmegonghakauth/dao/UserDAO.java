@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDao extends JpaRepository<UserDomain, Long> {
-
+    UserDomain findByStudentId(Long stuendId);
 }

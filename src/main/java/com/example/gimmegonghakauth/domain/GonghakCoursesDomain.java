@@ -1,6 +1,9 @@
 package com.example.gimmegonghakauth.domain;
 
+import com.example.gimmegonghakauth.constant.CourseCategoryConst;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
@@ -34,8 +37,10 @@ public class GonghakCoursesDomain {
     @NotNull
     @Range(min = 15, max = 24)
     private int year;
+
     @NotNull
-    private String courseCategory;
+    @Enumerated(value = EnumType.ORDINAL)
+    private CourseCategoryConst courseCategory;
     @NotNull
     private String passCategory;
     @NotNull

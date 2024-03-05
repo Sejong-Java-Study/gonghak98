@@ -29,6 +29,7 @@ public class CompletedCoursesDomain {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserDomain userDomain;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private CoursesDomain coursesDomain;

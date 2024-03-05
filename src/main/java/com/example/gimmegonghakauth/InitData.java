@@ -152,7 +152,7 @@ public class InitData {
         GonghakCoursesDomain gonghakCourses1 = GonghakCoursesDomain.builder()
             .courseCategory(CourseCategoryConst.MSC)
             .majorsDomain(testMajorsDomain)
-            .designCredit(1.5)
+            .designCredit(0.0)
             .coursesDomain(testCourse1)
             .passCategory("인필")
             .year(19).build();
@@ -160,7 +160,7 @@ public class InitData {
         GonghakCoursesDomain gonghakCourses2 = GonghakCoursesDomain.builder()
             .courseCategory(CourseCategoryConst.MSC)
             .majorsDomain(testMajorsDomain)
-            .designCredit(0.5)
+            .designCredit(0.0)
             .coursesDomain(testCourse2)
             .passCategory("인필")
             .year(19).build();
