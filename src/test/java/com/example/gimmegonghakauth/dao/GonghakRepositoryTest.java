@@ -1,6 +1,5 @@
 package com.example.gimmegonghakauth.dao;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
@@ -8,16 +7,16 @@ import com.example.gimmegonghakauth.domain.AbeekDomain;
 import com.example.gimmegonghakauth.domain.AbeekDomain.AbeekDomainBuilder;
 import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.CoursesDomain;
-import com.example.gimmegonghakauth.domain.CoursesDomain.CoursesDomainBuilder;
 import com.example.gimmegonghakauth.domain.GonghakCoursesDomain;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
-import com.example.gimmegonghakauth.domain.UserDomain.UserDomainBuilder;
 import com.example.gimmegonghakauth.dto.GonghakCoursesByMajorDto;
 import com.example.gimmegonghakauth.dto.GonghakStandardDto;
+import com.example.testcontainer.MySqlTestContainer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -27,6 +26,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -35,7 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 //출처: https://0soo.tistory.com/194?category=576925 [Lifealong:티스토리]
-class GonghakRepositoryTest {
+@ActiveProfiles("container")
+class GonghakRepositoryTest extends MySqlTestContainer {
 
     private static final Long TEST_STUDENT_ID = 19000001L;
 
@@ -203,11 +204,9 @@ class GonghakRepositoryTest {
             courseCategories.add(gonghakCoursesByMajorDto.getCourseCategory());
         });
 
-        assertThat(passCategories).containsAll(List.of("인필","인선"));
+        assertThat(passCategories).containsAll(List.of("인필", "인선"));
 
-        assertThat(courseCategories).containsAnyElementsOf(List.of("MSC","전필","전선","전문교양"));
-        assertThat(courseCategories).contains("MSC","전필","전선");
-
-
+        assertThat(courseCategories).containsAnyElementsOf(List.of("MSC", "전필", "전선", "전문교양"));
+        assertThat(courseCategories).contains("MSC", "전필", "전선");
     }
 }

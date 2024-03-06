@@ -6,14 +6,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
 import com.example.gimmegonghakauth.dao.GonghakRepository;
 import com.example.gimmegonghakauth.dao.MajorsDao;
+import com.example.testcontainer.MySqlTestContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-public class DomainTest {
+@ActiveProfiles("container")
+public class DomainTest extends MySqlTestContainer {
 
     @Autowired
     private GonghakRepository gonghakRepository;

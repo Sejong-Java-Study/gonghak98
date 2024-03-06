@@ -1,3 +1,9 @@
+create table MajorsDomain (
+                              id bigint not null,
+                              major varchar(255) not null,
+                              primary key (id)
+);
+
 create table AbeekDomain (
                              abeekType tinyint not null check (abeekType between 0 and 4),
                              minCredit integer not null,
@@ -33,12 +39,6 @@ create table GonghakCoursesDomain (
                                       courseCategory varchar(255) not null,
                                       passCategory varchar(255) not null,
                                       primary key (id)
-);
-
-create table MajorsDomain (
-                              id bigint not null,
-                              major varchar(255) not null,
-                              primary key (id)
 );
 
 create table UserDomain (
