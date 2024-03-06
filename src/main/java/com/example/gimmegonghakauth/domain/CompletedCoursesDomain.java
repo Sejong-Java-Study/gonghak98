@@ -1,50 +1,45 @@
 package com.example.gimmegonghakauth.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import org.hibernate.validator.constraints.Range;
 
 @Data
 @Entity
-@Getter
+@Builder
+@AllArgsConstructor
 public class CompletedCoursesDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UserDomain userDomain; //학번
+    private UserDomain userDomain;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
-    private CoursesDomain coursesDomain;//학수번호
+    private CoursesDomain coursesDomain;
 
     @NotNull
     @Range(min = 2015,max = 2024)
-    private Integer year; //수강년도
+    private int year;
 
     @NotNull
     @Range(min = 1, max = 2)
-    private Integer semester; //수강학기
+    private int semester;
 
-    @Builder
-    public CompletedCoursesDomain(UserDomain userDomain,CoursesDomain coursesDomain, Integer year, Integer semester){
-        this.userDomain= userDomain;
-        this.coursesDomain = coursesDomain;
-        this.year=year;
-        this.semester=semester;
-     }
 
     public CompletedCoursesDomain() {
 

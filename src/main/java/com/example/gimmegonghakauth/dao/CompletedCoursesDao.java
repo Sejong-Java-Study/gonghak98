@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CompletedCoursesDao extends JpaRepository<CompletedCoursesDomain, Long> {
-    public List<CompletedCoursesDomain> findByUserDomain(UserDomain userDomain);
+    List<CompletedCoursesDomain> findByUserDomain(UserDomain userDomain);
 }

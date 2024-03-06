@@ -22,10 +22,6 @@ public class MajorsDomain {
     @NotNull
     private String major;
 
-    @Builder
-    public MajorsDomain(String major){
-        this.major = major;
-    }
     public MajorsDomain() {
 
     }
