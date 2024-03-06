@@ -1,28 +1,22 @@
 package com.example.gimmegonghakauth.controller;
 
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
-import com.example.gimmegonghakauth.dao.GonghakRepository;
 import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;
 import com.example.gimmegonghakauth.dto.LoginDto;
 import com.example.gimmegonghakauth.service.GonghakCalculateService;
 import com.example.gimmegonghakauth.service.GonghakRecommendService;
-import jakarta.servlet.http.Cookie;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RequestMapping("/gonghak")
@@ -43,7 +37,7 @@ public class StatusController {
     public String sendStudentId(@ModelAttribute("loginDto") LoginDto loginDto, Model model){
         Long studentId = loginDto.getStudentId();
 
-        UserDomain student = userDao.findByStudentId(studentId);
+        UserDomain student = userDao.findByStudentId(studentId).get();
 
         if(student==null){
             return "/gonghak/statusInputForm";

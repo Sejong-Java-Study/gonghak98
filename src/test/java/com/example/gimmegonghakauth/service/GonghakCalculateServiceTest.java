@@ -92,7 +92,7 @@ class GonghakCalculateServiceTest {
         coursesDao.save(testCoursePlus1);
 
         CompletedCoursesDomain coursesDomain4 = CompletedCoursesDomain.builder()
-            .year(19)
+            .year(2019)
             .semester(1)
             .coursesDomain(testCoursePlus1)
             .userDomain(testUser.get()).build();

@@ -36,8 +36,6 @@ public class InitData {
     private final GonghakCorusesDao gonghakCorusesDao;
     private final UserDao userDao;
 
-
-
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void initDatabase(){
@@ -123,22 +121,22 @@ public class InitData {
 
         //CompletedCourses
         CompletedCoursesDomain coursesDomain1 = CompletedCoursesDomain.builder()
-            .year(19)
+            .year(2019)
             .semester(1)
             .coursesDomain(testCourse1)
             .userDomain(userDomain).build();
         CompletedCoursesDomain coursesDomain2 = CompletedCoursesDomain.builder()
-            .year(19)
+            .year(2019)
             .semester(1)
             .coursesDomain(testCourse2)
             .userDomain(userDomain).build();
         CompletedCoursesDomain coursesDomain3 = CompletedCoursesDomain.builder()
-            .year(20)
+            .year(2019)
             .semester(1)
             .coursesDomain(testCourse3)
             .userDomain(userDomain).build();
         CompletedCoursesDomain coursesDomain4 = CompletedCoursesDomain.builder()
-            .year(19)
+            .year(2019)
             .semester(1)
             .coursesDomain(testCourse4)
             .userDomain(userDomain).build();
