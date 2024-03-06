@@ -1,5 +1,7 @@
 package com.example.gimmegonghakauth.domain;
 
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +22,9 @@ public class UserDomain {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private Long studentId;
+
     @NotNull
     private String password;
     @NotNull

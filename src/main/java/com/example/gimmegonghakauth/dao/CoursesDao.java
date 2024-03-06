@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CoursesDao extends JpaRepository<CoursesDomain,Long> {
+public interface CoursesDao extends JpaRepository<CoursesDomain, Long> {
 
+    CoursesDomain findByCourseId(Long id);
 }

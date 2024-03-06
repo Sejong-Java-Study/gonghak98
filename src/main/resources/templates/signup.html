@@ -1,0 +1,53 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+  <form th:action="@{/user/signup}" th:object="${userJoinDto}" method="post"
+        class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label for="studentId" class="form-label">학번</label>
+      <input type="text" id="studentId" th:field="*{studentId}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('studentId')}" th:errors="*{studentId}"
+            class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+      <label for="password1" class="form-label">비밀번호</label>
+      <input type="password" id="password1" th:field="*{password1}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('password1')}" th:errors="*{password1}"
+            class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+      <label for="password2" class="form-label">비밀번호 확인</label>
+      <input type="password" id="password2" th:field="*{password2}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('password2')}" th:errors="*{password2}"
+            class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">이메일</label>
+      <input type="text" id="email" th:field="*{email}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+      <label for="major" class="form-label">학과</label>
+      <select id="major" th:field="*{major}" class="form-select" required>
+        <option value="">-- 선택하세요 --</option>
+        <option value="컴퓨터공학과">컴퓨터공학과</option>
+        <option value="전자정보통신공학과">전자정보통신공학과</option>
+      </select>
+      <span th:if="${#fields.hasErrors('major')}" th:errors="*{major}" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+      <label for="name" class="form-label">이름</label>
+      <input type="text" id="name" th:field="*{name}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary">가입하기</button>
+    </div>
+  </form>
+</div>
+</html>
