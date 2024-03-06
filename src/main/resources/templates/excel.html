@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>엑셀 업로드</title>
+</head>
+
+<body>
+<form th:action="@{/excel/read}" method="POST" enctype="multipart/form-data"
+      onsubmit="return checkFileSize()">
+  <!-- 파일 크기 초과 시 에러 메시지 표시 -->
+  <div id="fileSizeError" style="color: red;"></div>
+
+  <!-- 에러 메시지가 있으면 표시 -->
+  <div th:if="${error}" th:text="${error}" style="color: red;"></div>
+
+  <input id="fileInput" type="file" th:name="file"/>
+  <input type="submit" value="제출"/>
+</form>
+
+<!-- jQuery 라이브러리 포함 -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- 파일 크기 확인을 위한 JavaScript -->
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  function checkFileSize() {
+    var input = document.getElementById('fileInput');
+    var fileSize = input.files[0].size; // 파일 크기 (바이트 단위)
+    var maxSize = 10 * 1024 * 1024; // 최대 허용 파일 크기 (10MB)
+
+    if (fileSize > maxSize) {
+      // 파일 크기 초과 시 에러 메시지 표시
+      document.getElementById('fileSizeError').innerText = '파일 크기는 10MB 이하로 업로드 해주세요';
+      return false; // 폼 제출 취소
+    } else {
+      // 파일 크기가 허용 범위일 때 에러 메시지 초기화
+      document.getElementById('fileSizeError').innerText = '';
+    }
+
+    return true; // 폼 제출 허용
+  }
+
+  /*]]>*/
+</script>
+</body>
+</html>
