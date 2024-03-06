@@ -47,7 +47,7 @@ public class CompletedCoursesService {
 
         validateExcelFile(file, extension); //업로드 파일 검증
 
-        UserDomain userDomain = userDao.findByStudentId(19011684L);
+        UserDomain userDomain = userDao.findByStudentId(19011684L).get();
         // 원래는 로그인한 유저의 학번 데이터를 넣어줘야하지만 로그인 구현 전이라 임의로 학번을 넣어주었음.
         // 현재 학번이 같은 유저(중복가입) 있을시 오류가 남 해결필요
         checkUserDomain(userDomain);
