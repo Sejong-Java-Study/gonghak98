@@ -1,9 +1,12 @@
 package com.example.gimmegonghakauth.service;
 
+import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
 import com.example.gimmegonghakauth.dao.UserDao;
+import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
 import com.example.gimmegonghakauth.dto.UserJoinDto;
 import com.example.gimmegonghakauth.domain.UserDomain;
+import java.util.List;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,10 +16,13 @@ import org.springframework.validation.BindingResult;
 public class UserService {
 
     private final UserDao userDao;
+
+    private final CompletedCoursesDao completedCoursesDao;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserService(UserDao userDao, CompletedCoursesDao completedCoursesDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
+        this.completedCoursesDao = completedCoursesDao;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -61,6 +67,11 @@ public class UserService {
             .orElseThrow(() -> new UsernameNotFoundException("학번이 존재하지 않습니다."));
 
         if (passwordEncoder.matches(password, user.getPassword())) {
+            List<CompletedCoursesDomain> coursesList = completedCoursesDao.findByUserDomain(user);
+            if (!coursesList.isEmpty()) {
+                // CompletedCourses 테이블에서 해당하는 행들을 삭제
+                completedCoursesDao.deleteAllInBatch(coursesList);
+            } //해당 유저를 참조하는 CompletedCourses 테이블 먼저 삭제
             userDao.delete(user);
             return true;
         } else {
