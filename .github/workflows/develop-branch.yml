@@ -1,4 +1,4 @@
-name: Backend Build and Push (For develop)
+name: Backend Build and Push (For main)
 
 on: # 워크플로우가 언제 실행되는지 정의 (like 조건문)
   push:
@@ -6,6 +6,9 @@ on: # 워크플로우가 언제 실행되는지 정의 (like 조건문)
       - SJ-67--build-CI-pipeline # 지정한 브랜치로 Push 했을 때
     paths:
       - 'src/**'
+  pull_request:
+    branches:
+      - SJ-67--build-CI-pipeline # 테스트용 임시 브랜치
 
 jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정의 (like 조건문의 본문)
   image-build-and-push:
