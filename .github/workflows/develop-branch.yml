@@ -3,10 +3,10 @@ name: Backend Build and Push (For main)
 on: # 워크플로우가 언제 실행되는지 정의 (like 조건문)
   push:
     branches:
-      - SJ-67--build-CI-pipeline # 지정한 브랜치로 Push 했을 때
+      - main # 지정한 브랜치로 Push 했을 때
   pull_request:
     branches:
-      - SJ-67--build-CI-pipeline # 테스트용 임시 브랜치
+      - main # 지정한 브랜치로 PR 후 Merge 됐을 때
 
 env:
   REGISTRY: docker.io
@@ -14,6 +14,7 @@ env:
   AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }} # S3 버킷 이름
   AWS_CODE_DEPLOY_NAME: gonghak-codedeploy # CodeDeploy 애플리케이션 이름
   AWS_CODE_DEPLOY_GROUP: production # CodeDeploy 배포 그룹 이름
+  AWS_REGION_NAME: ap-northeast-2 # AWS 리전 이름
 
 jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정의 (like 조건문의 본문)
   image-build-and-push:
@@ -41,3 +42,37 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
           push: true # 이미지를 레지스트리에 푸쉬
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} # 커밋 아이디로 태그 지정
           platforms: linux/amd64,linux/arm64 # 빌드된 이미지가 여러 환경에서 호환될 수 있도록 아키텍처 명시
+
+      # 이미지 이름을 txt 파일에 저장
+      - name: Create Text File for S3
+        run: echo "${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}" > image.txt
+
+      # CodeDeploy 배포를 위해 필요한 파일들 압축하기(appspec, image, scripts 파일을 CodeDeploy 애플리케이션 이름의 폴더로 복사
+      - name: Create Zip File for CodeDeploy and Copy Deploy Files
+        run: mkdir ${{ env.AWS_CODE_DEPLOY_NAME }} && cp -r appspec.yml image.txt scripts ${{ env.AWS_CODE_DEPLOY_NAME }}
+
+      # AWS 인증정보 설정
+      - name: AWS Configure
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION_NAME }}
+      # S3로 배포 압축파일 업로드
+      - name: Upload Deploy Zip FIle to S3
+        run: |
+          aws deploy push \
+            --application-name ${{ env.AWS_CODE_DEPLOY_NAME }} \
+            --s3-location s3://${{ env.AWS_S3_BUCKET_NAME }}/codedeploy/${{ github.sha }}.zip \
+            --description "Upload AWS Deploy Zip File to S3" \
+            --ignore-hidden-files \
+            --source ${{ env.AWS_CODE_DEPLOY_NAME }}
+
+      # CodeDeploy에게 S3에 업로드 된 배포파일로 EC2에 배포하도록 요청
+      - name: Deploy to EC2
+        run: |
+          aws deploy create-deployment \
+            --application-name ${{ env.AWS_CODE_DEPLOY_NAME }} \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} \
+            --s3-location bucket=${{ env.AWS_S3_BUCKET_NAME }},key=codedeploy/${{ github.sha }}.zip,bundleType=zip
