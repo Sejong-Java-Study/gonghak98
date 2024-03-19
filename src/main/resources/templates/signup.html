@@ -47,7 +47,41 @@
 
     <div class="mb-3">
       <button type="submit" class="btn btn-primary">가입하기</button>
+      <label for="email" class="form-label">이메일</label>
+      <input type="text" id="email" th:field="*{email}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
     </div>
+
+    <div class="mb-3">
+      <button type="button" onclick="sendVerificationEmail();" class="btn btn-success">인증번호 발송
+      </button>
+    </div>
+
+    </div>
+    <script type="text/javascript">
+      function sendVerificationEmail() {
+        var email = document.getElementById("email").value;
+        var xhr = new XMLHttpRequest();
+        if (!email) {
+          alert("세종대학교 이메일을 입력하세요.");
+          return;
+        }
+        xhr.open("POST", "/user/send-verification-email", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.responseText.includes("인증메일 발송에 성공했습니다.")) {
+              document.getElementById("verificationCodeSection1").style.display = "block";
+              document.getElementById("verificationCodeSection2").style.display = "block";
+            }
+            alert(xhr.responseText);
+          }
+        };
+        var data = JSON.stringify({"email": email});
+        xhr.send(data);
+      }
+
+    </script>
   </form>
 </div>
 </html>

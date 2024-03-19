@@ -26,6 +26,8 @@ public class UserJoinDto {
     @Email
     private String email;
 
+    private Integer verifyCode;
+
     @NotBlank(message = "학과는 필수항목입니다.")
     private String major;
 
