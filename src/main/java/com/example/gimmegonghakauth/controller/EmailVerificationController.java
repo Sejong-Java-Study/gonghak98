@@ -42,5 +42,13 @@ public class EmailVerificationController {
 
         return emailVerificationService.verifyStatus(email);
     }
+
+    @PostMapping("/certification/clear")
+    public String clearCertification(@RequestBody Map<String, String> requestData) {
+        String email = requestData.get("email");
+
+        return emailVerificationService.clearCertification(email);
+    }
+
 }
 
