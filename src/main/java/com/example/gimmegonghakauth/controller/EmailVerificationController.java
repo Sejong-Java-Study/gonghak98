@@ -27,5 +27,13 @@ public class EmailVerificationController {
         return emailVerificationService.sendVerificationEmail(email, UNIV_NAME, univCheck);
     }
 
+    @PostMapping("/verify-code")
+    public String verifyEmailCode(@RequestBody UserJoinDto userJoinDto) {
+
+        String email = userJoinDto.getEmail();
+        int code = userJoinDto.getVerifyCode(); // 입력된 인증번호
+
+        return emailVerificationService.verifyEmailCode(email, UNIV_NAME, code);
+    }
 }
 

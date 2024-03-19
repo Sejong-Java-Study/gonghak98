@@ -57,6 +57,16 @@
       </button>
     </div>
 
+    <div class="mb-3" id="verificationCodeSection1" style="display:none;">
+      <label for="verifyCode" class="form-label">인증번호 입력</label>
+      <input type="number" id="verifyCode" th:field="*{verifyCode}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('verifyCode')}" th:errors="*{verifyCode}"
+            class="text-danger"></span>
+    </div>
+
+    <div class="mb-3" id="verificationCodeSection2" style="display:none;">
+      <button type="button" onclick="verifyEmailCode();" class="btn btn-primary">인증번호 확인</button>
+    </div>
     </div>
     <script type="text/javascript">
       function sendVerificationEmail() {
@@ -81,6 +91,30 @@
         xhr.send(data);
       }
 
+      function verifyEmailCode() {
+        var code = document.getElementById("verifyCode").value;
+        var email = document.getElementById("email").value;
+        if (!code) {
+          alert("인증번호를 입력하세요.");
+          return;
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/user/verify-code", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.responseText.includes("인증번호 확인에 성공했습니다.")) {
+              document.getElementById("verificationCodeSection1").getElementsByTagName(
+                  "input")[0].disabled = true;
+              document.getElementById("verificationCodeSection2").getElementsByTagName(
+                  "button")[0].disabled = true;
+            }
+            alert(xhr.responseText);
+          }
+        };
+        var data = JSON.stringify({"email": email, "verifyCode": code});
+        xhr.send(data);
+      }
     </script>
   </form>
 </div>
