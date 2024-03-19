@@ -35,5 +35,12 @@ public class EmailVerificationController {
 
         return emailVerificationService.verifyEmailCode(email, UNIV_NAME, code);
     }
+
+    @PostMapping("/verify-status")
+    public String verifyStatus(@RequestBody UserJoinDto userJoinDto) {
+        String email = userJoinDto.getEmail();
+
+        return emailVerificationService.verifyStatus(email);
+    }
 }
 

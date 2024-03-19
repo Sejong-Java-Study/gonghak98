@@ -78,6 +78,31 @@ public class EmailVerificationService {
             return UnivcertErrorMessageConst.UNEXPECTED_ERROR.getErrorMessage();
         }
     }
+
+    public String verifyStatus(String email) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        String apiUrl = UnivcertUrlConst.VERIFY_STATUS.getUrl();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String requestJson = "{\"key\":\"" + apiKey + "\",\"email\":\"" + email + "\"}";
+
+        HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
+
+        try {
+            String response = restTemplate.postForObject(apiUrl, entity, String.class);
+            return responseMessage(response, UnivCertTypeConst.VERIFY_STATUS.getType());
+        } catch (HttpClientErrorException.BadRequest e) { // HttpClientErrorException 처리
+            return univcertException.handleBadRequestException(e,
+                UnivCertTypeConst.VERIFY_STATUS.getType());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return UnivcertErrorMessageConst.UNEXPECTED_ERROR.getErrorMessage();
+        }
+    }
+
     private String responseMessage(String response, String type) {
         String message = "에러 발생!";
         switch (type) {
