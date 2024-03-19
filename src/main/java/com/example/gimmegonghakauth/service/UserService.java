@@ -48,6 +48,10 @@ public class UserService {
             bindingResult.rejectValue("studentId", "duplicate", "이미 등록된 학번입니다.");
             return false;
         }
+        if (checkEmail(userJoinDto.getEmail())) {
+            bindingResult.rejectValue("email", "duplicate", "이미 등록된 이메일입니다.");
+            return false;
+        }
         return true;
     }
 
@@ -60,6 +64,10 @@ public class UserService {
 
     public boolean checkStudentId(String studentId) {
         return userDao.existsByStudentId(Long.parseLong(studentId));
+    }
+
+    public boolean checkEmail(String email){
+        return userDao.existsByEmail(email);
     }
 
     public boolean withdrawal(String _studentId, String password) {
