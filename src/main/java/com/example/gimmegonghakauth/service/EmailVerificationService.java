@@ -2,15 +2,10 @@ package com.example.gimmegonghakauth.service;
 
 import com.example.gimmegonghakauth.constant.UnivCertTypeConst;
 import com.example.gimmegonghakauth.constant.UnivcertErrorMessageConst;
-import com.example.gimmegonghakauth.constant.UnivcertUrlConst;
-import com.example.gimmegonghakauth.exception.UnivcertException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.univcert.api.UnivCert;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class EmailVerificationService {
@@ -18,136 +13,119 @@ public class EmailVerificationService {
     @Value("${univcert.apikey}")
     private String apiKey;
 
-    private final UnivcertException univcertException = new UnivcertException();
-
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public String sendVerificationEmail(String email, String univName, boolean univCheck) {
-        // API 호출을 위한 RestTemplate 객체 생성
-        RestTemplate restTemplate = new RestTemplate();
-        // API 호출을 위한 요청 데이터 설정
-        String apiUrl = UnivcertUrlConst.SEND_MAIL.getUrl();
 
-        // 요청 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // 요청 본문 생성
-        String requestJson =
-            "{\"key\":\"" + apiKey + "\",\"email\":\"" + email + "\",\"univName\":\"" + univName
-                + "\",\"univ_check\":" + univCheck + "}";
-
-        // HttpEntity를 사용하여 요청 헤더와 본문을 결합
-        HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
-
-        // API 호출 및 응답 처리
         try {
-            String response = restTemplate.postForObject(apiUrl, entity, String.class);
-            return responseMessage(response, UnivCertTypeConst.SEND_MAIL.getType());
-        } catch (HttpClientErrorException.BadRequest e) { // HttpClientErrorException 처리
-            return univcertException.handleBadRequestException(e,
-                UnivCertTypeConst.SEND_MAIL.getType());
+            String response = objectMapper.writeValueAsString(
+                UnivCert.certify(apiKey, email, univName, univCheck));
+            if (response.contains("\"success\":true")) {
+                return UnivcertErrorMessageConst.SEND_MAIL_SUCCESS.getErrorMessage();
+            } else {
+                return handleBadRequestException(response, UnivCertTypeConst.SEND_MAIL.getType());
+            }
         } catch (Exception e) {
-            e.printStackTrace();
             return UnivcertErrorMessageConst.UNEXPECTED_ERROR.getErrorMessage();
         }
     }
 
     public String verifyEmailCode(String email, String univName, int code) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        String apiUrl = UnivcertUrlConst.VERIFY_CODE.getUrl();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String requestJson =
-            "{\"key\":\"" + apiKey + "\",\"email\":\"" + email + "\",\"univName\":\"" + univName
-                + "\",\"code\":" + code + "}";
-
-        HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
-
         try {
-            String response = restTemplate.postForObject(apiUrl, entity, String.class);
-            return responseMessage(response, UnivCertTypeConst.VERIFY_CODE.getType());
-
-        } catch (HttpClientErrorException.BadRequest e) { // HttpClientErrorException 처리
-            return univcertException.handleBadRequestException(e,
-                UnivCertTypeConst.VERIFY_CODE.getType());
+            String response = objectMapper.writeValueAsString(
+                UnivCert.certifyCode(apiKey, email, univName, code));
+            if (response.contains("\"success\":true")) {
+                return UnivcertErrorMessageConst.VERIFY_CODE_SUCCESS.getErrorMessage();
+            } else {
+                return handleBadRequestException(response, UnivCertTypeConst.VERIFY_CODE.getType());
+            }
         } catch (Exception e) {
-            e.printStackTrace();
             return UnivcertErrorMessageConst.UNEXPECTED_ERROR.getErrorMessage();
         }
     }
 
     public String verifyStatus(String email) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        String apiUrl = UnivcertUrlConst.VERIFY_STATUS.getUrl();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String requestJson = "{\"key\":\"" + apiKey + "\",\"email\":\"" + email + "\"}";
-
-        HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
-
         try {
-            String response = restTemplate.postForObject(apiUrl, entity, String.class);
-            return responseMessage(response, UnivCertTypeConst.VERIFY_STATUS.getType());
-        } catch (HttpClientErrorException.BadRequest e) { // HttpClientErrorException 처리
-            return univcertException.handleBadRequestException(e,
-                UnivCertTypeConst.VERIFY_STATUS.getType());
+            String response = objectMapper.writeValueAsString(UnivCert.status(apiKey, email));
+            if (response.contains("\"success\":true")) {
+                return UnivcertErrorMessageConst.VERIFY_STATUS_SUCCESS.getErrorMessage();
+            } else {
+                return handleBadRequestException(response,
+                    UnivCertTypeConst.VERIFY_STATUS.getType());
+            }
         } catch (Exception e) {
-            e.printStackTrace();
             return UnivcertErrorMessageConst.UNEXPECTED_ERROR.getErrorMessage();
         }
     }
 
     public String clearCertification(String email) {
-        String apiUrl = UnivcertUrlConst.CLEAR_CERTIFICATION.getUrl();
-        RestTemplate restTemplate = new RestTemplate();
-        String url = apiUrl + email;
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        String requestJson = "{\"key\":\"" + apiKey + "\"}";
-        HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
         try {
-            String response = restTemplate.postForObject(url, entity, String.class);
-            return responseMessage(response, UnivCertTypeConst.CLEAR_CERTIFICATION.getType());
-        } catch (HttpClientErrorException.BadRequest e) { // HttpClientErrorException 처리
-            return univcertException.handleBadRequestException(e,
-                UnivCertTypeConst.CLEAR_CERTIFICATION.getType());
+            String response = objectMapper.writeValueAsString(UnivCert.clear(apiKey, email));
+            if (response.contains("\"success\":true")) {
+                return UnivcertErrorMessageConst.CLEAR_CERTIFICATION_SUCCESS.getErrorMessage();
+            } else {
+                return handleBadRequestException(response,
+                    UnivCertTypeConst.CLEAR_CERTIFICATION.getType());
+            }
         } catch (Exception e) {
             // 기타 에러 처리
-            e.printStackTrace();
+
             return UnivcertErrorMessageConst.UNEXPECTED_ERROR.getErrorMessage();
         }
     }
 
-    private String responseMessage(String response, String type) {
-        String message = "에러 발생!";
+    private String handleBadRequestException(String response, String type) {
+        String errorMessage;
+
         switch (type) {
             case "이메일 발송":
-                message = response.contains("\"success\":true")
-                    ? UnivcertErrorMessageConst.SEND_MAIL_SUCCESS.getErrorMessage()
-                    : UnivcertErrorMessageConst.SEND_MAIL_FAIL.getErrorMessage();
-                break;
+                if (response.contains("이미 완료된 요청입니다.")) {
+                    errorMessage = UnivcertErrorMessageConst.SEND_MAIL_COMPLETED.getErrorMessage();
+                    break;
+                } else if (response.contains("대학과 일치하지 않는 메일 도메인입니다.")) {
+                    errorMessage = UnivcertErrorMessageConst.SEND_MAIL_SEJONG.getErrorMessage();
+                    break;
+                } else {
+                    errorMessage = UnivcertErrorMessageConst.UNEXPECTED_ERROR.getErrorMessage();
+                    break;
+                }
             case "이메일 코드 인증":
-                message = response.contains("\"success\":true")
-                    ? UnivcertErrorMessageConst.VERIFY_CODE_SUCCESS.getErrorMessage()
-                    : UnivcertErrorMessageConst.VERIFY_CODE_FAIL.getErrorMessage();
-                break;
+                if (response.contains("이미 완료된 요청입니다.")) {
+                    errorMessage = UnivcertErrorMessageConst.VERIFY_CODE_COMPLETED.getErrorMessage();
+                    break;
+                } else if (response.contains("대학과 일치하지 않는 메일 도메인입니다.")) {
+                    errorMessage = UnivcertErrorMessageConst.VERIFY_CODE_SEJONG.getErrorMessage();
+                    break;
+                } else if (response.contains("일치하지 않는 인증코드입니다.")) {
+                    errorMessage = UnivcertErrorMessageConst.VERIFY_CODE_FAIL.getErrorMessage();
+                    break;
+                } else {
+                    errorMessage = UnivcertErrorMessageConst.UNEXPECTED_ERROR.getErrorMessage();
+                    break;
+                }
             case "인증 확인":
-                message = response.contains("\"success\":true")
-                    ? UnivcertErrorMessageConst.VERIFY_STATUS_SUCCESS.getErrorMessage()
-                    : UnivcertErrorMessageConst.VERIFY_STATUS_FAIL.getErrorMessage();
-                break;
+                if (response.contains("인증 요청 이력이 존재하지 않습니다.")) {
+                    errorMessage = UnivcertErrorMessageConst.VERIFY_STATUS_FAIL.getErrorMessage();
+                    break;
+                } else if (response.contains("인증되지 않은 메일입니다.")) {
+                    errorMessage = UnivcertErrorMessageConst.VERIFY_STATUS_NULL.getErrorMessage();
+                    break;
+                } else {
+                    errorMessage = UnivcertErrorMessageConst.UNEXPECTED_ERROR.getErrorMessage();
+                    break;
+                }
             case "인증 초기화":
-                message = response.contains("\"success\":true")
-                    ? UnivcertErrorMessageConst.CLEAR_CERTIFICATION_SUCCESS.getErrorMessage()
-                    : UnivcertErrorMessageConst.CLEAR_CERTIFICATION_FAIL.getErrorMessage();
+                if (response.contains("인증 요청 이력이 존재하지 않습니다.")) {
+                    errorMessage = UnivcertErrorMessageConst.CLEAR_CERTIFICATION_NULL.getErrorMessage();
+                    break;
+                } else {
+                    errorMessage = UnivcertErrorMessageConst.UNEXPECTED_ERROR.getErrorMessage();
+                    break;
+                }
+            default:
+                errorMessage = UnivcertErrorMessageConst.UNEXPECTED_ERROR.getErrorMessage();
                 break;
         }
-        return message;
+        return errorMessage;
     }
 }
