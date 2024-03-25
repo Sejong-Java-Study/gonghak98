@@ -107,11 +107,6 @@ class GonghakRepositoryTest extends MySqlTestContainer {
         });
 
         assertThat(passCategories).containsAll(List.of("인필", "인선"));
-
-        assertThat(courseCategories).containsAnyElementsOf(List.of(MSC, MAJOR_REQUIRED, MAJOR_SELECTIVE, PROFESSIONAL_NON_MAJOR));
-        assertThat(courseCategories).contains(MSC, MAJOR_REQUIRED, MAJOR_SELECTIVE);
-        assertThat(passCategories).containsAll(List.of("인필","인선"));
-
         assertThat(courseCategories).containsAnyElementsOf(List.of(MAJOR_REQUIRED, MAJOR_SELECTIVE, MSC,
             PROFESSIONAL_NON_MAJOR));
         assertThat(courseCategories).contains(MSC, MAJOR_SELECTIVE);
