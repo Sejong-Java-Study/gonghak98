@@ -1,0 +1,16 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+  <form th:action="@{/user/withdrawal}" method="post" class="needs-validation" novalidate>
+    <div th:if="${withdrawalError}" class="alert alert-danger">
+      <span th:text="${withdrawalError}"></span>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">회원 탈퇴</label>
+      <input type="password" name="password" id="password" class="form-control"
+             placeholder="비밀번호를 입력하세요." required>
+      <div class="invalid-feedback">비밀번호를 입력하세요.</div>
+    </div>
+    <button type="submit" class="btn btn-primary">회원 탈퇴</button>
+  </form>
+</div>
+</html>

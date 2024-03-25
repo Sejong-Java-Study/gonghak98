@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 @Entity
 @Data
 public class CoursesDomain {
+
     @Id
     private Long courseId;
 

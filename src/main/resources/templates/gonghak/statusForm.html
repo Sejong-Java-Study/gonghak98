@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="../static/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .container {
+      max-width: 560px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="py-5 text-center">
+    <h2>RESULT RATIO</h2>
+  </div>
+
+<div>
+  <table class="table">
+    <thead>
+      <tr class="table-dark">
+        <th>Abeek 타입</th>
+        <th>비율(ratio)</th>
+      </tr>
+      <tr th:each="resultRatio : ${userResultRatio}">
+        <td th:text="${resultRatio.getKey()}"></td>
+        <td th:text="${resultRatio.value}"></td>
+      </tr>
+    </thead>
+  </table>
+
+  <div class="py-5 text-center">
+    <h2>RECOMMEND COURSES</h2>
+  </div>
+
+  <div class="py-5 text-center" th:each="recommendCourse : ${recommendCoursesByAbeekType}">
+    <h5 th:text="${recommendCourse.getKey()}">type</h5>
+
+    <table class="table">
+      <thead>
+      <tr class="table-dark">
+        <th>강의명</th>
+        <th>학점</th>
+        <th>설계학점</th>
+        <th>강의 분류</th>
+      </tr>
+
+      <tr th:each="recommendCourse : ${recommendCourse.getValue()}">
+        <td th:text="${recommendCourse.getCourseName()}"></td>
+        <td th:text="${recommendCourse.getCredit()}"></td>
+        <td th:text="${recommendCourse.getDesignCredit()}"></td>
+        <td th:text="${recommendCourse.getCourseCategory()}"></td>'
+
+        <!--      <td th:text="${resultRatio.value}"></td>-->
+      </tr>
+      </thead>
+    </table>
+  </div>
+
+</div>
+</div>
+</body>

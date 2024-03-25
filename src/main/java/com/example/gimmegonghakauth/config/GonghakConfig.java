@@ -6,8 +6,6 @@ import com.example.gimmegonghakauth.dao.GonghakCorusesDao;
 import com.example.gimmegonghakauth.dao.GonghakDao;
 import com.example.gimmegonghakauth.dao.GonghakRepository;
 import com.example.gimmegonghakauth.dao.MajorsDao;
-import com.example.gimmegonghakauth.dto.GonghakCoursesByMajorDto;
-import com.example.gimmegonghakauth.service.GonghakCalculateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
