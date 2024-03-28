@@ -1,4 +1,4 @@
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{layout/layout}">
 <div layout:fragment="content" class="container my-3">
   <form th:action="@{/user/login}" method="post" class="needs-validation" novalidate>
     <div th:if="${param.error}" class="alert alert-danger">
