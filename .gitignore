@@ -29,6 +29,8 @@ out/
 !**/src/test/**/out/
 src/main/resources/application.properties
 
+com/example/gimmegonghakauth/InitFileData.java
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
