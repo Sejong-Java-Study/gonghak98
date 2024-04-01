@@ -6,11 +6,14 @@ import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;
 import com.example.gimmegonghakauth.dto.LoginDto;
 import com.example.gimmegonghakauth.service.GonghakCalculateService;
-import com.example.gimmegonghakauth.service.GonghakRecommendService;
+import com.example.gimmegonghakauth.service.recommend.ElecInfoMajorGonghakRecommendService;
+import com.example.gimmegonghakauth.service.recommend.GonghakRecommendService;
+import com.example.gimmegonghakauth.service.recommend.RecommendServiceSelectManager;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class StatusController {
 
     private final GonghakCalculateService gonghakCalculateService;
-    private final GonghakRecommendService gonghakRecommendService;
+    private final RecommendServiceSelectManager recommendServiceSelectManager;
     private final UserDao userDao;
 
     @GetMapping("/status")
@@ -44,13 +47,18 @@ public class StatusController {
         }
 
         log.info("studentId= {}",loginDto.getStudentId());
+
         Map<AbeekTypeConst, Double> userResultRatio = gonghakCalculateService
             .getResultRatio(student).get().getUserResultRatio();
+
+        GonghakRecommendService gonghakRecommendService = recommendServiceSelectManager.selectRecommendService(
+            loginDto);
+
         Map<AbeekTypeConst, List<IncompletedCoursesDto>> recommendCoursesByAbeekType = gonghakRecommendService
             .createRecommendCourses(student).getRecommendCoursesByAbeekType();
+
         model.addAttribute("userResultRatio", userResultRatio);
         model.addAttribute("recommendCoursesByAbeekType", recommendCoursesByAbeekType);
-
         return "/gonghak/statusForm";
     }
 }
