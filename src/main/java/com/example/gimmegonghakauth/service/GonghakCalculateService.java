@@ -2,7 +2,6 @@ package com.example.gimmegonghakauth.service;
 
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
 import com.example.gimmegonghakauth.dao.GonghakRepository;
-import com.example.gimmegonghakauth.domain.AbeekDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.GonghakCoursesByMajorDto;
 import com.example.gimmegonghakauth.dto.GonghakResultDto;
@@ -16,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.example.gimmegonghakauth.constant.CourseCategoryConst;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +28,10 @@ public class GonghakCalculateService {
     public Optional<GonghakResultDto> getResultRatio(UserDomain userDomain) {
         //standard
         Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(userDomain.getStudentId(), userDomain.getMajorsDomain());
+        log.info("standard = {}",standard.get().getStandards());
 
         //default user abeek 학점 상태 map
-        Map<AbeekTypeConst, Double> userAbeekCredit = getUserAbeekCreditDefault();
+        Map<AbeekTypeConst, Double> userAbeekCredit = getUserAbeekCreditDefault(standard.get().getStandards());
 
         log.info("default user abeek 학점 상태 map userAbeekCredit = {}",userAbeekCredit);
 
@@ -40,7 +39,13 @@ public class GonghakCalculateService {
         List<GonghakCoursesByMajorDto> userCoursesByMajorByGonghakCoursesWithCompletedCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithCompletedCourses(
             userDomain.getStudentId(), userDomain.getMajorsDomain());
 
-        log.info("user 공학 상태 테이블 userCoursesByMajorByGonghakCoursesWithCompletedCourses ={}",userCoursesByMajorByGonghakCoursesWithCompletedCourses);
+        userCoursesByMajorByGonghakCoursesWithCompletedCourses.forEach(
+            gonghakCoursesByMajorDto -> {
+                log.info("user 공학 상태 테이블 course name ={}",gonghakCoursesByMajorDto.getCourseName());
+                log.info("user 공학 상태 테이블 getCredit ={}",gonghakCoursesByMajorDto.getCredit());
+                log.info("user 공학 상태 테이블 getDesignCredit ={}",gonghakCoursesByMajorDto.getDesignCredit());
+            }
+        );
 
         //user
         stackUserGonghakCredit(userCoursesByMajorByGonghakCoursesWithCompletedCourses, userAbeekCredit);
@@ -54,10 +59,12 @@ public class GonghakCalculateService {
         return Optional.of(new GonghakResultDto(userResultRatio));
     }
 
-    private Map<AbeekTypeConst, Double> getUserAbeekCreditDefault() {
+    private Map<AbeekTypeConst, Double> getUserAbeekCreditDefault(Map<AbeekTypeConst, Integer> standards) {
         Map<AbeekTypeConst, Double> userAbeekCredit = new ConcurrentHashMap<>();
         Arrays.stream(AbeekTypeConst.values()).forEach(abeekTypeConst -> {
-            userAbeekCredit.put(abeekTypeConst,0.0);
+            if(standards.containsKey(abeekTypeConst)){
+                userAbeekCredit.put(abeekTypeConst,0.0);
+            }
         });
         return userAbeekCredit;
     }
@@ -67,16 +74,19 @@ public class GonghakCalculateService {
 
         Map<AbeekTypeConst, Double> userResultRatio = new ConcurrentHashMap<>();
         Arrays.stream(AbeekTypeConst.values()).forEach(abeekTypeConst -> {
-            getRatio(userAbeekCredit, standard, abeekTypeConst, userResultRatio);
+                if(userAbeekCredit.containsKey(abeekTypeConst)){
+                    getRatio(userAbeekCredit, standard, abeekTypeConst, userResultRatio);
+                }
             }
         );
         return userResultRatio;
     }
 
-    private Double getRatio(Map<AbeekTypeConst, Double> userAbeekCredit,
+    private void getRatio(Map<AbeekTypeConst, Double> userAbeekCredit,
         Optional<GonghakStandardDto> standard, AbeekTypeConst abeekTypeConst,
         Map<AbeekTypeConst, Double> userResultRatio) {
-        return userResultRatio.put(
+
+        userResultRatio.put(
             abeekTypeConst, Double.valueOf(
                 RESULT_RATIO_FORMAT.format(
                     (double) userAbeekCredit.get(abeekTypeConst) / standard.get().getStandards()
@@ -89,14 +99,14 @@ public class GonghakCalculateService {
         Map<AbeekTypeConst, Double> userAbeekCredit) {
         userCoursesByMajorByGonghakCoursesWithCompletedCourses.forEach(gonghakCoursesByMajorDto -> {
             switch (gonghakCoursesByMajorDto.getCourseCategory()){
-                case MAJOR_SELECTIVE:
+                case 전선, 전공주제, 전필, 전공:
                     stackCredit(AbeekTypeConst.MAJOR, gonghakCoursesByMajorDto, userAbeekCredit);break;
-                case MAJOR_REQUIRED:
-                    stackCredit(AbeekTypeConst.MAJOR, gonghakCoursesByMajorDto, userAbeekCredit);break;
-                case PROFESSIONAL_NON_MAJOR:
+                case 전문교양:
                     stackCredit(AbeekTypeConst.PROFESSIONAL_NON_MAJOR,gonghakCoursesByMajorDto, userAbeekCredit); break;
                 case MSC:
                     stackCredit(AbeekTypeConst.MSC,gonghakCoursesByMajorDto, userAbeekCredit); break;
+                case BSM:
+                    stackCredit(AbeekTypeConst.BSM,gonghakCoursesByMajorDto,userAbeekCredit);break;
             }
             stackCredit(AbeekTypeConst.DESIGN, gonghakCoursesByMajorDto, userAbeekCredit);
             stackCredit(AbeekTypeConst.MINIMUM_CERTI,gonghakCoursesByMajorDto, userAbeekCredit);
@@ -107,8 +117,7 @@ public class GonghakCalculateService {
         Map<AbeekTypeConst, Double> userAbeekCredit) {
         double inputCredit = getInputCredit(abeekTypeConst, gonghakCoursesByMajorDto);
 
-        userAbeekCredit.put(abeekTypeConst,
-            userAbeekCredit.get(abeekTypeConst) + inputCredit);
+        userAbeekCredit.put(abeekTypeConst, userAbeekCredit.get(abeekTypeConst) + inputCredit);
 
     }
 
