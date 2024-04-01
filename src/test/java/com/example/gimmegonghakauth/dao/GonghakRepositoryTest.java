@@ -63,7 +63,7 @@ class GonghakRepositoryTest {
     @DisplayName("dao 메서드 상태 출력")
     void displayDaoMethod(){
         List<IncompletedCoursesDto> withoutCompleteCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
-            CourseCategoryConst.MAJOR_SELECTIVE, STUDENT_ID, TEST_MAJORDOMAIN
+            CourseCategoryConst.전선, STUDENT_ID, TEST_MAJORDOMAIN
         );
 
         withoutCompleteCourses.forEach(
@@ -109,8 +109,8 @@ class GonghakRepositoryTest {
 
         assertThat(passCategories).containsAll(List.of("인필","인선"));
 
-        assertThat(courseCategories).containsAnyElementsOf(List.of(CourseCategoryConst.MAJOR_REQUIRED,CourseCategoryConst.MAJOR_SELECTIVE,CourseCategoryConst.MSC,CourseCategoryConst.PROFESSIONAL_NON_MAJOR));
-        assertThat(courseCategories).contains(CourseCategoryConst.MSC,CourseCategoryConst.MAJOR_SELECTIVE);
+        assertThat(courseCategories).containsAnyElementsOf(List.of(CourseCategoryConst.전필,CourseCategoryConst.전선,CourseCategoryConst.MSC,CourseCategoryConst.전문교양));
+        assertThat(courseCategories).contains(CourseCategoryConst.MSC,CourseCategoryConst.전선);
     }
 
     @Test
@@ -120,14 +120,14 @@ class GonghakRepositoryTest {
         Arrays.stream(CourseCategoryConst.values()).forEach(
             courseCategory -> {
                 List<IncompletedCoursesDto> testCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
-                    CourseCategoryConst.MAJOR_REQUIRED,
+                    CourseCategoryConst.전필,
                     STUDENT_ID,
                     TEST_MAJORDOMAIN
                 );
 
                 testCourses.forEach(
                     incompletedCoursesDto -> {
-                        assertThat(incompletedCoursesDto.getCourseCategory()).isEqualTo(CourseCategoryConst.MAJOR_REQUIRED);
+                        assertThat(incompletedCoursesDto.getCourseCategory()).isEqualTo(CourseCategoryConst.전필);
                     }
                 );
             }

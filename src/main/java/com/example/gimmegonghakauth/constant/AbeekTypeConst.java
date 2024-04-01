@@ -6,12 +6,9 @@ public enum AbeekTypeConst {
     MSC("MSC"),
     MAJOR("전공학점"),
     DESIGN("설계학점"),
-    MINIMUM_CERTI("최소인증학점");
-
-    private final String typeMessage;
+    MINIMUM_CERTI("최소인증학점"),
+    BSM("BSM");
 
     AbeekTypeConst(String typeMessage) {
-
-        this.typeMessage = typeMessage;
     }
 }
