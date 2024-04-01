@@ -2,14 +2,15 @@ package com.example.gimmegonghakauth.constant;
 
 public enum CourseCategoryConst {
 
-    MAJOR_SELECTIVE("전선"),
-    MAJOR_REQUIRED("전필"),
-    PROFESSIONAL_NON_MAJOR("전문교양"),
-    MSC("MSC");
-
-    private final String typeMessage;
+    전선("전선"),
+    전필("전필"),
+    전문교양("전문교양"),
+    MSC("MSC"),
+    전공주제("전공주제"),
+    전공기초("전공기초"),
+    전공("전공"),
+    BSM("BSM");
 
     CourseCategoryConst(String typeMessage) {
-        this.typeMessage = typeMessage;
     }
 }
