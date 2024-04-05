@@ -17,8 +17,8 @@ public class RecommendServiceSelectManager {
     private final ApplicationContext applicationContext;
     private final UserDao userDao;
 
-    public GonghakRecommendService selectRecommendService(LoginDto loginDto){
-        MajorsDomain majorsDomain = userDao.findByStudentId(loginDto.getStudentId()).get()
+    public GonghakRecommendService selectRecommendService(Long studentId){
+        MajorsDomain majorsDomain = userDao.findByStudentId(studentId).get()
             .getMajorsDomain();
         if(majorsDomain.getMajor().contains(ELEC_INFO.getName())){
             log.info("ElecInfoMajorGonghakRecommendService");

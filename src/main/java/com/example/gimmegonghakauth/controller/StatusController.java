@@ -14,6 +14,8 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,28 +33,25 @@ public class StatusController {
     private final RecommendServiceSelectManager recommendServiceSelectManager;
     private final UserDao userDao;
 
-    @GetMapping("/status")
-    public String status(@ModelAttribute("loginDto") LoginDto loginDto) {
-        return "/gonghak/statusInputForm";
-    }
 
-    @PostMapping("/status")
-    public String sendStudentId(@ModelAttribute("loginDto") LoginDto loginDto, Model model){
-        Long studentId = loginDto.getStudentId();
+    @GetMapping("/status")
+    public String sendStudentId(Authentication authentication, Model model){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Long studentId = Long.parseLong(userDetails.getUsername());
 
         UserDomain student = userDao.findByStudentId(studentId).get();
 
-        if(student==null){
+        /*if(student==null){
             return "/gonghak/statusInputForm";
-        }
+        }*/
 
-        log.info("studentId= {}",loginDto.getStudentId());
+        log.info("studentId= {}",student.getStudentId());
 
         Map<AbeekTypeConst, Double> userResultRatio = gonghakCalculateService
             .getResultRatio(student).get().getUserResultRatio();
 
         GonghakRecommendService gonghakRecommendService = recommendServiceSelectManager.selectRecommendService(
-            loginDto);
+            studentId);
 
         Map<AbeekTypeConst, List<IncompletedCoursesDto>> recommendCoursesByAbeekType = gonghakRecommendService
             .createRecommendCourses(student).getRecommendCoursesByAbeekType();
