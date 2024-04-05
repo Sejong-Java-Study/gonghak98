@@ -54,7 +54,7 @@ public class UserControllerTest {
                 .param("major", "컴퓨터공학과")
                 .param("name", "Test User")
                 .with(csrf()))
-            .andExpect(MockMvcResultMatchers.view().name("signup"))
+            .andExpect(MockMvcResultMatchers.view().name("user/signup"))
             .andExpect(MockMvcResultMatchers.model()
                 .attributeHasFieldErrorCode("userJoinDto", "password2", "passwordInCorrect"));
         // 가정1: 불일치로 인해 다시 회원가입 폼으로 이동
@@ -72,7 +72,7 @@ public class UserControllerTest {
                 .param("major", "컴퓨터공학과")
                 .param("name", "Test User")
                 .with(csrf()))
-            .andExpect(MockMvcResultMatchers.view().name("signup"))
+            .andExpect(MockMvcResultMatchers.view().name("user/signup"))
             .andExpect(MockMvcResultMatchers.model()
                 .attributeHasFieldErrorCode("userJoinDto", "studentId", "duplicate"));
         // 가정1: 불일치로 인해 다시 회원가입 폼으로 이동,
@@ -99,7 +99,7 @@ public class UserControllerTest {
         mockMvc.perform(post("/user//withdrawal")
                 .param("password", "1235")
                 .with(csrf()))
-            .andExpect(MockMvcResultMatchers.view().name("withdrawal"))
+            .andExpect(MockMvcResultMatchers.view().name("user/withdrawal"))
             .andExpect(MockMvcResultMatchers.model()
                 .attribute("withdrawalError", "회원 탈퇴에 실패했습니다. 비밀번호를 확인해 주세요."));
         //가정1 : 탈퇴가 실패하면 회원탈퇴 폼으로 이동
@@ -130,7 +130,7 @@ public class UserControllerTest {
                 .param("newPassword1", "1235")
                 .param("newPassword2", "1235")
                 .with(csrf()))
-            .andExpect(MockMvcResultMatchers.view().name("changePassword"))
+            .andExpect(MockMvcResultMatchers.view().name("user/changePassword"))
             .andExpect(MockMvcResultMatchers.model()
                 .attributeHasFieldErrorCode("changePasswordDto", "currentPassword", "currentPasswordInCorrect"));
         //가정1 : 변경이 실패하면 비밀번호 변경 폼으로 이동
@@ -147,7 +147,7 @@ public class UserControllerTest {
                 .param("newPassword1", "1234")
                 .param("newPassword2", "1234")
                 .with(csrf()))
-            .andExpect(MockMvcResultMatchers.view().name("changePassword"))
+            .andExpect(MockMvcResultMatchers.view().name("user/changePassword"))
             .andExpect(MockMvcResultMatchers.model()
             .attributeHasFieldErrorCode("changePasswordDto", "newPassword1", "sameCurrentPassword"));
         //가정1 : 변경이 실패하면 비밀번호 변경 폼으로 이동
@@ -164,7 +164,7 @@ public class UserControllerTest {
                 .param("newPassword1", "1111")
                 .param("newPassword2", "2222")
                 .with(csrf()))
-            .andExpect(MockMvcResultMatchers.view().name("changePassword"))
+            .andExpect(MockMvcResultMatchers.view().name("user/changePassword"))
             .andExpect(MockMvcResultMatchers.model()
             .attributeHasFieldErrorCode("changePasswordDto", "newPassword2", "newPasswordInCorrect"));
         //가정1 : 변경이 실패하면 비밀번호 변경 폼으로 이동
