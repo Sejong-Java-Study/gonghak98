@@ -74,7 +74,9 @@ public class CompletedCoursesService {
 
             CoursesDomain coursesDomain = coursesDao.findByCourseId(
                 courseId);// 학수번호를 기반으로 Courses 테이블 검색
-
+            if (coursesDomain == null){
+                continue;
+            }
             data = CompletedCoursesDomain.builder().userDomain(userDomain)
                 .coursesDomain(coursesDomain).year(year).semester(semester).build();
 

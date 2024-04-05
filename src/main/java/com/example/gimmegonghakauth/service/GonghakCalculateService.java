@@ -98,6 +98,7 @@ public class GonghakCalculateService {
         List<GonghakCoursesByMajorDto> userCoursesByMajorByGonghakCoursesWithCompletedCourses,
         Map<AbeekTypeConst, Double> userAbeekCredit) {
         userCoursesByMajorByGonghakCoursesWithCompletedCourses.forEach(gonghakCoursesByMajorDto -> {
+            log.info("교과목= {}",gonghakCoursesByMajorDto.getCourseName());
             switch (gonghakCoursesByMajorDto.getCourseCategory()){
                 case 전선, 전공주제, 전필, 전공:
                     stackCredit(AbeekTypeConst.MAJOR, gonghakCoursesByMajorDto, userAbeekCredit);break;
@@ -116,7 +117,8 @@ public class GonghakCalculateService {
     private void stackCredit(AbeekTypeConst abeekTypeConst, GonghakCoursesByMajorDto gonghakCoursesByMajorDto,
         Map<AbeekTypeConst, Double> userAbeekCredit) {
         double inputCredit = getInputCredit(abeekTypeConst, gonghakCoursesByMajorDto);
-
+        log.info("abeekTypeConst= {}",abeekTypeConst);
+        log.info("userAbeekCredit.get(abeekTypeConst)= {}",userAbeekCredit.get(abeekTypeConst));
         userAbeekCredit.put(abeekTypeConst, userAbeekCredit.get(abeekTypeConst) + inputCredit);
 
     }
