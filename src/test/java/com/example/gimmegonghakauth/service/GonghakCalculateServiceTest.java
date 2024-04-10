@@ -38,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @Slf4j
-class GonghakCalculateServiceTest {
+class GonghakCalculateServiceTest extends MySqlTestContainer{
 
     @Autowired
     private GonghakRepository gonghakRepository;
