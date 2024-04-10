@@ -22,8 +22,12 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
     runs-on: ubuntu-latest # 상세 작업에 필수적으로 들어가야 하는 항목 : 어느 환경에서 실행되어야 하는지 정의
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Repository and Create Properties For Test
         uses: actions/checkout@v4 # 현재 리포지토리로 체크아웃
+        run: |
+          touch ./src/test/resources/application.properties
+          echo ${{ secrets.TEST_PROPERTIES }} > ./src/test/resources/application.properties
+          cat ./src/test/resources/application.properties
 
       - name: Set up Docker Buildx # 멀티 플랫폼 빌드와 캐시 활용을 할 수 있는 도커 빌드X 설치
         uses: docker/setup-buildx-action@v3
