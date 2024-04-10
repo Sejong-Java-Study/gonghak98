@@ -28,7 +28,7 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
       - name: Create Properties For Test
         run: |
           touch ./src/test/resources/application.properties
-          echo ${{ secrets.TEST_PROPERTIES }} >> ./src/test/resources/application.properties
+          echo "${{ secrets.TEST_PROPERTIES }}" >> ./src/test/resources/application.properties
           cat ./src/test/resources/application.properties
 
       - name: Set up Docker Buildx # 멀티 플랫폼 빌드와 캐시 활용을 할 수 있는 도커 빌드X 설치
