@@ -1,4 +1,4 @@
-package com.example.gimmegonghakauth.Service;
+package com.example.gimmegonghakauth.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,6 +7,7 @@ import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.service.UserService;
+import com.example.testcontainer.MySqlTestContainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

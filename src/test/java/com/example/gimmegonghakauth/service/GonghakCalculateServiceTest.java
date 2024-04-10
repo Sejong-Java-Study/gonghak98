@@ -19,6 +19,7 @@ import com.example.gimmegonghakauth.domain.MajorsDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.GonghakResultDto;
 import com.example.gimmegonghakauth.dto.GonghakStandardDto;
+import com.example.testcontainer.MySqlTestContainer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;

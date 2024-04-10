@@ -9,6 +9,7 @@ import com.example.gimmegonghakauth.domain.CoursesDomain;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.service.CompletedCoursesService;
+import com.example.testcontainer.MySqlTestContainer;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
