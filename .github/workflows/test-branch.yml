@@ -22,8 +22,10 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
     runs-on: ubuntu-latest # 상세 작업에 필수적으로 들어가야 하는 항목 : 어느 환경에서 실행되어야 하는지 정의
 
     steps:
-      - name: Checkout Repository and Create Properties For Test
+      - name: Checkout Repository
         uses: actions/checkout@v4 # 현재 리포지토리로 체크아웃
+
+      - name: Create Properties For Test
         run: |
           touch ./src/test/resources/application.properties
           echo ${{ secrets.TEST_PROPERTIES }} > ./src/test/resources/application.properties
