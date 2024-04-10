@@ -5,11 +5,11 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-//@Testcontainers
+@Testcontainers
 public class MySqlTestContainer {
     private static final String MYSQL_VERSION = "mysql:8";
 
-    //@Container
+    @Container
     protected static MySQLContainer mySQLContainer = new MySQLContainer(MYSQL_VERSION)
         .withDatabaseName("test");
 }
