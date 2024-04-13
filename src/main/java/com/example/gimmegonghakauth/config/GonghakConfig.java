@@ -21,7 +21,7 @@ public class GonghakConfig {
 
     @Bean
     public GonghakRepository gonghakRepository(){
-        return new GonghakDao(abeekDao,completedCoursesDao,gonghakCorusesDao,majorsDao);
+        return new GonghakDao(abeekDao,gonghakCorusesDao);
     }
 
 //    @Bean
