@@ -43,9 +43,10 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
       - name: Set Up MySQL For Test
         uses: mirromutth/mysql-action@v1.1
         with:
+          host port: 3306
+          container port: 3306
           mysql database: 'jpa_prac'
-          mysql user: 'root'
-          mysql password: 1234
+          mysql root password: 1234
 
       - name: Build and Push
         uses: docker/build-push-action@v5
