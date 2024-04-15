@@ -10,6 +10,5 @@ public class MySqlTestContainer {
     private static final String MYSQL_VERSION = "mysql:8";
 
     @Container
-    protected static MySQLContainer mySQLContainer = new MySQLContainer(MYSQL_VERSION)
-        .withDatabaseName("test");
+    protected static MySQLContainer mySQLContainer = new MySQLContainer(MYSQL_VERSION);
 }
