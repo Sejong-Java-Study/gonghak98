@@ -16,7 +16,7 @@ RUN ./gradlew dependencies --no-daemon
 COPY src src
 
 # 스프링부트 프로젝트를 Jar 파일로 빌드 (테스트 제외), bootJar : 스프링부트 실행에 필요한 클래스와 리소스, 의존성 등이 포함되도록 빌드
-RUN ./gradlew --no-daemon bootJar -x test
+RUN ./gradlew clean build
 
 # 빌드된 파일을 실행하는 Base 이미지 : JRE만 포함된 이미지
 FROM amazoncorretto:17-alpine3.19
