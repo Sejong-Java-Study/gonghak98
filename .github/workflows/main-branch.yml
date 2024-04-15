@@ -58,15 +58,19 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION_NAME }}
+
       # S3로 배포 압축파일 업로드
       - name: Upload Deploy Zip FIle to S3
         run: |
-          aws deploy push \
-            --application-name ${{ env.AWS_CODE_DEPLOY_NAME }} \
-            --s3-location s3://${{ env.AWS_S3_BUCKET_NAME }}/codedeploy/${{ github.sha }}.zip \
-            --description "Upload AWS Deploy Zip File to S3" \
-            --ignore-hidden-files \
-            --source ${{ env.AWS_CODE_DEPLOY_NAME }}
+          cd ${{ env.AWS_CODE_DEPLOY_NAME }}
+          zip -r ../${{ env.AWS_CODE_DEPLOY_NAME }}.zip .
+          aws s3 cp ../${{ env.AWS_CODE_DEPLOY_NAME }}.zip s3://${{ env.AWS_S3_BUCKET_NAME }}/codedeploy/${{ github.sha }}.zip
+#          aws deploy push \
+#            --application-name ${{ env.AWS_CODE_DEPLOY_NAME }} \
+#            --s3-location s3://${{ env.AWS_S3_BUCKET_NAME }}/codedeploy/${{ github.sha }}.zip \
+#            --description "Upload AWS Deploy Zip File to S3" \
+#            --ignore-hidden-files \
+#            --source ${{ env.AWS_CODE_DEPLOY_NAME }}
 
       # CodeDeploy에게 S3에 업로드 된 배포파일로 EC2에 배포하도록 요청
       - name: Deploy to EC2
