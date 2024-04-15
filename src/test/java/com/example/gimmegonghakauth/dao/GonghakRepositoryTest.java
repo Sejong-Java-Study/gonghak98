@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GonghakRepositoryTest extends MySqlTestContainer{
+class GonghakRepositoryTest {
     private static final Long TEST_STUDENT_ID = 19011706L;
 
     @Autowired

@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Nested
 @Transactional
 @DisplayName("DB 테스트(로그인)")
-public class UserSecurityServiceTest extends MySqlTestContainer {
+public class UserSecurityServiceTest {
 
     @Mock
     private UserDao userDao;

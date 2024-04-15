@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 @Nested
 @DisplayName("유저 컨트롤러 테스트")
-public class UserControllerTest extends MySqlTestContainer{
+public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

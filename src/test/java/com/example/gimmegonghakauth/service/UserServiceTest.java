@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Import(UserService.class)
 @Nested
 @DisplayName("DB 테스트(유저)")
-public class UserServiceTest extends MySqlTestContainer{
+public class UserServiceTest {
 
     private final MajorsDao majorsDao;
     private final UserDao userDao;

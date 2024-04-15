@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Nested
 @DisplayName("DB 테스트(기이수과목)")
 @Import(CompletedCoursesService.class)
-public class CompletedCoursesServiceDataTest extends MySqlTestContainer{
+public class CompletedCoursesServiceDataTest {
 
     @Autowired
     private MajorsDao majorsDao;

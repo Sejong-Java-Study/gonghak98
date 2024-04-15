@@ -23,7 +23,7 @@ import org.springframework.mock.web.MockMultipartFile;
 @ExtendWith(MockitoExtension.class)
 @Nested
 @DisplayName("엑셀 업로드 테스트")
-class CompletedCoursesServiceTest extends MySqlTestContainer{
+class CompletedCoursesServiceTest {
 
     @InjectMocks
     private CompletedCoursesService excelService;

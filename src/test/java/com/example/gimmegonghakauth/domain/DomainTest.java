@@ -16,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-public class DomainTest extends MySqlTestContainer{
+public class DomainTest {
 
     @Autowired
     private GonghakRepository gonghakRepository;
