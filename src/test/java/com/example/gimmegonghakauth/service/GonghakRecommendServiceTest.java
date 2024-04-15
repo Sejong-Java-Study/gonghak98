@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Transactional
 class GonghakRecommendServiceTest {
+
     @Autowired
     private GonghakRepository gonghakRepository;
     @Autowired
