@@ -20,14 +20,6 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
   image-build-and-push:
     # 가장 최신 버전의 우분투를 러너(Github Actions 실행 환경)로 설정
     runs-on: ubuntu-latest # 상세 작업에 필수적으로 들어가야 하는 항목 : 어느 환경에서 실행되어야 하는지 정의
-    # Runner에서 실행하는 MySQL 컨테이너(테스트 용 - 테스트 이후 자동으로 삭제됨)
-    services:
-      mysql:
-        image: mysql:8.3
-        env:
-          MYSQL_ROOT_PASSWORD: 1234
-        ports:
-          - 3306:3306
 
     steps:
       - name: Checkout Repository
@@ -47,6 +39,13 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }} # Github Secret에서 Docker hub 사용자 이름을 가져옴
           password: ${{ secrets.DOCKERHUB_TOKEN }} # Github Secret에서 Docker hub 액세스 토큰을 가져옴
+
+      - name: Set Up MySQL For Test
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql database: 'jpa_prac'
+          mysql user: 'root'
+          mysql password: 1234
 
       - name: Build and Push
         uses: docker/build-push-action@v5
