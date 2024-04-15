@@ -54,5 +54,4 @@ public class UserServiceTest {
         assertEquals(user, userDao.findByStudentId(19011684L).get());
     }
 
-
 }
