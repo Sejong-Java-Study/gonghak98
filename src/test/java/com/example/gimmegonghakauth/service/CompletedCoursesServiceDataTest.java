@@ -1,4 +1,4 @@
-package com.example.gimmegonghakauth.Service;
+package com.example.gimmegonghakauth.service;
 
 import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
 import com.example.gimmegonghakauth.dao.CoursesDao;
