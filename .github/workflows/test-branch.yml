@@ -25,6 +25,26 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
       - name: Checkout Repository
         uses: actions/checkout@v4 # 현재 리포지토리로 체크아웃
 
+      - name: Install JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      - name: Set Up MySQL For Test
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 3306
+          container port: 3306
+          mysql database: 'jpa_prac'
+          mysql root password: 1234
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Build With Gradle
+        run: ./gradlew clean bootJar
       - name: Create Properties For Test
         run: |
           touch ./src/test/resources/application.properties
@@ -39,14 +59,6 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }} # Github Secret에서 Docker hub 사용자 이름을 가져옴
           password: ${{ secrets.DOCKERHUB_TOKEN }} # Github Secret에서 Docker hub 액세스 토큰을 가져옴
-
-      - name: Set Up MySQL For Test
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          host port: 3306
-          container port: 3306
-          mysql database: 'jpa_prac'
-          mysql root password: 1234
 
       - name: Build and Push
         uses: docker/build-push-action@v5
