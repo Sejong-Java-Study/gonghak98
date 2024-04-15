@@ -20,8 +20,14 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
   image-build-and-push:
     # 가장 최신 버전의 우분투를 러너(Github Actions 실행 환경)로 설정
     runs-on: ubuntu-latest # 상세 작업에 필수적으로 들어가야 하는 항목 : 어느 환경에서 실행되어야 하는지 정의
-
-
+    # Runner에서 실행하는 MySQL 컨테이너(테스트 용 - 테스트 이후 자동으로 삭제됨)
+    services:
+      mysql:
+        image: mysql:8.3
+        env:
+          MYSQL_ROOT_PASSWORD: 1234
+        ports:
+          - 3306:3306
 
     steps:
       - name: Checkout Repository
