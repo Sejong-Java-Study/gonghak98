@@ -31,6 +31,9 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
           distribution: 'corretto'
           java-version: '17'
 
+      - name: Gradle Set Up
+        uses: gradle/actions/setup-gradle@v3
+
       - name: Set Up MySQL For Test
         uses: mirromutth/mysql-action@v1.1
         with:
