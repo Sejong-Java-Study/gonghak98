@@ -68,3 +68,7 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+bootJar {
+    dependsOn test
+}
+
