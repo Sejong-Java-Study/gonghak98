@@ -1,17 +1,15 @@
 package com.example.gimmegonghakauth.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
 import com.example.gimmegonghakauth.dao.CoursesDao;
 import com.example.gimmegonghakauth.dao.MajorsDao;
 import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.CoursesDomain;
-import com.example.gimmegonghakauth.domain.MajorsDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
-import com.example.gimmegonghakauth.service.CompletedCoursesService;
-import com.example.testcontainer.MySqlTestContainer;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,16 +17,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @SpringBootTest

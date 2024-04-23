@@ -1,7 +1,6 @@
 package com.example.gimmegonghakauth.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
 import com.example.gimmegonghakauth.dao.AbeekDao;
@@ -11,17 +10,12 @@ import com.example.gimmegonghakauth.dao.GonghakCorusesDao;
 import com.example.gimmegonghakauth.dao.GonghakRepository;
 import com.example.gimmegonghakauth.dao.MajorsDao;
 import com.example.gimmegonghakauth.dao.UserDao;
-import com.example.gimmegonghakauth.domain.GonghakCoursesDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
-import com.example.gimmegonghakauth.dto.GonghakRecommendCoursesDto;
 import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;
-import com.example.testcontainer.MySqlTestContainer;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

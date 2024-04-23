@@ -9,7 +9,6 @@ import com.example.gimmegonghakauth.domain.MajorsDomain;
 import com.example.gimmegonghakauth.dto.GonghakCoursesByMajorDto;
 import com.example.gimmegonghakauth.dto.GonghakStandardDto;
 import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;
-import com.example.testcontainer.MySqlTestContainer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
