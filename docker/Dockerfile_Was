@@ -1,0 +1,28 @@
+# 소스 빌드용 Base 이미지(Maven, Gradle에 호환되는 JDK 이미지)
+FROM amazoncorretto:17-alpine3.19 as build
+
+WORKDIR /app
+
+# 의존성을 가져오기 위해 필요한 파일만 우선 복사
+COPY ../gradle gradle
+COPY ../build.gradle settings.gradle ./
+COPY ../gradlew ./
+
+RUN chmod +x ./gradlew
+
+# Gradle 빌드 명령어 실행 (CI/CD 환경에서 일관된 빌드를 위해 데몬 프로세스 실행 X)
+RUN ./gradlew dependencies --no-daemon
+
+COPY ../src src
+
+# 스프링부트 프로젝트를 Jar 파일로 빌드 (테스트 제외), bootJar : 스프링부트 실행에 필요한 클래스와 리소스, 의존성 등이 포함되도록 빌드
+RUN ./gradlew --no-daemon bootJar -x test
+
+# 빌드된 파일을 실행하는 Base 이미지 : JRE만 포함된 이미지
+FROM amazoncorretto:17-alpine3.19
+
+# 빌드된 jar 파일을 "app.jar"라는 이름으로 복사
+COPY --from=build /app/build/libs/*.jar app.jar
+
+# 어플리케이션 실행 (/ 루트(절대 경로)에 있는 app.jar 파일을 실행)
+ENTRYPOINT ["java","-jar","/app.jar"]

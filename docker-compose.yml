@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  nginx:
+    build: # 도커파일을 통해 이미지를 빌드할 때, 사용
+      context: ./docker
+      dockerfile: Dockerfile_Nginx
+    image: gonghak-proxy:local
+    ports:
+      - 80:80
+    networks:
+      - gonghak
+  was:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile_Was
+    image: boylonglegs/gonghak-was:local
+    networks:
+      - gonghak
+  db:
+    image: mysql:8.3.0
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    environment:
+          MYSQL_ROOT_PASSWORD: 1234
+          MYSQL_DATABASE: gonghak
+
+networks:
+  gonghak:
+    driver: bridge
