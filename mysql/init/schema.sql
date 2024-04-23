@@ -52,31 +52,25 @@ create table UserDomain (
 );
 
 alter table AbeekDomain
-add constraint FKqp6ay2sjkbn4hooguigj9mqnv
-foreign key (major_id)
+add foreign key (major_id)
 references MajorsDomain (id);
 
 alter table CompletedCoursesDomain
-add constraint FKhx1h6qt61i3npeib86gd64xp4
-foreign key (course_id)
+add foreign key (course_id)
 references CoursesDomain (courseId);
 
 alter table CompletedCoursesDomain
-add constraint FKgutgwcobexlotyfvbrlr7f7og
-foreign key (user_id)
+add foreign key (user_id)
 references UserDomain (id);
 
 alter table GonghakCoursesDomain
-add constraint FKdk1l4utu4dfavyahxafqeijw4
-foreign key (course_id)
+add foreign key (course_id)
 references CoursesDomain (courseId);
 
 alter table GonghakCoursesDomain
-add constraint FK38sqoiv1lj2ucn2rgehl1bc0l
-foreign key (major_id)
+add foreign key (major_id)
 references MajorsDomain (id);
 
 alter table UserDomain
-add constraint FKh05bg3njuiwsvmcvssvpfyoki
-foreign key (major_id)
+add foreign key (major_id)
 references MajorsDomain (id);

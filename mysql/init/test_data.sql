@@ -1,4 +1,4 @@
-INSERT INTO coursesdomain (credit,courseId,name) VALUES
+INSERT INTO CoursesDomain (credit,courseId,name) VALUES
 (3,107,'경영수학'),
 (1,285,'골프'),
 (3,304,'공업수학1'),
@@ -384,7 +384,7 @@ INSERT INTO coursesdomain (credit,courseId,name) VALUES
 (3,600034,'모두의스타트업코딩'),
 (3,600036,'4차산업혁명:융합적분석과인문학의대안');
 
-INSERT INTO gonghakcoursesDomain (designCredit,year,course_id,id,major_id,courseCategory,passCategory) VALUES
+INSERT INTO GonghakCoursesDomain (designCredit,year,course_id,id,major_id,courseCategory,passCategory) VALUES
 (0,19,1234,1,1,'BSM','인필'),
 (0,19,2345,2,1,'BSM','인필'),
 (1,19,9000,3,1,'전선','인선'),
