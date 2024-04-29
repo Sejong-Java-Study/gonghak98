@@ -1,40 +1,40 @@
 create table MajorsDomain (
-                              id bigint not null,
+                              id bigint not null auto_increment,
                               major varchar(255) not null,
                               primary key (id)
 );
 
 create table AbeekDomain (
-                             abeekType tinyint not null check (abeekType between 0 and 4),
+                             id bigint not null auto_increment,
+                             abeekType tinyint not null check (abeekType between 0 and 5),
                              minCredit integer not null,
                              year integer not null check ((year>=14) and (year<=24)),
-                             id bigint not null auto_increment,
                              major_id bigint,
                              note tinytext,
                              primary key (id)
 );
 
 create table CompletedCoursesDomain (
+                                        id bigint not null auto_increment,
                                         semester integer not null check ((semester>=1) and (semester<=2)),
                                         year integer not null check ((year>=15) and (year<=24)),
                                         course_id bigint,
-                                        id bigint not null auto_increment,
                                         user_id bigint,
                                         primary key (id)
 );
 
 create table CoursesDomain (
-                               credit integer not null,
                                courseId bigint not null,
+                               credit integer not null,
                                name varchar(255) not null,
                                primary key (courseId)
 );
 
 create table GonghakCoursesDomain (
+                                      id bigint not null auto_increment,
                                       designCredit float not null check ((designCredit>=0) and (designCredit<=6)),
                                       year integer not null check ((year>=15) and (year<=24)),
                                       course_id bigint,
-                                      id bigint not null auto_increment,
                                       major_id bigint,
                                       courseCategory varchar(255) not null,
                                       passCategory varchar(255) not null,

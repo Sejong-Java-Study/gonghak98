@@ -1,29 +1,49 @@
-version: '3'
+version: "3.8"
 
 services:
-  nginx:
-    build: # 도커파일을 통해 이미지를 빌드할 때, 사용
-      context: ./docker
-      dockerfile: Dockerfile_Nginx
-    image: gonghak-proxy:local
-    ports:
-      - 80:80
-    networks:
-      - gonghak
-  was:
-    build:
-      context: ./docker
-      dockerfile: Dockerfile_Was
-    image: boylonglegs/gonghak-was:local
-    networks:
-      - gonghak
   db:
-    image: mysql:8.3.0
+    container_name: db
+    image: mysql:latest
     volumes:
       - ./mysql/init:/docker-entrypoint-initdb.d
     environment:
-          MYSQL_ROOT_PASSWORD: 1234
-          MYSQL_DATABASE: gonghak
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=gonghak
+    ports:
+      - 3306:3306
+    restart: always
+    networks:
+      - gonghak
+  was:
+    container_name: was
+    build:
+      context: .
+      dockerfile: docker/Dockerfile_Was
+#    image: boylonglegs/gonghak-was:local
+    environment:
+      - DB_URL=db
+      - DB_PORT=3306
+      - DB_NAME=gonghak
+    ports:
+      - 8080:8080
+    depends_on:
+      - db # db 컨테이너가 실행된 후, was가 실행됨
+    networks:
+      - gonghak
+  nginx:
+    container_name: nginx
+    build: # 도커파일을 통해 이미지를 빌드할 때, 사용
+      context: . # 도커 빌드 컨텍스트는 루트 경로로 지정
+      dockerfile: docker/Dockerfile_Nginx
+#    image: gonghak-proxy:local
+    environment:
+      - WAS_HOST=was
+    ports:
+      - 80:80
+    depends_on:
+      - was # was 컨테이너가 실행된 후, nginx가 실행됨
+    networks:
+      - gonghak
 
 networks:
   gonghak:
