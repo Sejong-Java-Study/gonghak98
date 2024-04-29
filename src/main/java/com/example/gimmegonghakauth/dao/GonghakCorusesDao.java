@@ -21,8 +21,8 @@ public interface GonghakCorusesDao extends JpaRepository<GonghakCoursesDomain,Lo
         + "where GCCD.userDomain.studentId =:studentId and GCCD.userDomain.majorsDomain = :majorsDomain")
     List<GonghakCoursesByMajorDto> findUserCoursesByMajorAndGonghakCoursesWithCompletedCourses(@Param("studentId") Long studentId, @Param("majorsDomain") MajorsDomain majorsDomain);
 
-    @Query("select new com.example.gimmegonghakauth.dto.IncompletedCoursesDto(GCD.coursesDomain.name, GCD.courseCategory, GCD.coursesDomain.credit, GCD.designCredit) from CompletedCoursesDomain GCCD "
-        + "right outer join GonghakCoursesDomain GCD on GCCD.coursesDomain = GCD.coursesDomain "
+    @Query("select new com.example.gimmegonghakauth.dto.IncompletedCoursesDto(GCD.coursesDomain.name, GCD.courseCategory, GCD.coursesDomain.credit, GCD.designCredit) from GonghakCoursesDomain GCD  "
+        + "left join CompletedCoursesDomain GCCD on GCCD.coursesDomain = GCD.coursesDomain "
         + "where GCD.majorsDomain = :majorsDomain and GCD.courseCategory = :courseCategory and GCCD.id is null and :studentId is not null")
     List<IncompletedCoursesDto> findUserCoursesByMajorAndCourseCategoryAndGonghakCoursesWithoutCompleteCourses(@Param("courseCategory") CourseCategoryConst courseCategory, @Param("studentId") Long studentId, @Param("majorsDomain") MajorsDomain majorsDomain);
 
