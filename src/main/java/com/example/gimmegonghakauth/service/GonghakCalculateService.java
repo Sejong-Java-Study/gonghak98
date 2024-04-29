@@ -5,8 +5,8 @@ import com.example.gimmegonghakauth.dao.GonghakRepository;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.GonghakCoursesByMajorDto;
 import com.example.gimmegonghakauth.dto.GonghakResultDto;
+import com.example.gimmegonghakauth.dto.GonghakResultDto.ResultPointDto;
 import com.example.gimmegonghakauth.dto.GonghakStandardDto;
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +22,6 @@ import org.springframework.stereotype.Service;
 public class GonghakCalculateService {
 
     private final GonghakRepository gonghakRepository;
-
-    private static final DecimalFormat RESULT_RATIO_FORMAT = new DecimalFormat("#.####");
 
     public Optional<GonghakResultDto> getResultRatio(UserDomain userDomain) {
         //standard
@@ -52,9 +50,15 @@ public class GonghakCalculateService {
 
         log.info("학점 계산 후 학점 상태 map userAbeekCredit = {}",userAbeekCredit);
 
-        Map<AbeekTypeConst, Double> userResultRatio = getUserGonghakResultRatio(userAbeekCredit, standard);
+        Map<AbeekTypeConst, ResultPointDto> userResultRatio = getUserGonghakResultRatio(userAbeekCredit, standard);
 
         log.info("비율 결과 userResultRatio = {}",userResultRatio);
+        userResultRatio.forEach(
+            (abeekTypeConst, resultPointDto) -> {
+                log.info("resultPointDto.getStandardPoint() = {}",resultPointDto.getStandardPoint());
+                log.info("resultPointDto.getStandardPoint() = {}",resultPointDto.getStandardPoint());
+            }
+        );
 
         return Optional.of(new GonghakResultDto(userResultRatio));
     }
@@ -69,10 +73,10 @@ public class GonghakCalculateService {
         return userAbeekCredit;
     }
 
-    private Map<AbeekTypeConst, Double> getUserGonghakResultRatio(Map<AbeekTypeConst, Double> userAbeekCredit,
+    private Map<AbeekTypeConst, ResultPointDto> getUserGonghakResultRatio(Map<AbeekTypeConst, Double> userAbeekCredit,
         Optional<GonghakStandardDto> standard) {
 
-        Map<AbeekTypeConst, Double> userResultRatio = new ConcurrentHashMap<>();
+        Map<AbeekTypeConst, ResultPointDto> userResultRatio = new ConcurrentHashMap<>();
         Arrays.stream(AbeekTypeConst.values()).forEach(abeekTypeConst -> {
                 if(userAbeekCredit.containsKey(abeekTypeConst)){
                     getRatio(userAbeekCredit, standard, abeekTypeConst, userResultRatio);
@@ -84,13 +88,11 @@ public class GonghakCalculateService {
 
     private void getRatio(Map<AbeekTypeConst, Double> userAbeekCredit,
         Optional<GonghakStandardDto> standard, AbeekTypeConst abeekTypeConst,
-        Map<AbeekTypeConst, Double> userResultRatio) {
+        Map<AbeekTypeConst, ResultPointDto> userResultRatio) {
 
         userResultRatio.put(
-            abeekTypeConst, Double.valueOf(
-                RESULT_RATIO_FORMAT.format(
-                    (double) userAbeekCredit.get(abeekTypeConst) / standard.get().getStandards()
-                        .get(abeekTypeConst)))
+            abeekTypeConst, new ResultPointDto(userAbeekCredit.get(abeekTypeConst),standard.get().getStandards()
+                        .get(abeekTypeConst))
         );
     }
 
