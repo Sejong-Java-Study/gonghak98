@@ -1,4 +1,4 @@
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{layout/layout}">
 <div layout:fragment="content" class="container my-3">
   <form th:action="@{/user/signup}" th:object="${userJoinDto}" method="post"
         class="needs-validation" novalidate>
@@ -24,12 +24,6 @@
     </div>
 
     <div class="mb-3">
-      <label for="email" class="form-label">이메일</label>
-      <input type="text" id="email" th:field="*{email}" class="form-control" required>
-      <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
       <label for="major" class="form-label">학과</label>
       <select id="major" th:field="*{major}" class="form-select" required>
         <option value="">-- 선택하세요 --</option>
@@ -46,8 +40,31 @@
     </div>
 
     <div class="mb-3">
-      <button type="submit" class="btn btn-primary">가입하기</button>
+      <label for="email" class="form-label">이메일</label>
+      <input type="text" id="email" th:field="*{email}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
     </div>
+
+    <div class="mb-3">
+      <button type="button" onclick="sendVerificationEmail();" class="btn btn-success">인증번호 발송
+      </button>
+    </div>
+
+    <div class="mb-3" id="verificationCodeSection1" style="display:none;">
+      <label for="verifyCode" class="form-label">인증번호 입력</label>
+      <input type="number" id="verifyCode" th:field="*{verifyCode}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('verifyCode')}" th:errors="*{verifyCode}"
+            class="text-danger"></span>
+    </div>
+
+    <div class="mb-3" id="verificationCodeSection2" style="display:none;">
+      <button type="button" onclick="verifyEmailCode();" class="btn btn-primary">인증번호 확인</button>
+    </div>
+
+    <div class="mb-3">
+      <button type="button" class="btn btn-primary" onclick="verifyStatus();">가입하기</button>
+    </div>
+    <script src="/js/verify.js"></script>
   </form>
 </div>
 </html>

@@ -69,7 +69,7 @@ public class GonghakDao implements GonghakRepository{
     @Override
     public List<GonghakCoursesByMajorDto> findUserCoursesByMajorByGonghakCoursesWithCompletedCourses(
         Long studentId, MajorsDomain majorsDomain) {
-        return gonghakCorusesDao.findUserCoursesByMajorAndGonghakCoursesWithCompletedCourses(studentId,majorsDomain);
+        return gonghakCorusesDao.findUserCoursesByMajorAndGonghakCoursesWithCompletedCourses(studentId,majorsDomain.getId());
     }
 
     @Override

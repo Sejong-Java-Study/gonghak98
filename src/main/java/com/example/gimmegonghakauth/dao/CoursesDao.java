@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface CoursesDao extends JpaRepository<CoursesDomain, Long> {
 
     CoursesDomain findByCourseId(Long id);
+
+    CoursesDomain findByName(String name);
 }
