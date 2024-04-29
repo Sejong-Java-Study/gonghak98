@@ -1,7 +1,20 @@
 <html layout:decorate="~{layout/layout}">
-<div layout:fragment="content" class="container my-3">
-  <table class="table">
-    <p>main page</p>
-  </table>
+<div layout:fragment="content" class="container my-3 text-center">
+  <div style="margin-top: 100px;margin-bottom: 200px">
+    <img src ="images/image3.png" style ="width: 120px; height: 120px ">
+    <p style="font-family: IBM Plex Mono; font-weight: 500; color:white; font-size : 100px">Sejong Auth</p>
+  </div>
+  <div>
+    <p style="font-family: IBM Plex Mono; color:white; font-weight: 400; font-size: 30px">* 세종대학교 공학인증 요건 검사 사이트. </p>
+  </div>
+  <div style="margin-bottom: 100px">
+    <p style="font-family: IBM Plex Mono; color:white; font-weight: 400; font-size: 30px">* Engineering Certification Inspection Service of Sejong University.</p>
+  </div>
+  <div style="margin-bottom:50px">
+    <p style="font-family: IBM Plex Mono; color:white; font-weight: 400; font-size: 30px">Press start to continue _</p>
+  </div>
+  <div style="margin-bottom: 50px">
+    <button class ="btn-lg" style="font-family: IBM Plex Mono; font-weight: 400; font-size: 30px; height: 60px; width: 180px" onclick="location.href='/user/login'">Start</button>
+  </div>
 </div>
 </html>
