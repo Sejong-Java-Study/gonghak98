@@ -20,14 +20,17 @@
           <span style="font-size: 1rem" th:text="${withdrawalError}"></span>
         </div>
         <div class="row" style="margin-bottom: 40px; margin-top: 40px">
-          <label for="password" class="form-label col-2" style="font-size: 1.5rem; text-align: right">비밀번호</label>
+          <label for="password" class="form-label col-2"
+                 style="font-size: 1.5rem; text-align: right; padding-top: 0.6rem">비밀번호</label>
           <input type="password" name="password" id="password" class="form-control-lg col-9"
                  placeholder="비밀번호를 입력하세요." required>
           <div class="invalid-feedback" style="font-size: 1rem">비밀번호를 입력하세요.</div>
         </div>
         <div class="row" style="text-align: center;">
           <div class="col m-2">
-            <button type="button" class="btn-lg" onclick="location.href='/user'" style="height: 40px; width: 130px; margin-right: 10px;">< Back</button>
+            <button type="button" class="btn-lg" onclick="location.href='/user'"
+                    style="height: 40px; width: 130px; margin-right: 10px;">< Back
+            </button>
             <button type="submit" class="btn-lg" style="height: 40px; width: 130px">회원 탈퇴</button>
           </div>
         </div>
