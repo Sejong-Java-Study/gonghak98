@@ -16,6 +16,6 @@ COPY ./src/main/resources/index.html /usr/share/nginx/html
 
 # 포트 설정
 EXPOSE 80
-ENTRYPOINT ["/usr/local/bin/nginx-entrypoint.sh"]
+ENTRYPOINT ["nginx-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
 # 컨테이너에 전달되는 최종 명령어 "nginx-entrypoint.sh nginx -g daemon off"
