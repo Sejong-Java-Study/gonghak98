@@ -9,8 +9,6 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=1234
       - MYSQL_DATABASE=gonghak
-    ports:
-      - 3306:3306
     restart: always
     networks:
       - gonghak
@@ -24,8 +22,6 @@ services:
       - DB_URL=db
       - DB_PORT=3306
       - DB_NAME=gonghak
-    ports:
-      - 8080:8080
     depends_on:
       - db # db 컨테이너가 실행된 후, was가 실행됨
     networks:
