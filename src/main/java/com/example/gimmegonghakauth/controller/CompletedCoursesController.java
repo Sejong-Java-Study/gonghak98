@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+@Controller
 @RequestMapping("/api/excel")
 public class CompletedCoursesController {
 
@@ -25,21 +26,29 @@ public class CompletedCoursesController {
         this.excelService = excelService;
     }
 
-    @GetMapping("/")
-    public String main() {
-        return "excel";
+    @GetMapping("/excel")
+    public String excel(Model model, Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<CompletedCoursesDomain> dataList = excelService.getExcelList(userDetails);
+        model.addAttribute("datas",dataList);
+        return "excel/excelList";
     }
 
-    @PostMapping("/read")
-    public String readExcel(@RequestParam("file") MultipartFile file, Model model, Authentication authentication) {
+    @PostMapping("/excel/read")
+    public String readExcel(@RequestParam("file") MultipartFile file, Model model,
+        Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<CompletedCoursesDomain> beforeDataList = excelService.getExcelList(userDetails);
+        model.addAttribute("datas",beforeDataList);
+
         try {
-            List<CompletedCoursesDomain> dataList = excelService.extractExcelFile(file,userDetails);
-            model.addAttribute("datas", dataList);
-            return "excelList";
+            excelService.extractExcelFile(file, userDetails);
+            List<CompletedCoursesDomain> afterDataList = excelService.getExcelList(userDetails);
+            model.addAttribute("datas",afterDataList);
+            return "excel/excelList";
         } catch (IOException | FileException e) {
             model.addAttribute("error", e.getMessage());
-            return "excel";
+            return "excel/excelList";
         }
     }
 }

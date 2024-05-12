@@ -41,7 +41,7 @@ public class CompletedCoursesService {
 
     final int FIRST_ROW = 4;
 
-    public List<CompletedCoursesDomain> extractExcelFile(MultipartFile file, UserDetails userDetails)
+    public void extractExcelFile(MultipartFile file, UserDetails userDetails)
         throws IOException { //엑셀 데이터 추출
         List<CompletedCoursesDomain> dataList = new ArrayList<>();
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
@@ -74,7 +74,9 @@ public class CompletedCoursesService {
 
             CoursesDomain coursesDomain = coursesDao.findByCourseId(
                 courseId);// 학수번호를 기반으로 Courses 테이블 검색
-
+            if (coursesDomain == null){
+                continue;
+            }
             data = CompletedCoursesDomain.builder().userDomain(userDomain)
                 .coursesDomain(coursesDomain).year(year).semester(semester).build();
 
@@ -82,8 +84,14 @@ public class CompletedCoursesService {
 
             dataList.add(data);
         }
+    }
 
-        return dataList; //데이터 반환
+    public List<CompletedCoursesDomain> getExcelList(UserDetails userDetails){
+        List<CompletedCoursesDomain> dataList = new ArrayList<>();
+        Long studentId = Long.parseLong(userDetails.getUsername());
+        UserDomain userDomain = userDao.findByStudentId(studentId).get();
+
+        return completedCoursesDao.findByUserDomain(userDomain);
     }
 
     //업로드 파일 검증

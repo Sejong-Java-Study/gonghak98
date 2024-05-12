@@ -1,17 +1,5 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="utf-8">
-  <link th:href="@{/css/bootstrap.min.css}"
-        href="../static/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .container {
-      max-width: 560px;
-    }
-  </style>
-</head>
-<body>
-<div class="container">
+<html layout:decorate="~{layout/layout}">
+<div layout:fragment="content" class="container my-3">
 
   <div class="py-5 text-center">
     <h2>RESULT RATIO</h2>
@@ -61,4 +49,4 @@
 
 </div>
 </div>
-</body>
+</html>

@@ -3,15 +3,13 @@ package com.example.gimmegonghakauth.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
-import com.example.gimmegonghakauth.dao.AbeekDao;
-import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
-import com.example.gimmegonghakauth.dao.CoursesDao;
-import com.example.gimmegonghakauth.dao.GonghakCorusesDao;
-import com.example.gimmegonghakauth.dao.GonghakRepository;
-import com.example.gimmegonghakauth.dao.MajorsDao;
 import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;
+<<<<<<< HEAD:src/test/java/com/example/gimmegonghakauth/service/GonghakRecommendServiceTest.java
+=======
+import com.example.gimmegonghakauth.service.recommend.ElecInfoMajorGonghakRecommendService;
+>>>>>>> SJ-91-페이지-화면-구현:src/test/java/com/example/gimmegonghakauth/Service/ElecInfoMajorGonghakRecommendServiceTest.java
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Slf4j
 @Transactional
+<<<<<<< HEAD:src/test/java/com/example/gimmegonghakauth/service/GonghakRecommendServiceTest.java
 class GonghakRecommendServiceTest {
 
     @Autowired
@@ -40,9 +39,15 @@ class GonghakRecommendServiceTest {
     private UserDao userDao;
     @Autowired
     private MajorsDao majorsDao;
+=======
+class ElecInfoMajorGonghakRecommendServiceTest {
+>>>>>>> SJ-91-페이지-화면-구현:src/test/java/com/example/gimmegonghakauth/Service/ElecInfoMajorGonghakRecommendServiceTest.java
 
     @Autowired
-    private GonghakRecommendService gonghakRecommendService;
+    private UserDao userDao;
+
+    @Autowired
+    private ElecInfoMajorGonghakRecommendService gonghakRecommendService;
 
     private static final String RECOMMEND_TESTCOURSE = "testCourse5";
 

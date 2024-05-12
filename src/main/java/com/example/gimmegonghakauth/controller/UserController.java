@@ -6,18 +6,21 @@ import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.ChangePasswordDto;
 import com.example.gimmegonghakauth.dto.UserJoinDto;
 import com.example.gimmegonghakauth.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
@@ -30,19 +33,29 @@ public class UserController {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
 
+    @GetMapping("")
+    public String userInformation(Model model, Authentication authentication){
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Long studentId = Long.parseLong(userDetails.getUsername());
+        UserDomain user = userDao.findByStudentId(studentId).get();
+        model.addAttribute("user",user);
+
+        return "user/information";
+    }
     @GetMapping("/signup")
     public String signup(UserJoinDto userJoinDto) {
-        return "signup";
+        return "user/signup";
     }
 
 
     @PostMapping("/signup")
     public String signup(@Valid UserJoinDto userJoinDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "signup";
+            return "user/signup";
         }
         if (!userService.joinValidation(userJoinDto, bindingResult)) {
-            return "signup"; //회원가입 검증
+            return "user/signup"; //회원가입 검증
         }
         userService.create(userJoinDto.getStudentId(), userJoinDto.getPassword1(),
             userJoinDto.getEmail(),
@@ -51,14 +64,26 @@ public class UserController {
         return "redirect:/user/login"; //성공적인 회원가입시 로그인 페이지로 이동
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response)
+        throws Exception {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+
+        return "redirect:/";
+    }
+
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "user/login";
     }
 
     @GetMapping("/withdrawal")
     public String withdrawal() {
-        return "withdrawal";
+        return "user/withdrawal";
     }
 
     @PostMapping("/withdrawal")
@@ -72,12 +97,12 @@ public class UserController {
         } else {
             model.addAttribute("withdrawalError", "회원 탈퇴에 실패했습니다. 비밀번호를 확인해 주세요.");
         }
-        return "withdrawal";
+        return "user/withdrawal";
     }
 
     @GetMapping("change/password")
     public String changePassword(ChangePasswordDto changePasswordDto) {
-        return "changePassword";
+        return "user/changePassword";
     }
 
     @PostMapping("change/password")
@@ -87,10 +112,10 @@ public class UserController {
         Long studentId = Long.parseLong(userDetails.getUsername());
         UserDomain user = userDao.findByStudentId(studentId).get();
         if (bindingResult.hasErrors()) {
-            return "changePassword";
+            return "user/changePassword";
         }
         if (!userService.changePasswordValidation(changePasswordDto, bindingResult, user)) {
-            return "changePassword"; //비밀번호 변경 검증
+            return "user/changePassword"; //비밀번호 변경 검증
         }
         user.updatePassword(passwordEncoder.encode(changePasswordDto.getNewPassword1()));
         userDao.save(user);
@@ -100,6 +125,6 @@ public class UserController {
 
     @GetMapping("/certification/clear")
     public String clearCertification() {
-        return "resetVerify";
+        return "user/resetVerify";
     }
 }

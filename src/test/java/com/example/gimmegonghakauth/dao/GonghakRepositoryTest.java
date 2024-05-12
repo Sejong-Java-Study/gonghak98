@@ -60,7 +60,11 @@ class GonghakRepositoryTest {
     @DisplayName("dao 메서드 상태 출력")
     void displayDaoMethod(){
         List<IncompletedCoursesDto> withoutCompleteCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+<<<<<<< HEAD
             MAJOR_SELECTIVE, STUDENT_ID, TEST_MAJORDOMAIN
+=======
+            CourseCategoryConst.전선, STUDENT_ID, TEST_MAJORDOMAIN
+>>>>>>> SJ-91-페이지-화면-구현
         );
 
         withoutCompleteCourses.forEach(
@@ -103,10 +107,17 @@ class GonghakRepositoryTest {
             courseCategories.add(gonghakCoursesByMajorDto.getCourseCategory());
         });
 
+<<<<<<< HEAD
         assertThat(passCategories).containsAll(List.of("인필", "인선"));
         assertThat(courseCategories).containsAnyElementsOf(List.of(MAJOR_REQUIRED, MAJOR_SELECTIVE, MSC,
             PROFESSIONAL_NON_MAJOR));
         assertThat(courseCategories).contains(MSC, MAJOR_SELECTIVE);
+=======
+        assertThat(passCategories).containsAll(List.of("인필","인선"));
+
+        assertThat(courseCategories).containsAnyElementsOf(List.of(CourseCategoryConst.전필,CourseCategoryConst.전선,CourseCategoryConst.MSC,CourseCategoryConst.전문교양));
+        assertThat(courseCategories).contains(CourseCategoryConst.MSC,CourseCategoryConst.전선);
+>>>>>>> SJ-91-페이지-화면-구현
     }
 
     @Test
@@ -115,14 +126,22 @@ class GonghakRepositoryTest {
         Arrays.stream(values()).forEach(
             courseCategory -> {
                 List<IncompletedCoursesDto> testCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+<<<<<<< HEAD
                     MAJOR_REQUIRED,
+=======
+                    CourseCategoryConst.전필,
+>>>>>>> SJ-91-페이지-화면-구현
                     STUDENT_ID,
                     TEST_MAJORDOMAIN
                 );
 
                 testCourses.forEach(
                     incompletedCoursesDto -> {
+<<<<<<< HEAD
                         assertThat(incompletedCoursesDto.getCourseCategory()).isEqualTo(MAJOR_REQUIRED);
+=======
+                        assertThat(incompletedCoursesDto.getCourseCategory()).isEqualTo(CourseCategoryConst.전필);
+>>>>>>> SJ-91-페이지-화면-구현
                     }
                 );
             }

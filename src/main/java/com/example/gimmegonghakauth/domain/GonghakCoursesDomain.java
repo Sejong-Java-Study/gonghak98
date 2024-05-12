@@ -39,7 +39,7 @@ public class GonghakCoursesDomain {
     private int year;
 
     @NotNull
-    @Enumerated(value = EnumType.ORDINAL)
+    @Enumerated(value = EnumType.STRING)
     private CourseCategoryConst courseCategory;
     @NotNull
     private String passCategory;

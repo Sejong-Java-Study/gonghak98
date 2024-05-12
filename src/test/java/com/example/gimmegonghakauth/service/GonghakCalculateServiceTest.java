@@ -94,7 +94,7 @@ class GonghakCalculateServiceTest {
         completedCoursesDao.save(coursesDomain4);
 
         GonghakCoursesDomain gonghakCourses3 = GonghakCoursesDomain.builder()
-            .courseCategory(CourseCategoryConst.MAJOR_REQUIRED)
+            .courseCategory(CourseCategoryConst.전필)
             .majorsDomain(TEST_MAJORSDOMAIN)
             .designCredit(1.0)
             .coursesDomain(testCoursePlus1)

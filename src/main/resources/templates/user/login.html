@@ -1,0 +1,80 @@
+<html layout:decorate="~{layout/layout}">
+<div layout:fragment="content" class="container my-3"
+     style="display: flex; justify-content: center;">
+  <div class="window" style="width: 100%;margin-top: 10%">
+    <div class="title-bar">
+      <div class="title-bar-text " style="font-size: 30px">
+        Welcome to Sejong Auth
+      </div>
+      <div class="title-bar-controls" style="margin-right: 10px">
+        <button style="margin-right: 20px">
+          <img src="/images/questionmark.svg" style="height: 40px; width: 40px; padding:10px">
+        </button>
+        <button>
+          <img src="/images/x.svg" style="height: 40px; width: 40px; padding:10px">
+        </button>
+      </div>
+    </div>
+    <div class="window-body">
+      <form th:action="@{/user/login}" method="post" class="needs-validation" novalidate>
+        <div th:if="${param.error}" class="alert alert-danger">
+          사용자ID 또는 비밀번호를 확인해 주세요.
+        </div>
+        <div class="row"
+             style="display: flex; justify-content: center; margin-bottom: 60px; margin-top: 50px">
+          <div class="col-3"
+               style="display: flex; justify-content: center; height: 150px; width: 150px">
+            <img src="/images/networkNormalTwoPcs2.png">
+          </div>
+          <div class="col-7">
+            <p style="font-size: 40px">
+              Sejong Auth에 로그인하려면 암호를 입력하십시오.
+            </p>
+          </div>
+          <div class="col-2"
+               style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            <div class="md-2" style="margin-bottom: 20px;">
+              <button class="btn-lg" type="submit" style="height: 40px; width: 130px">Log in
+              </button>
+            </div>
+            <div>
+              <button class="btn-lg" type="button" style="height: 40px; width: 130px"
+                      onclick="location.href='/user/signup'">Sign in
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 40px">
+          <label for="username" class="form-label col-xl-2 col-md-3 col-sm-3 md-3"
+                 style="font-size: 35px; text-align: right; width: 200px; display: inline-block">학번</label>
+          <input type="text" name="username" id="username"
+                 class="form-control-lg col-xl-9 col-md-7 col-sm-5" required>
+          <div class="invalid-feedback">학번을 입력하세요.</div>
+        </div>
+        <div class="row" style="margin-bottom: 100px">
+          <label for="password" class="form-label col-xl-2 col-md-3 col-sm-3 md-3"
+                 style="font-size: 35px; text-align: right; width: 200px; display: inline-block">비밀번호</label>
+          <input type="password" name="password" id="password"
+                 class="form-control-lg col-xl-9 col-md-7 col-sm-5" required>
+          <div class="invalid-feedback">비밀번호를 입력하세요.</div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</html>
+<style>
+  .row {
+    display: flex;
+    align-items: center;
+  }
+
+  .form-label {
+    height: 100%; /* 부모 요소의 높이를 100%로 설정하여 세로 중앙 정렬 */
+    margin-bottom: 0; /* 기본 마진 제거 */
+  }
+
+  .form-control-lg {
+    height: 100%; /* 부모 요소의 높이를 100%로 설정하여 세로 중앙 정렬 */
+  }
+</style>
