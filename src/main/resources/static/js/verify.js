@@ -5,7 +5,7 @@ function sendVerificationEmail() {
     alert("세종대학교 이메일을 입력하세요.");
     return;
   }
-  xhr.open("POST", "/user/send-verification-email", true);
+  xhr.open("POST", "/api/user/send-verification-email", true);
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
@@ -30,7 +30,7 @@ function verifyEmailCode() {
     return;
   }
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "/user/verify-code", true);
+  xhr.open("POST", "/api/user/verify-code", true);
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
@@ -52,7 +52,7 @@ function verifyEmailCode() {
 function verifyStatus() {
   var email = document.getElementById("email").value;
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "/user/verify-status", true);
+  xhr.open("POST", "/api/user/verify-status", true);
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
@@ -71,7 +71,7 @@ function clearCertification() {
   var email = document.getElementById("email").value;
 
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "/user/certification/clear", true);
+  xhr.open("POST", "/api/user/certification/clear", true);
   xhr.setRequestHeader("Content-Type", "application/json");
 
   xhr.onreadystatechange = function () {

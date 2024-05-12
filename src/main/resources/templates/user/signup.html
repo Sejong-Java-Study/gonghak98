@@ -5,21 +5,21 @@
       <div class="title-bar-text" style="font-size: 30px">Sejong Auth 회원가입 마법사</div>
       <div class="title-bar-controls" style="margin-right: 10px">
         <button style="margin-right: 20px">
-          <img src="/images/questionmark.svg" style="height: 40px; width: 40px; padding:10px">
+          <img src="/static/images/questionmark.svg" style="height: 40px; width: 40px; padding:10px">
         </button>
         <button>
-          <img src="/images/x.svg" style="height: 40px; width: 40px; padding:10px">
+          <img src="/static/images/x.svg" style="height: 40px; width: 40px; padding:10px">
         </button>
       </div>
     </div>
     <div class="window-body row">
       <div class="col-lg-4 col-md-12 col-sm-12"
            style="display: flex; justify-content: center; align-items: center">
-        <img src="/images/login.png"
+        <img src="/static/images/login.png"
              style="max-width: 100%; height: auto; max-height: 100%; padding: 10px">
       </div>
       <div class="col-lg-8 col-md-12 col-sm-12">
-        <form th:action="@{/user/signup}" th:object="${userJoinDto}" method="post"
+        <form th:action="@{/api/user/signup}" th:object="${userJoinDto}" method="post"
               class="needs-validation" novalidate>
           <div class="row" style="margin-bottom: 20px; margin-top: 30px; text-align: center">
             <label for="studentId" class="form-label col-xl-3 col-lg-3 col-md-2 col-sm-2"
@@ -111,7 +111,7 @@
               </button>
             </div>
           </div>
-          <script src="/js/verify.js"></script>
+          <script src="/static/js/verify.js"></script>
         </form>
       </div>
     </div>

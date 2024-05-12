@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 HELP.md
 .gradle
 build/
@@ -83,4 +82,3 @@ src/main/resources/application.properties
 
 ### VS Code ###
 .vscode/
->>>>>>> SJ-91-페이지-화면-구현
