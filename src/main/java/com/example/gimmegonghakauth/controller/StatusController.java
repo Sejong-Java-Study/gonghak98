@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/gonghak")
+@RequestMapping("/api/gonghak")
 @Slf4j
 @RequiredArgsConstructor
 public class StatusController {
