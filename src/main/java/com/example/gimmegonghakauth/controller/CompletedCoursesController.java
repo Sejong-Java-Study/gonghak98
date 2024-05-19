@@ -26,7 +26,7 @@ public class CompletedCoursesController {
         this.excelService = excelService;
     }
 
-    @GetMapping("/excel")
+    @GetMapping("")
     public String excel(Model model, Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         List<CompletedCoursesDomain> dataList = excelService.getExcelList(userDetails);
@@ -34,7 +34,7 @@ public class CompletedCoursesController {
         return "excel/excelList";
     }
 
-    @PostMapping("/excel/read")
+    @PostMapping("/read")
     public String readExcel(@RequestParam("file") MultipartFile file, Model model,
         Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
