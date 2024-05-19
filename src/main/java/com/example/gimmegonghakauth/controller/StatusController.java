@@ -53,6 +53,6 @@ public class StatusController {
 
         model.addAttribute("userResultRatio", userResultRatio);
         model.addAttribute("recommendCoursesByAbeekType", recommendCoursesByAbeekType);
-        return "/gonghak/statusForm";
+        return "gonghak/statusForm";
     }
 }
