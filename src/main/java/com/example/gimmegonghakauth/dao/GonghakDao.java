@@ -54,8 +54,9 @@ public class GonghakDao implements GonghakRepository{
     private Optional<GonghakStandardDto> changeToGonghakStandardDto(MajorsDomain majorsDomain, int year) {
 
         Map<AbeekTypeConst, Integer> standards = new ConcurrentHashMap<>();
-        List<AbeekDomain> allByYearAndMajorsDomain = abeekDao.findAllByYearAndMajorsDomain(year,
-            majorsDomain);
+        List<AbeekDomain> allByYearAndMajorsDomain = abeekDao.findAllByYearAndMajorsDomain(year, majorsDomain);
+
+        log.info("allByYearAndMajorsDomain.isEmpty() = {}", allByYearAndMajorsDomain.isEmpty());
 
         allByYearAndMajorsDomain.forEach(
             abeekDomain -> {

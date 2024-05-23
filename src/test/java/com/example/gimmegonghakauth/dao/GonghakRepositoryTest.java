@@ -76,8 +76,7 @@ class GonghakRepositoryTest {
     @Test
     @DisplayName("GonghakStandardDto 5가지 상태 모두 포함되어있는지 확인")
     void findStandardKeySetTest() {
-        Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(COM_TEST_STUDENT_ID,
-            COM_TEST_MAJORDOMAIN);
+        Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(COM_TEST_STUDENT_ID, COM_TEST_MAJORDOMAIN);
         log.info("testStandard status ={}", standard.get().getStandards());
         Map<AbeekTypeConst, Integer> testStandard = standard.get().getStandards();
         assertThat(testStandard.keySet()).contains(AbeekTypeConst.BSM,AbeekTypeConst.PROFESSIONAL_NON_MAJOR,AbeekTypeConst.DESIGN,AbeekTypeConst.MAJOR,AbeekTypeConst.MINIMUM_CERTI);
@@ -90,6 +89,18 @@ class GonghakRepositoryTest {
     void findUserCoursesByMajorByGonghakCoursesWithCompletedCoursesTest() {
         List<GonghakCoursesByMajorDto> userDataForCalculate = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithCompletedCourses(
             COM_TEST_STUDENT_ID, COM_TEST_MAJORDOMAIN);
+
+        log.info("userDataForCalculate size = {}",userDataForCalculate.size());
+        for (GonghakCoursesByMajorDto course : userDataForCalculate) {
+            log.info("Course ID: {}, Course Name: {}, Year: {}, Course Category: {}, Pass Category: {}, Design Credit: {}, Credit: {}",
+                course.getCourseId(),
+                course.getCourseName(),
+                course.getYear(),
+                course.getCourseCategory(),
+                course.getPassCategory(),
+                course.getDesignCredit(),
+                course.getCredit());
+        }
 
         List<String> passCategories = new ArrayList<>();
         List<CourseCategoryConst> courseCategories = new ArrayList<>();
