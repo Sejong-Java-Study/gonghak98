@@ -10,11 +10,13 @@
     <thead>
       <tr class="table-dark">
         <th>Abeek 타입</th>
-        <th>비율(ratio)</th>
+        <th>얻은 학점</th>
+        <th>기준 학점</th>
       </tr>
       <tr th:each="resultRatio : ${userResultRatio}">
         <td th:text="${resultRatio.getKey()}"></td>
-        <td th:text="${resultRatio.value}"></td>
+        <td th:text="${resultRatio.value.getUserPoint()}"></td>
+        <td th:text="${resultRatio.value.getStandardPoint()}"></td>
       </tr>
     </thead>
   </table>
