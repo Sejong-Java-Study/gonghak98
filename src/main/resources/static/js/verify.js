@@ -11,9 +11,9 @@ function sendVerificationEmail() {
     if (xhr.readyState === 4 && xhr.status === 200) {
       if (xhr.responseText.includes("인증메일 발송에 성공했습니다.")) {
         document.getElementById(
-            "verificationCodeSection1").style.display = "block";
+            "verificationCodeSection1").style.visibility = "visible";
         document.getElementById(
-            "verificationCodeSection2").style.display = "block";
+            "verificationCodeSection2").style.visibility = "visible";
       }
       alert(xhr.responseText);
     }

@@ -21,12 +21,12 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers("/user/withdrawal", "/user/change/password", "/user/logout",
-                    "/excel/**", "/gonghak/**").authenticated()
+                    "/excel/**", "/gonghak/**","/user").authenticated()
                 .anyRequest().permitAll()
             );
         http
             .formLogin((auth) -> auth.loginPage("/user/login")
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/user")
                 .permitAll()
             ); //로그인시 메인페이지로 되돌아감
         http
