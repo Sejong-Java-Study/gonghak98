@@ -16,9 +16,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Component
 @RequiredArgsConstructor
 @Slf4j
-@Component
 public class InitFileData {
     private final MajorsDao majorsDao;
     private final CoursesDao coursesDao;
@@ -27,7 +27,7 @@ public class InitFileData {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void loadCoursesDataFromCSV()  throws IOException {
-        log.info("----set data----");
+
         String csvFilePath = "src/main/java/com/example/gimmegonghakauth/19학년2학기_20학년1학기_컴공.csv";
         inputCoursesCsv(csvFilePath);
         csvFilePath = "src/main/java/com/example/gimmegonghakauth/19학년2학기_20학년1학기_전정통.csv";

@@ -3,16 +3,17 @@ package com.example.gimmegonghakauth.controller;
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
 import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.UserDomain;
-import com.example.gimmegonghakauth.dto.GonghakResultDto.ResultPointDto;
 import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;
 import com.example.gimmegonghakauth.dto.LoginDto;
 import com.example.gimmegonghakauth.service.GonghakCalculateService;
+import com.example.gimmegonghakauth.service.recommend.ElecInfoMajorGonghakRecommendService;
 import com.example.gimmegonghakauth.service.recommend.GonghakRecommendService;
 import com.example.gimmegonghakauth.service.recommend.RecommendServiceSelectManager;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,7 @@ public class StatusController {
 
         log.info("studentId= {}",student.getStudentId());
 
-        Map<AbeekTypeConst, ResultPointDto> userResultRatio = gonghakCalculateService
+        Map<AbeekTypeConst, Double> userResultRatio = gonghakCalculateService
             .getResultRatio(student).get().getUserResultRatio();
 
         GonghakRecommendService gonghakRecommendService = recommendServiceSelectManager.selectRecommendService(

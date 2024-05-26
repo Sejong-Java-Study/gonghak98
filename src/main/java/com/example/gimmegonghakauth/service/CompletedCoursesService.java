@@ -41,7 +41,7 @@ public class CompletedCoursesService {
 
     final int FIRST_ROW = 4;
 
-    public void extractExcelFile(MultipartFile file, UserDetails userDetails)
+    public List<CompletedCoursesDomain> extractExcelFile(MultipartFile file, UserDetails userDetails)
         throws IOException { //엑셀 데이터 추출
         List<CompletedCoursesDomain> dataList = new ArrayList<>();
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
@@ -84,14 +84,8 @@ public class CompletedCoursesService {
 
             dataList.add(data);
         }
-    }
 
-    public List<CompletedCoursesDomain> getExcelList(UserDetails userDetails){
-        List<CompletedCoursesDomain> dataList = new ArrayList<>();
-        Long studentId = Long.parseLong(userDetails.getUsername());
-        UserDomain userDomain = userDao.findByStudentId(studentId).get();
-
-        return completedCoursesDao.findByUserDomain(userDomain);
+        return dataList; //데이터 반환
     }
 
     //업로드 파일 검증

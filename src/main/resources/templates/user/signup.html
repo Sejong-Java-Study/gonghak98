@@ -1,120 +1,70 @@
 <html layout:decorate="~{layout/layout}">
 <div layout:fragment="content" class="container my-3">
-  <div class="window" style="width: 100%;margin-top: 10%">
-    <div class="title-bar">
-      <div class="title-bar-text" style="font-size: 30px">Sejong Auth 회원가입 마법사</div>
-      <div class="title-bar-controls" style="margin-right: 10px">
-        <button style="margin-right: 20px">
-          <img src="/images/questionmark.svg" style="height: 40px; width: 40px; padding:10px">
-        </button>
-        <button>
-          <img src="/images/x.svg" style="height: 40px; width: 40px; padding:10px">
-        </button>
-      </div>
+  <form th:action="@{/user/signup}" th:object="${userJoinDto}" method="post"
+        class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label for="studentId" class="form-label">학번</label>
+      <input type="text" id="studentId" th:field="*{studentId}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('studentId')}" th:errors="*{studentId}"
+            class="text-danger"></span>
     </div>
-    <div class="window-body row">
-      <div class="col-lg-4 col-md-12 col-sm-12"
-           style="display: flex; justify-content: center; align-items: center">
-        <img src="/images/login.png"
-             style="max-width: 100%; height: auto; max-height: 100%; padding: 10px">
-      </div>
-      <div class="col-lg-8 col-md-12 col-sm-12">
-        <form th:action="@{/user/signup}" th:object="${userJoinDto}" method="post"
-              class="needs-validation" novalidate>
-          <div class="row" style="margin-bottom: 20px; margin-top: 30px; text-align: center">
-            <label for="studentId" class="form-label col-xl-3 col-lg-3 col-md-2 col-sm-2"
-                   style="font-size: 1.5rem; text-align: right ; padding-top: 0.4rem; width: 190px; display: inline-block">학번</label>
-            <input type="text" id="studentId" th:field="*{studentId}"
-                   class="form-control-lg col-xl-8 col-lg-8 col-md-8 col-sm-7"
-                   required>
-            <span th:if="${#fields.hasErrors('studentId')}" th:errors="*{studentId}"
-                  class="text-danger" style="font-size: 1rem; margin-left: 13rem"></span>
-          </div>
 
-          <div class="row" style="margin-bottom: 20px">
-            <label for="password1" class="form-label col-xl-3 col-lg-3 col-md-2 col-sm-2 "
-                   style="font-size: 1.5rem; text-align: right ; padding-top: 0.4rem; width: 190px; display: inline-block">비밀번호</label>
-            <input type="password" id="password1" th:field="*{password1}"
-                   class="form-control-lg col-xl-8 col-lg-8 col-md-8 col-sm-7" required>
-            <span th:if="${#fields.hasErrors('password1')}" th:errors="*{password1}"
-                  class="text-danger" style="font-size: 1rem; margin-left: 13rem"></span>
-          </div>
-
-          <div class="row" style="margin-bottom: 20px">
-            <label for="password2" class="form-label col-xl-3 col-lg-3 col-md-2 col-sm-2"
-                   style="font-size: 1.5rem; text-align: right ; padding-top: 0.4rem; width: 190px; display: inline-block">비밀번호
-              확인</label>
-            <input type="password" id="password2" th:field="*{password2}"
-                   class="form-control-lg col-xl-8 col-lg-8 col-md-8 col-sm-7" required>
-            <span th:if="${#fields.hasErrors('password2')}" th:errors="*{password2}"
-                  class="text-danger" style="font-size: 1rem; margin-left: 13rem"></span>
-          </div>
-
-          <div class="row" style="margin-bottom: 20px">
-            <label for="major" class="form-label col-xl-3 col-lg-3 col-md-2 col-sm-2"
-                   style="font-size: 1.5rem; text-align: right ; padding-top: 0.4rem; width: 190px; display: inline-block">학과</label>
-            <select id="major" th:field="*{major}"
-                    class="form-control-lg col-xl-8 col-lg-8 col-md-8 col-sm-7" required>
-              <option value="">-- 선택하세요 --</option>
-              <option value="컴퓨터공학과">컴퓨터공학과</option>
-              <option value="전자정보통신공학과">전자정보통신공학과</option>
-            </select>
-            <span th:if="${#fields.hasErrors('major')}" th:errors="*{major}" class="text-danger"
-                  style="font-size: 1rem; margin-left: 13rem"></span>
-          </div>
-
-          <div class="row" style="margin-bottom: 20px;">
-            <label for="name" class="form-label col-xl-3 col-lg-3 col-md-2 col-sm-2"
-                   style="font-size: 1.5rem; text-align: right; padding-top: 0.4rem; width: 190px; display: inline-block">이름</label>
-            <input type="text" id="name" th:field="*{name}"
-                   class="form-control-lg col-xl-8 col-lg-8 col-md-8 col-sm-7" required>
-            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"
-                  style="font-size: 1rem; margin-left: 13rem"></span>
-          </div>
-
-          <div class="row" style="margin-bottom: 20px; align-items: center;">
-            <label for="email" class="form-label col-xl-3 col-lg-3 col-md-2 col-sm-2"
-                   style="font-size: 1.5rem; text-align: right; padding-top: 0.4rem; width: 190px; display: inline-block">이메일</label>
-            <input type="text" id="email" th:field="*{email}"
-                   class="form-control-lg col-xl-6 col-lg-5 col-md-5 col-sm-4"
-                   required>
-            <button type="button" onclick="sendVerificationEmail();"
-                    class="col-xl-2 col-lg-2 col-md-2 col-sm-1 btn-lg m-3"
-                    style="height: 40px; width: 130px; font-size: 20px">인증 발송
-            </button>
-            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"
-                  style="font-size: 1rem; margin-left: 13rem"></span>
-          </div>
-
-          <div class="row" style="margin-bottom: 20px; visibility: hidden; align-items: center;"
-               id="verificationCodeSection1">
-            <label for="verifyCode" class="form-label col-xl-3 col-lg-3 col-md-2 col-sm-2"
-                   style="font-size: 1.5rem; text-align: right; padding-top: 0.4rem; width: 190px; display: inline-block">인증
-              입력</label>
-            <input type="number" id="verifyCode" th:field="*{verifyCode}"
-                   class="form-control-lg col-xl-6 col-lg-5 col-md-5 col-sm-4" required>
-            <button type="button" onclick="verifyEmailCode();"
-                    class="col-xl-2 col-lg-2 col-md-2 col-sm-1 btn-lg m-3"
-                    style="height: 40px; width: 130px; font-size: 20px">인증 확인
-            </button>
-            <span th:if="${#fields.hasErrors('verifyCode')}" th:errors="*{verifyCode}"
-                  class="text-danger" style="font-size: 1rem; margin-left: 13rem"></span>
-          </div>
-
-          <div class="row" style="text-align: right;">
-            <div class="col m-2">
-              <button type="button" class="btn-lg" onclick="location.href='/'"
-                      style="height: 40px; width: 130px; margin-right: 10px;">< Back
-              </button>
-              <button type="button" class="btn-lg" onclick="verifyStatus();"
-                      style="height: 40px; width: 130px">Sign up
-              </button>
-            </div>
-          </div>
-          <script src="/js/verify.js"></script>
-        </form>
-      </div>
+    <div class="mb-3">
+      <label for="password1" class="form-label">비밀번호</label>
+      <input type="password" id="password1" th:field="*{password1}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('password1')}" th:errors="*{password1}"
+            class="text-danger"></span>
     </div>
-  </div>
+
+    <div class="mb-3">
+      <label for="password2" class="form-label">비밀번호 확인</label>
+      <input type="password" id="password2" th:field="*{password2}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('password2')}" th:errors="*{password2}"
+            class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+      <label for="major" class="form-label">학과</label>
+      <select id="major" th:field="*{major}" class="form-select" required>
+        <option value="">-- 선택하세요 --</option>
+        <option value="컴퓨터공학과">컴퓨터공학과</option>
+        <option value="전자정보통신공학과">전자정보통신공학과</option>
+      </select>
+      <span th:if="${#fields.hasErrors('major')}" th:errors="*{major}" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+      <label for="name" class="form-label">이름</label>
+      <input type="text" id="name" th:field="*{name}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">이메일</label>
+      <input type="text" id="email" th:field="*{email}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+      <button type="button" onclick="sendVerificationEmail();" class="btn btn-success">인증번호 발송
+      </button>
+    </div>
+
+    <div class="mb-3" id="verificationCodeSection1" style="display:none;">
+      <label for="verifyCode" class="form-label">인증번호 입력</label>
+      <input type="number" id="verifyCode" th:field="*{verifyCode}" class="form-control" required>
+      <span th:if="${#fields.hasErrors('verifyCode')}" th:errors="*{verifyCode}"
+            class="text-danger"></span>
+    </div>
+
+    <div class="mb-3" id="verificationCodeSection2" style="display:none;">
+      <button type="button" onclick="verifyEmailCode();" class="btn btn-primary">인증번호 확인</button>
+    </div>
+
+    <div class="mb-3">
+      <button type="button" class="btn btn-primary" onclick="verifyStatus();">가입하기</button>
+    </div>
+    <script src="/js/verify.js"></script>
+  </form>
 </div>
 </html>

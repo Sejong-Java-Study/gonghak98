@@ -4,6 +4,7 @@ package com.example.gimmegonghakauth.service.recommend;
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
 import com.example.gimmegonghakauth.constant.CourseCategoryConst;
 import com.example.gimmegonghakauth.dao.GonghakRepository;
+import com.example.gimmegonghakauth.domain.MajorsDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.GonghakRecommendCoursesDto;
 import com.example.gimmegonghakauth.dto.GonghakStandardDto;
@@ -92,6 +93,7 @@ public class ComputerMajorGonghakRecommendService implements GonghakRecommendSer
     }
 
     private static void printLog(List<IncompletedCoursesDto> incompletedCoursesDtoList){
+        log.info("-----------");
         log.info("dto list size = {}",incompletedCoursesDtoList.size());
         for (IncompletedCoursesDto incompletedCoursesDto : incompletedCoursesDtoList) {
             log.info("courseName = {}",incompletedCoursesDto.getCourseName());

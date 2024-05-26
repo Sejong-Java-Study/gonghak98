@@ -129,7 +129,7 @@ public class InitData {
 
         //User
         UserDomain userDomain = UserDomain.builder()
-            .email("testEmail@sju.ac.kr")
+            .email("testEmail")
             .name("홍지섭")
             .password(passwordEncoder.encode("qwer"))
             .studentId(19011706L)
@@ -137,7 +137,7 @@ public class InitData {
         userDao.save(userDomain);
 
         UserDomain userDomainElec = UserDomain.builder()
-            .email("testEmail123@sju.ac.kr")
+            .email("testEmail123")
             .name("전통이")
             .password(passwordEncoder.encode("qwer"))
             .studentId(19111111L)
@@ -145,7 +145,7 @@ public class InitData {
         userDao.save(userDomainElec);
 
         UserDomain userDomain2 = UserDomain.builder()
-            .email("testEmail@sju.ac.kr")
+            .email("testEmail")
             .name("testUser")
             .password(passwordEncoder.encode("1234"))
             .studentId(12345678L)

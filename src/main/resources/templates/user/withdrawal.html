@@ -1,42 +1,16 @@
-<html layout:decorate="~{layout/layout2}">
+<html layout:decorate="~{layout/layout}">
 <div layout:fragment="content" class="container my-3">
-  <div class="window" style="width: 100%;margin-top: 10%">
-    <div class="title-bar">
-      <div class="title-bar-text " style="font-size: 30px">
-        회원 탈퇴
-      </div>
-      <div class="title-bar-controls" style="margin-right: 10px">
-        <button style="margin-right: 20px">
-          <img src="/images/questionmark.svg" style="height: 40px; width: 40px; padding:10px">
-        </button>
-        <button>
-          <img src="/images/x.svg" style="height: 40px; width: 40px; padding:10px">
-        </button>
-      </div>
+  <form th:action="@{/user/withdrawal}" method="post" class="needs-validation" novalidate>
+    <div th:if="${withdrawalError}" class="alert alert-danger">
+      <span th:text="${withdrawalError}"></span>
     </div>
-    <div class="window-body" style="text-align: center">
-      <form th:action="@{/user/withdrawal}" method="post" class="needs-validation" novalidate>
-        <div th:if="${withdrawalError}" class="alert alert-danger">
-          <span style="font-size: 1rem" th:text="${withdrawalError}"></span>
-        </div>
-        <div class="row" style="margin-bottom: 40px; margin-top: 40px">
-          <label for="password" class="form-label col-xl-2 col-lg-1 col-md-1 col-sm-1 col-1"
-                 style="font-size: 1.5rem; text-align: right; padding-top: 0.6rem; width: 190px; display: inline-block">비밀번호</label>
-          <input type="password" name="password" id="password"
-                 class="form-control-lg col-xl-9 col-lg-7 col-md-7 col-sm-5 col-5"
-                 placeholder="비밀번호를 입력하세요." required>
-          <div class="invalid-feedback" style="font-size: 1rem">비밀번호를 입력하세요.</div>
-        </div>
-        <div class="row" style="text-align: center;">
-          <div class="col m-2">
-            <button type="button" class="btn-lg" onclick="location.href='/user'"
-                    style="height: 40px; width: 130px; margin-right: 10px;">< Back
-            </button>
-            <button type="submit" class="btn-lg" style="height: 40px; width: 130px">회원 탈퇴</button>
-          </div>
-        </div>
-      </form>
+    <div class="mb-3">
+      <label for="password" class="form-label">회원 탈퇴</label>
+      <input type="password" name="password" id="password" class="form-control"
+             placeholder="비밀번호를 입력하세요." required>
+      <div class="invalid-feedback">비밀번호를 입력하세요.</div>
     </div>
-  </div>
+    <button type="submit" class="btn btn-primary">회원 탈퇴</button>
+  </form>
 </div>
 </html>
