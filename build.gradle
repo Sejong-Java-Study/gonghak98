@@ -41,6 +41,8 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     testImplementation 'org.springframework.security:spring-security-test'
 
@@ -50,7 +52,6 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-
 }
 
 tasks.named('bootBuildImage') {
@@ -59,5 +60,10 @@ tasks.named('bootBuildImage') {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+bootJar {
+    // main 브랜치에서만 추가하기
+    // dependsOn test
 }
 
