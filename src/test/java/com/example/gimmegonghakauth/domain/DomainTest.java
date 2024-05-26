@@ -4,46 +4,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
-import com.example.gimmegonghakauth.dao.AbeekDao;
-import com.example.gimmegonghakauth.dao.GonghakCorusesDao;
-import com.example.gimmegonghakauth.dao.GonghakDao;
 import com.example.gimmegonghakauth.dao.GonghakRepository;
 import com.example.gimmegonghakauth.dao.MajorsDao;
-
-import com.example.gimmegonghakauth.domain.DomainTest.DomainTestConfig;
-import lombok.RequiredArgsConstructor;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-@Import(DomainTestConfig.class)
+@SpringBootTest
 public class DomainTest {
 
     @Autowired
     private GonghakRepository gonghakRepository;
     @Autowired
     private MajorsDao majorsDao;
-
-    @TestConfiguration
-    @RequiredArgsConstructor
-    public static class DomainTestConfig {
-        private final AbeekDao abeekDao;
-        private final GonghakCorusesDao gonghakCorusesDao;
-
-        @Bean
-        public GonghakRepository gonghakRepository(){
-            return new GonghakDao(abeekDao,gonghakCorusesDao);
-        }
-    }
 
     private final MajorsDomain majorsDomain = MajorsDomain.builder()
         .id(1L)
@@ -57,6 +33,7 @@ public class DomainTest {
             .id(1L)
             .major("건설환경공학과").build();
         majorsDao.save(majorsDomain);
+//        gonghakRepository.save(majorsDomain);
     }
 
     @Transactional
@@ -64,7 +41,7 @@ public class DomainTest {
     void normalSaveTest(){
 
         //given
-        AbeekDomain normalAbeekDomain = buildAbeekDomain(majorsDomain);
+        AbeekDomain normalAbeekDomain = abeekDomain(majorsDomain);
 
         //when
         AbeekDomain savedAbeekDomain = gonghakRepository.save(normalAbeekDomain);
@@ -77,16 +54,29 @@ public class DomainTest {
     }
 
     @Test
+    @DisplayName("MajorDomain이 불완전 할 때 runtime")
+    void emptyMajorDomainSaveTest(){
+        //given
+        AbeekDomain errorAbeekDomain = abeekDomain(majorsDomain);
+        errorAbeekDomain.setMajorsDomain(new MajorsDomain());
+
+        //when
+        //then
+        assertThatThrownBy(() -> gonghakRepository.save(errorAbeekDomain))
+            .isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
     @DisplayName("범위 밖의 학년")
     void outOfRangeYear(){
-        AbeekDomain errorAbeekDomain = buildAbeekDomain(majorsDomain);
+        AbeekDomain errorAbeekDomain = abeekDomain(majorsDomain);
         errorAbeekDomain.setYear(25);
 
         assertThatThrownBy(() -> gonghakRepository.save(errorAbeekDomain))
             .isInstanceOf(RuntimeException.class);
     }
 
-    private AbeekDomain buildAbeekDomain(MajorsDomain majorsDomain){
+    private AbeekDomain abeekDomain(MajorsDomain majorsDomain){
         return AbeekDomain.builder()
             .id(1L)
             .majorsDomain(majorsDomain)

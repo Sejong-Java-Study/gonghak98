@@ -25,28 +25,22 @@ public class CompletedCoursesController {
     }
 
     @GetMapping("/excel")
-    public String excel(Model model, Authentication authentication){
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        List<CompletedCoursesDomain> dataList = excelService.getExcelList(userDetails);
-        model.addAttribute("datas",dataList);
-        return "excel/excelList";
+    public String main() {
+        return "excel/excel";
     }
 
     @PostMapping("/excel/read")
     public String readExcel(@RequestParam("file") MultipartFile file, Model model,
         Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        List<CompletedCoursesDomain> beforeDataList = excelService.getExcelList(userDetails);
-        model.addAttribute("datas",beforeDataList);
-
         try {
-            excelService.extractExcelFile(file, userDetails);
-            List<CompletedCoursesDomain> afterDataList = excelService.getExcelList(userDetails);
-            model.addAttribute("datas",afterDataList);
+            List<CompletedCoursesDomain> dataList = excelService.extractExcelFile(file,
+                userDetails);
+            model.addAttribute("datas", dataList);
             return "excel/excelList";
         } catch (IOException | FileException e) {
             model.addAttribute("error", e.getMessage());
-            return "excel/excelList";
+            return "excel/excel";
         }
     }
 }

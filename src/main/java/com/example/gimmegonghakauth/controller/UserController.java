@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -35,16 +34,6 @@ public class UserController {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
 
-    @GetMapping("")
-    public String userInformation(Model model, Authentication authentication){
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Long studentId = Long.parseLong(userDetails.getUsername());
-        UserDomain user = userDao.findByStudentId(studentId).get();
-        model.addAttribute("user",user);
-
-        return "user/information";
-    }
     @GetMapping("/signup")
     public String signup(UserJoinDto userJoinDto) {
         return "user/signup";
