@@ -15,3 +15,18 @@ function checkFileSize() {
 
   return true; // 폼 제출 허용
 }
+
+function showFileUploadSection() {
+  var fileUploadSection = document.getElementById("fileUploadSection");
+  fileUploadSection.style.display = "block";
+  var uploadButton = document.getElementById("uploadButton");
+  uploadButton.style.display = "none";
+}
+
+$(document).ready(function () {
+  if ($('tbody').children().length === 0) {
+    $('#courseTable').hide();
+    $('#fileUploadSection').show();
+    $('#uploadButton').hide();
+  }
+});
