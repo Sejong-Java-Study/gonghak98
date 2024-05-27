@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="window-body" style="text-align: center">
-      <form th:action="@{/api/user/withdrawal}" method="post" class="needs-validation" novalidate>
+      <form th:action="@{/user/withdrawal}" method="post" class="needs-validation" novalidate>
         <div th:if="${withdrawalError}" class="alert alert-danger">
           <span style="font-size: 1rem" th:text="${withdrawalError}"></span>
         </div>

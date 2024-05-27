@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/excel")
 public class CompletedCoursesController {
 
     private final CompletedCoursesService excelService;
@@ -26,7 +25,7 @@ public class CompletedCoursesController {
         this.excelService = excelService;
     }
 
-    @GetMapping("")
+    @GetMapping("/excel")
     public String excel(Model model, Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         List<CompletedCoursesDomain> dataList = excelService.getExcelList(userDetails);
@@ -34,7 +33,7 @@ public class CompletedCoursesController {
         return "excel/excelList";
     }
 
-    @PostMapping("/read")
+    @PostMapping("/excel/read")
     public String readExcel(@RequestParam("file") MultipartFile file, Model model,
         Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

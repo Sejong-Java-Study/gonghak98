@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="window-body">
-      <form th:action="@{/api/user/login}" method="post" class="needs-validation" novalidate>
+      <form th:action="@{/user/login}" method="post" class="needs-validation" novalidate>
         <div th:if="${param.error}" class="alert alert-danger">
           사용자ID 또는 비밀번호를 확인해 주세요.
         </div>
@@ -39,7 +39,7 @@
             </div>
             <div>
               <button class="btn-lg" type="button" style="height: 40px; width: 130px"
-                      onclick="location.href='/api/user/signup'">Sign in
+                      onclick="location.href='/user/signup'">Sign in
               </button>
             </div>
           </div>

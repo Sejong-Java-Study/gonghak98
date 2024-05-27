@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;

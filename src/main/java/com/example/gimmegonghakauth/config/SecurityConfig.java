@@ -20,28 +20,28 @@ public class SecurityConfig {
 
         http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                .requestMatchers("/api/user/withdrawal", "/api/user/change/password", "/api/user/logout",
-                    "/api/excel/**", "/api/gonghak/**","/api/user").authenticated()
+                .requestMatchers("/user/withdrawal", "/user/change/password", "/user/logout",
+                    "/excel/**", "/gonghak/**","/user").authenticated()
                 .anyRequest().permitAll()
             );
         http
-            .formLogin((auth) -> auth.loginPage("/api/user/login")
-                .defaultSuccessUrl("/api/user")
+            .formLogin((auth) -> auth.loginPage("/user/login")
+                .defaultSuccessUrl("/user")
                 .permitAll()
             ); //로그인시 메인페이지로 되돌아감
         http
-            .logout((auth) -> auth.logoutUrl("/api/user/logout")
+            .logout((auth) -> auth.logoutUrl("/user/logout")
                 .logoutSuccessUrl("/")
             );//로그아웃시 메인페이지로 되돌아감
         http
             .csrf(
                 (auth) -> auth.csrfTokenRepository((CookieCsrfTokenRepository.withHttpOnlyFalse()))
                     .ignoringRequestMatchers(
-                        "/api/user/send-verification-email") // "/user/send-verification-email" 경로에 대한 CSRF 보안 비활성화
+                        "/user/send-verification-email") // "/user/send-verification-email" 경로에 대한 CSRF 보안 비활성화
                     .ignoringRequestMatchers(
-                        "/api/user/verify-code") // "/user/verify-code" 경로에 대한 CSRF 보안 비활성화
-                    .ignoringRequestMatchers("/api/user/certification/clear")
-                    .ignoringRequestMatchers("/api/user/verify-status")
+                        "/user/verify-code") // "/user/verify-code" 경로에 대한 CSRF 보안 비활성화
+                    .ignoringRequestMatchers("/user/certification/clear")
+                    .ignoringRequestMatchers("/user/verify-status")
             );
 
         return http.build();
