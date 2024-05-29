@@ -22,6 +22,7 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers("/user/withdrawal", "/user/change/password", "/user/logout",
                     "/excel/**", "/gonghak/**","/user").authenticated()
+                .requestMatchers("/user/certification/clear").hasRole("ADMIN")
                 .anyRequest().permitAll()
             );
         http
