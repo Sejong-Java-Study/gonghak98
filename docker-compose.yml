@@ -2,45 +2,42 @@ version: "3.8"
 
 services:
   db:
-    container_name: db
     image: mysql:8.4.0
     volumes:
       - ./mysql/init:/docker-entrypoint-initdb.d
     environment:
-      - MYSQL_ROOT_PASSWORD=1234
-      - MYSQL_DATABASE=gonghak
-      - LANG=C.UTF-8
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - LANG=${LANG}
     restart: always
     networks:
-      - gonghak
+      - ${NETWORK_NAME}
   was:
-    container_name: was
     build:
       context: .
       dockerfile: docker/Dockerfile_Was
 #    image: boylonglegs/gonghak-was:local
     environment:
-      - DB_URL=db
-      - DB_PORT=3306
-      - DB_NAME=gonghak
+      - DB_URL=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${SCHEMA_NAME}
     depends_on:
-      - db # db 컨테이너가 실행된 후, was가 실행됨
+      - ${DB_NAME} # db 컨테이너가 실행된 후, was가 실행됨
     networks:
-      - gonghak
+      - ${NETWORK_NAME}
   nginx:
-    container_name: nginx
     build: # 도커파일을 통해 이미지를 빌드할 때, 사용
       context: . # 도커 빌드 컨텍스트는 루트 경로로 지정
       dockerfile: docker/Dockerfile_Nginx
 #    image: gonghak-proxy:local
     environment:
-      - WAS_HOST=was
+      - WAS_HOST=${WAS_NAME}
     ports:
       - 80:80
     depends_on:
-      - was # was 컨테이너가 실행된 후, nginx가 실행됨
+      - ${WAS_NAME} # was 컨테이너가 실행된 후, nginx가 실행됨
     networks:
-      - gonghak
+      - ${NETWORK_NAME}
 
 networks:
   gonghak:
