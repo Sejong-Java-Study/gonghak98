@@ -38,7 +38,7 @@ application.properties
 
 ### VS Code ###
 .vscode/
-/mysql/init/
+/mysql/
 =======
 HELP.md
 .gradle
@@ -73,6 +73,7 @@ src/main/resources/application.properties
 
 *.csv
 *.sql
+*.env
 
 ### NetBeans ###
 /nbproject/private/
