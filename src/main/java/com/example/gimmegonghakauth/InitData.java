@@ -144,14 +144,6 @@ public class InitData {
             .majorsDomain(elecInfoMajor).build();
         userDao.save(userDomainElec);
 
-        UserDomain userDomain2 = UserDomain.builder()
-            .email("testEmail@sju.ac.kr")
-            .name("testUser")
-            .password(passwordEncoder.encode("1234"))
-            .studentId(12345678L)
-            .majorsDomain(computerMajor).build();
-        userDao.save(userDomain2);
-
         //Courses
         CoursesDomain testCourse1 = CoursesDomain.builder()
             .courseId(1234L)

@@ -13,7 +13,7 @@ import lombok.Setter;
 public class UserJoinDto {
 
     @NotBlank(message = "학번은 필수항목입니다.")
-    @Pattern(regexp = "\\d{8}", message = "학번은 8자리 숫자여야 합니다.")
+    @Pattern(regexp = "1[7-9]\\d{6}|2[0-4]\\d{6}", message = "학번은 17에서 24로 시작하는 8자리 숫자여야 합니다.")
     private String studentId;
 
     @NotBlank(message = "비밀번호는 필수항목입니다.")
