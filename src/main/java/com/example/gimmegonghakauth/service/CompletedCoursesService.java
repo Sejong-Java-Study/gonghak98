@@ -18,6 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class CompletedCoursesService {
 
     final int FIRST_ROW = 4;
 
+    @Transactional
     public void extractExcelFile(MultipartFile file, UserDetails userDetails)
         throws IOException { //엑셀 데이터 추출
         List<CompletedCoursesDomain> dataList = new ArrayList<>();
@@ -86,6 +88,7 @@ public class CompletedCoursesService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<CompletedCoursesDomain> getExcelList(UserDetails userDetails){
         List<CompletedCoursesDomain> dataList = new ArrayList<>();
         Long studentId = Long.parseLong(userDetails.getUsername());
@@ -131,6 +134,7 @@ public class CompletedCoursesService {
         return workbook;
     }
 
+    @Transactional
     public void checkUserDomain(UserDomain userDomain) {
         // CompletedCourses 테이블에서 파일을 업로드한 유저정보를 가지는 행들을 불러옴
         List<CompletedCoursesDomain> coursesList = completedCoursesDao.findByUserDomain(userDomain);

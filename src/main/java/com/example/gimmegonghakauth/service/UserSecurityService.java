@@ -15,9 +15,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class UserSecurityService implements UserDetailsService {
 
