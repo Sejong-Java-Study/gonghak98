@@ -10,6 +10,7 @@ function sendVerificationEmail() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       if (xhr.responseText.includes("인증메일 발송에 성공했습니다.")) {
+        alert("인증메일 발송에 성공했습니다!");
         document.getElementById(
             "verificationCodeSection1").style.visibility = "visible";
         document.getElementById(
@@ -35,6 +36,7 @@ function verifyEmailCode() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       if (xhr.responseText.includes("인증번호 확인에 성공했습니다.")) {
+        alert("인증번호 확인에 성공했습니다!");
         document.getElementById(
             "verificationCodeSection1").getElementsByTagName(
             "input")[0].disabled = true;
