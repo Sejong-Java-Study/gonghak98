@@ -1,23 +1,18 @@
 version: 0.0
 os: Linux
-files:
-  - source: /
-    destination: /home/ubuntu/deploy/
+
+files: # EC2가 배포에 필요한 파일을 가져오는 경로 지정 (CodeDeploy-Agent가 수행함)
+  - source: / # S3에 있는 전체파일
+    destination: /home/ubuntu/gonghak98 # 해당 경로로 이동
 file_exists_behavior: OVERWRITE
 
 permissions:
-  - object: /home/ubuntu/deploy/
-    pattern: "**"
-    owner: root
-    group: root
+  - object: /
+    owner: ubuntu
+    group: ubuntu
 
 hooks:
-  ApplicationStop:
-    - location: scripts/stop.sh
-      timeout: 60
-      runas: root
-
   ApplicationStart:
-    - location: scripts/start.sh
+    - location: scripts/start-server.sh
       timeout: 60
-      runas: root
+      runas: ubuntu
