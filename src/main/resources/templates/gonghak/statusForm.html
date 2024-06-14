@@ -1,0 +1,115 @@
+<html layout:decorate="~{layout/layout2}">
+<div class="container my-3" layout:fragment="content">
+  <div class="window" style="width: 100%;margin-top: 10%">
+    <div class="title-bar">
+      <div class="title-bar-text " style="font-size: 30px">
+        인증정보 확인
+      </div>
+      <div class="title-bar-controls" style="margin-right: 10px">
+        <button style="margin-right: 20px">
+          <img src="/static/images/questionmark.svg" style="height: 40px; width: 40px; padding:10px">
+        </button>
+        <button>
+          <img src="/static/images/x.svg" style="height: 40px; width: 40px; padding:10px">
+        </button>
+      </div>
+    </div>
+    <div class="window-body" style="text-align: center">
+      <div style="margin-top: 30px; margin-bottom: 40px">
+        <div class="py-5 text-center">
+          <h1>RESULT RATIO</h1>
+        </div>
+        <div class="table-container m-3" style="max-height: 500px; overflow-y: auto">
+          <table class="table" style="font-size:20px">
+            <thead>
+            <tr class="table-dark">
+              <th>Abeek 타입</th>
+              <th>얻은 학점</th>
+              <th>기준 학점</th>
+              <th>진행도</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="resultRatio : ${userResultRatio}">
+              <td th:text="${resultRatio.getKey()}"></td>
+              <td th:text="${resultRatio.value.getUserPoint()}"></td>
+              <td th:text="${resultRatio.value.getStandardPoint()}"></td>
+              <td>
+                <div class="progress-bar">
+                  <div class="progress"
+                       th:style="'width: ' + ${#numbers.formatPercent((resultRatio.value.getUserPoint()/resultRatio.value.getStandardPoint()),1,1)}"></div>
+                </div>
+              </td>
+              <td th:text="${#numbers.formatPercent((resultRatio.value.getUserPoint()/resultRatio.value.getStandardPoint()),1,1) }"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <hr/>
+
+
+      <style>
+        .progress-bar {
+          width: 100%; /* 프로그레스 바 전체 너비 */
+          height: 20px; /* 프로그레스 바 높이 */
+          background-color: #f5f5f5; /* 기본 배경색 */
+          border-radius: 5px; /* 프로그레스 바 모서리를 둥글게 */
+          margin-bottom: 10px; /* 마진 추가 */
+        }
+
+        .progress {
+          height: 100%; /* 프로그레스 바 내부 높이 */
+          border-radius: 5px; /* 프로그레스 바 내부 모서리를 둥글게 */
+          background-color: #007bff; /* 진행도에 따라 변경될 배경색 */
+          transition: width 0.3s ease-in-out; /* 진행도 변경 애니메이션 */
+        }
+      </style>
+
+      <div style="margin-top:30px">
+        <div class="py-5 text-center">
+          <h1>RECOMMEND COURSES</h1>
+        </div>
+        <div class="py-5 text-center" th:each="recommendCourse : ${recommendCoursesByAbeekType}">
+
+          <div th:if="${not #lists.isEmpty(recommendCourse.getValue())}">
+            <h3 th:text="${recommendCourse.getKey()}">type</h3>
+            <div style="margin-bottom: 50px">
+              <div class="table-container m-3"
+                   style="max-height: 500px; overflow-y: auto; margin-top: 30px">
+                <table class="table table-striped" style="font-size:20px">
+                  <thead style="position:sticky; top: 0; background-color: white">
+                  <tr class="table-dark">
+                    <th>강의명</th>
+                    <th>학점</th>
+                    <th>설계학점</th>
+                    <th>강의 분류</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="recommendCourse : ${recommendCourse.getValue()}">
+                    <td th:text="${recommendCourse.getCourseName()}"></td>
+                    <td th:text="${recommendCourse.getCredit()}"></td>
+                    <td th:text="${recommendCourse.getDesignCredit()}"></td>
+                    <td th:text="${recommendCourse.getCourseCategory()}"></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <hr/>
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>
+</html>

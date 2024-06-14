@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout2}">
+<div layout:fragment="content" class="container my-3">
+  <div class="window" style="width: 100%;margin-top: 10%; min-height: 40dvh">
+    <div class="title-bar">
+      <div class="title-bar-text " style="font-size: 30px">
+        기이수 과목
+      </div>
+      <div class="title-bar-controls" style="margin-right: 10px">
+        <button style="margin-right: 20px">
+          <img src="/static/images/questionmark.svg" style="height: 40px; width: 40px; padding:10px">
+        </button>
+        <button>
+          <img src="/static/images/x.svg" style="height: 40px; width: 40px; padding:10px">
+        </button>
+      </div>
+    </div>
+    <div class="window-body" style="text-align: center">
+      <div id="courseTable" class="table-container" style="max-height: 500px; overflow-y: auto; margin-top: 30px">
+        <table class="table table-striped" style="font-size:20px">
+          <thead style="position: sticky; top: 0; background-color: white;">
+          <tr class="table-dark">
+            <th scope="col">수강년도</th>
+            <th scope="col">학기</th>
+            <th scope="col">과목명</th>
+            <th scope="col">학수번호</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="data : ${datas}">
+            <td th:text="${data.year}"></td>
+            <td th:text="${data.semester}"></td>
+            <td th:text="${data.coursesDomain.getName()}"></td>
+            <td th:text="${data.coursesDomain.getCourseId()}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <form th:action="@{/excel/read}" method="POST" enctype="multipart/form-data"
+            onsubmit="return checkFileSize()"
+            class="needs-validation" novalidate style="font-size:15px">
+        <!-- 파일 크기 초과 시 에러 메시지 표시 -->
+        <div id="fileSizeError" class="text-danger"></div>
+
+        <!-- 에러 메시지가 있으면 표시 -->
+        <div th:if="${error}" th:text="${error}" class="text-danger" style="font-size:15px"></div>
+
+        <div id="fileUploadSection" style="display: none; margin-top: 30px">
+          <div style="text-align: center; margin-bottom: 30px; font-size: 15px">
+            <p style="font-size: 25px; font-weight: bold">기이수 성적 업로드</p>
+            <hr>
+            <p>1. 학사정보시스템 사이트에 로그인</p>
+            <p>2. 수업/성적 -> 성적 및 강의평가 -> 기이수 성적 조회</p>
+            <p>3. 성적엑셀다운로드 후 업로드</p>
+          </div>
+          <div class="mb-3">
+            <label for="fileInput" class="form-label" style="font-size:15px">기이수 성적 엑셀 파일을 업로드해주세요.</label>
+            <input id="fileInput" type="file" th:name="file" class="form-control" required>
+            <div class="invalid-feedback">기이수 파일을 등록해주세요.</div>
+          </div>
+          <button type="submit" style="width: 150px; height: 50px; font-size: 15px">업로드</button>
+        </div>
+        <button id="uploadButton" type="button" onclick="showFileUploadSection()" style="width: 150px; height: 50px; font-size: 15px; margin-top: 30px">기이수 파일<br> 업로드</button>
+      </form>
+      <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+      <!-- 파일 크기 확인을 위한 JavaScript -->
+      <script src="/static/js/excel.js"></script>
+    </div>
+  </div>
+</div>
+</html>

@@ -1,0 +1,10 @@
+<html layout:decorate="~{layout/layout}">
+<div layout:fragment="content" class="container my-3">
+  <form id="certificationForm" onsubmit="clearCertification(); return false;">
+    <label for="email">이메일:</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+    <button type="submit" class="btn btn-primary">인증 초기화</button>
+  </form>
+  <script src="/static/js/verify.js"></script>
+</div>
+</html>
