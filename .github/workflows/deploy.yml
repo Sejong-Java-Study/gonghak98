@@ -44,7 +44,7 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
 
       - name: Test용 Properties 파일 추가
         run: |
-          touch ./src/test/resources/application.properties
+          mkdir -p ./src/test/resources
           echo "${{ secrets.TEST_PROPERTIES }}" >> ./src/test/resources/application.properties
 
       - name: gradlew 권한 부여
