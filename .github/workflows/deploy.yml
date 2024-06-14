@@ -1,4 +1,4 @@
-name: Backend Build and Push (For main)
+name: gonghak98 WAS CI/CD
 
 on: # 워크플로우가 언제 실행되는지 정의 (like 조건문)
   push:
@@ -19,16 +19,58 @@ env:
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
   IMAGE_TAG: latest
 
-# jobs를 test와 deployment 두 가지로 나누기
-
-
 jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정의 (like 조건문의 본문)
-  # test:
-
-  deploy:
-    # 가장 최신 버전의 우분투를 러너(Github Actions 실행 환경)로 설정
+  test:
+    name: 스프링부트 프로젝트 테스트 자동화
     runs-on: ubuntu-latest # 상세 작업에 필수적으로 들어가야 하는 항목 : 어느 환경에서 실행되어야 하는지 정의
 
+    steps:
+      - name: 깃허브 리포지토리 파일 불러오기
+        uses: actions/checkout@v4
+
+      - name: 러너에 JDK 설치
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      - name: Gradle 설치
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: 러너에 테스트용 MySQL을 설치
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 3306
+          container port: 3306
+          mysql database: 'jpa_prac'
+          mysql root password: 1234
+
+      - name: Test용 Properties 파일 추가
+        run: |
+          echo "${{ secrets.TEST_PROPERTIES }}" >> ./src/test/resources/application.properties
+
+      - name: gradlew 권한 부여
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: 프로젝트 테스트
+        run: ./gradlew test
+        
+      - name: 프로젝트 빌드
+        run: ./gradlew clean bootJar --console=plain
+
+      - name: 빌드 산출물을 다른 job이 사용할 수 있도록 업로드
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: build/libs/*.jar
+
+  deploy:
+    name: 스프링부트 프로젝트 배포
+    # 가장 최신 버전의 우분투를 러너(Github Actions 실행 환경)로 설정
+    runs-on: ubuntu-latest # 상세 작업에 필수적으로 들어가야 하는 항목 : 어느 환경에서 실행되어야 하는지 정의
+    needs: test # test 작업이 끝난 후에 실행될 수 있도록 설정
+    
     steps:
       - name: 깃허브 리포지토리 파일 불러오기
         uses: actions/checkout@v4 # 현재 리포지토리로 체크아웃
@@ -47,9 +89,15 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: test 작업에서 업로드한 빌드 산출물 다운로드
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: ./build
+
       - name: 이미지 빌드 후, ECR에 푸쉬
         run: |
-          docker buildx build --platform=linux/amd64 -f ./docker/Dockerfile_Was -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY}}:${{ env.IMAGE_TAG }} .
+          docker buildx build --platform=linux/amd64 -f ./docker/Dockerfile_Was_ECR -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY}}:${{ env.IMAGE_TAG }} .
           docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
       - name: 배포 스크립트 폴더 및 파일 추가
