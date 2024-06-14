@@ -1,0 +1,73 @@
+name: Backend Build and Push (For main)
+
+on: # 워크플로우가 언제 실행되는지 정의 (like 조건문)
+  push:
+    branches:
+      - main # 지정한 브랜치로 Push 했을 때
+  pull_request:
+    branches:
+      - main # 지정한 브랜치로 PR 후 Merge 됐을 때
+
+env:
+  AWS_REGION_NAME: ap-northeast-2 # AWS 리전 이름
+
+  AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }} # S3 버킷 이름
+  AWS_CODE_DEPLOY_NAME: gonghak98-server # CodeDeploy 애플리케이션 이름
+  AWS_CODE_DEPLOY_GROUP: Production # CodeDeploy 배포 그룹 이름
+
+  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }} # login-ecr 스텝의 출력 값(ECR 저장소 이름)
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
+  IMAGE_TAG: latest
+
+# jobs를 test와 deployment 두 가지로 나누기
+
+
+jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정의 (like 조건문의 본문)
+  # test:
+
+  deploy:
+    # 가장 최신 버전의 우분투를 러너(Github Actions 실행 환경)로 설정
+    runs-on: ubuntu-latest # 상세 작업에 필수적으로 들어가야 하는 항목 : 어느 환경에서 실행되어야 하는지 정의
+
+    steps:
+      - name: 깃허브 리포지토리 파일 불러오기
+        uses: actions/checkout@v4 # 현재 리포지토리로 체크아웃
+
+      - name: Github Actions가 AWS 리소스(ECR, S3, CodeDeploy)에 접근할 수 있도록 인증정보 설정
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION_NAME }}
+
+      - name: 멀티 플랫폼 빌드와 캐시 활용을 할 수 있는 도커 빌드X 설치
+        uses: docker/setup-buildx-action@v3
+
+      - name: AWS ECR에 로그인
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: 이미지 빌드 후, ECR에 푸쉬
+        run: |
+          docker buildx build --platform=linux/amd64 -f ./docker/Dockerfile_Was -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY}}:${{ env.IMAGE_TAG }} .
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: 배포 스크립트 폴더 및 파일 추가
+        run: |
+          mkdir scripts
+          echo "${{ secrets.START_SERVER_SH }}" >> ./scripts/start-server.sh
+
+      - name: 배포에 필요한 파일 압축하기
+        run: tar -czvf ${{ GITHUB.SHA }}.tar.gz appspec.yml scripts
+
+      - name: S3로 배포 압축파일 업로드
+        run: |
+          aws s3 cp ./${{ GITHUB.SHA }}.tar.gz s3://${{ env.AWS_S3_BUCKET_NAME }}/${{ GITHUB.SHA }}.tar.gz
+
+      - name: CodeDeploy를 활용해 EC2에 프로젝트 코드 배포
+        run: |
+          aws deploy create-deployment \
+            --application-name ${{ env.AWS_CODE_DEPLOY_NAME }} \
+            --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --s3-location bucket=${{ env.AWS_S3_BUCKET_NAME }},key=${{ github.sha }}.tar.gz,bundleType=tgz
