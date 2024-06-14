@@ -1,6 +1,4 @@
-# 소스 빌드용 Base 이미지(Maven, Gradle에 호환되는 JDK 이미지)
-FROM amazoncorretto:17-alpine3.19 as build
-
+FROM gradle:8.8.0-jdk17-alpine as build
 WORKDIR /app
 
 # 의존성을 가져오기 위해 필요한 파일만 우선 복사
