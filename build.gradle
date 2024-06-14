@@ -61,9 +61,3 @@ tasks.named('bootBuildImage') {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-bootJar {
-    // main 브랜치에서만 추가하기
-    // dependsOn test
-}
-
