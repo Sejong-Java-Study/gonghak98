@@ -12,7 +12,7 @@ env:
   AWS_CODE_DEPLOY_NAME: gonghak98-server # CodeDeploy 애플리케이션 이름
   AWS_CODE_DEPLOY_GROUP: Production # CodeDeploy 배포 그룹 이름
 
-  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }} # login-ecr 스텝의 출력 값(ECR 저장소 이름)
+  ECR_REGISTRY: ${{ secrets.ECR_REPOSITORY_ORIGIN }} # login-ecr 스텝의 출력 값(ECR 저장소 이름)
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
   IMAGE_TAG: latest
 
@@ -83,7 +83,6 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
         uses: docker/setup-buildx-action@v3
 
       - name: AWS ECR에 로그인
-        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: test 작업에서 업로드한 빌드 산출물 다운로드
