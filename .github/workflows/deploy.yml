@@ -1,12 +1,9 @@
 name: gonghak98 WAS CI/CD
 
 on: # 워크플로우가 언제 실행되는지 정의 (like 조건문)
-  push:
-    branches:
-      - main # 지정한 브랜치로 Push 했을 때
   pull_request:
     branches:
-      - main # 지정한 브랜치로 PR 후 Merge 됐을 때
+      - main # main 브랜치로 PR 후 Merge 됐을 때
 
 env:
   AWS_REGION_NAME: ap-northeast-2 # AWS 리전 이름
