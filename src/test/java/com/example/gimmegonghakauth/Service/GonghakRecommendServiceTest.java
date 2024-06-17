@@ -1,4 +1,4 @@
-package com.example.gimmegonghakauth.service;
+package com.example.gimmegonghakauth.Service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
