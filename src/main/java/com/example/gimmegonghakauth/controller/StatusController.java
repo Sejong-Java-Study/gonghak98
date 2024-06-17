@@ -5,7 +5,6 @@ import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.GonghakResultDto.ResultPointDto;
 import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;
-import com.example.gimmegonghakauth.dto.LoginDto;
 import com.example.gimmegonghakauth.service.GonghakCalculateService;
 import com.example.gimmegonghakauth.service.recommend.GonghakRecommendService;
 import com.example.gimmegonghakauth.service.recommend.RecommendServiceSelectManager;
@@ -18,8 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -57,6 +54,6 @@ public class StatusController {
 
         model.addAttribute("userResultRatio", userResultRatio);
         model.addAttribute("recommendCoursesByAbeekType", recommendCoursesByAbeekType);
-        return "/gonghak/statusForm";
+        return "gonghak/statusForm";
     }
 }

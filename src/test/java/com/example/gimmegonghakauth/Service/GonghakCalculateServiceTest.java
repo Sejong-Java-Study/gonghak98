@@ -85,4 +85,7 @@ class GonghakCalculateServiceTest {
         );
     }
 
+    private double getExpectedCredit(int credit,Map<AbeekTypeConst, Integer> standard,AbeekTypeConst abeekTypeConst) {
+        return Double.valueOf(String.format("%.4f",(double) credit / standard.get(abeekTypeConst)));
+    }
 }

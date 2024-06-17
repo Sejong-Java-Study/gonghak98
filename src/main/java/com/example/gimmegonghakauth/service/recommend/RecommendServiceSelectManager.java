@@ -19,14 +19,14 @@ public class RecommendServiceSelectManager {
 
     public GonghakRecommendService selectRecommendService(Long studentId){
         MajorsDomain majorsDomain = userDao.findByStudentId(studentId).get()
-            .getMajorsDomain();
+                .getMajorsDomain();
         if(majorsDomain.getMajor().contains(ELEC_INFO.getName())){
             log.info("ElecInfoMajorGonghakRecommendService");
             return applicationContext.getBean("elecInfoMajorGonghakRecommendService",
-                ElecInfoMajorGonghakRecommendService.class);
+                    ElecInfoMajorGonghakRecommendService.class);
         }
         log.info("ComputerMajorGonghakRecommendService");
         return applicationContext.getBean("computerMajorGonghakRecommendService",
-            ComputerMajorGonghakRecommendService.class);
+                ComputerMajorGonghakRecommendService.class);
     }
 }

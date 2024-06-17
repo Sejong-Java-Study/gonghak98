@@ -1,0 +1,23 @@
+# nginx 경량화된 베이스 이미지
+FROM nginx:1.25.4-alpine-slim
+ENV WAS_HOST gonghak-was
+ENV WAS_PORT 8080
+
+# Nginx 설정 파일로 복사될 템플릿 파일
+COPY ./nginx/conf/nginx.conf /etc/nginx/conf.d/default.conf.template
+
+# Nginx 컨테이너 실행에 필요한 명령어 모음 쉘 파일
+COPY ./nginx/nginx-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/nginx-entrypoint.sh
+
+# Nginx 설정 파일 복사
+COPY ./nginx/conf/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Nginx 컨테이너에 정적 파일 복사
+COPY ./src/main/resources/static/ /usr/share/nginx/static/
+
+# 포트 설정
+EXPOSE 80
+ENTRYPOINT ["nginx-entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
+# 컨테이너에 전달되는 최종 명령어 "nginx-entrypoint.sh nginx -g daemon off"

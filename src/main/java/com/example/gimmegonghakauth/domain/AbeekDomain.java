@@ -30,7 +30,7 @@ public class AbeekDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "abeek_Id")
+    @Column(name = "abeek_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
