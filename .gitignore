@@ -27,10 +27,12 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-src/main/resources/application.properties
+
+application*.properties
 
 *.csv
 *.sql
+*.env
 
 ### NetBeans ###
 /nbproject/private/
