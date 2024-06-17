@@ -11,6 +11,7 @@ import com.example.gimmegonghakauth.dao.GonghakRepository;
 import com.example.gimmegonghakauth.dao.MajorsDao;
 
 import com.example.gimmegonghakauth.domain.DomainTest.DomainTestConfig;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
