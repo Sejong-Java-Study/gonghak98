@@ -15,7 +15,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+
 public class CompletedCoursesService {
 
     private final CompletedCoursesDao completedCoursesDao;
     private final CoursesDao coursesDao; // CoursesDao 변수 선언
     private final UserDao userDao;
 
-    @Autowired
     public CompletedCoursesService(CompletedCoursesDao completedCoursesDao, CoursesDao coursesDao,
         UserDao userDao) {
         this.completedCoursesDao = completedCoursesDao;
@@ -63,7 +62,6 @@ public class CompletedCoursesService {
 
         for (int i = FIRST_ROW; i < worksheet.getPhysicalNumberOfRows(); i++) { //데이터 추출
             Row row = worksheet.getRow(i);
-            CompletedCoursesDomain data = new CompletedCoursesDomain();
 
             String yearAsString = dataFormatter.formatCellValue(row.getCell(1));
             Integer year = Integer.parseInt(yearAsString);  //년도
@@ -79,7 +77,7 @@ public class CompletedCoursesService {
             if (coursesDomain == null){
                 continue;
             }
-            data = CompletedCoursesDomain.builder().userDomain(userDomain)
+            CompletedCoursesDomain data = CompletedCoursesDomain.builder().userDomain(userDomain)
                 .coursesDomain(coursesDomain).year(year).semester(semester).build();
 
             completedCoursesDao.save(data);
