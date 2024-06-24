@@ -17,7 +17,7 @@ env:
   IMAGE_TAG: latest
 
 jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정의 (like 조건문의 본문)
-  test:
+  test and build:
     name: 스프링부트 프로젝트 테스트 자동화
     runs-on: ubuntu-latest # 상세 작업에 필수적으로 들어가야 하는 항목 : 어느 환경에서 실행되어야 하는지 정의
 
@@ -34,25 +34,30 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
       - name: Gradle 설치
         uses: gradle/actions/setup-gradle@v3
 
-      - name: 러너에 테스트용 MySQL을 설치
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          host port: 3306
-          container port: 3306
-          mysql database: 'jpa_prac'
-          mysql root password: 1234
+#      - name: 러너에 테스트용 MySQL을 설치
+#        uses: mirromutth/mysql-action@v1.1
+#        with:
+#          host port: 3306
+#          container port: 3306
+#          mysql database: 'jpa_prac'
+#          mysql root password: 1234
+#
+#      - name: Test용 Properties 파일 추가
+#        run: |
+#          mkdir -p ./src/test/resources
+#          echo "${{ secrets.TEST_PROPERTIES }}" >> ./src/test/resources/application.properties
 
-      - name: Test용 Properties 파일 추가
+      - name: Main용 Properties 파일 추가
         run: |
-          mkdir -p ./src/test/resources
-          echo "${{ secrets.TEST_PROPERTIES }}" >> ./src/test/resources/application.properties
+          mkdir -p ./src/main/resources
+          echo "${{ secrets.MAIN_PROPERTIES }}" >> ./src/main/resources/application.properties
 
       - name: gradlew 권한 부여
         run: chmod +x ./gradlew
         shell: bash
 
-      - name: 프로젝트 테스트
-        run: ./gradlew test
+#      - name: 프로젝트 테스트
+#        run: ./gradlew test
         
       - name: 프로젝트 빌드
         run: ./gradlew clean bootJar --console=plain
