@@ -64,8 +64,8 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
           name: build-artifact
           path: build/libs/*.jar
 
-  deploy:
-    name: 스프링부트 프로젝트 배포
+  build_and_push_image:
+    name: 도커 이미지 빌드 및 푸시
     # 가장 최신 버전의 우분투를 러너(Github Actions 실행 환경)로 설정
     runs-on: ubuntu-latest # 상세 작업에 필수적으로 들어가야 하는 항목 : 어느 환경에서 실행되어야 하는지 정의
     needs: test_and_build # test_and_build 작업이 끝난 후에 실행될 수 있도록 설정
@@ -74,18 +74,20 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
       - name: 깃허브 리포지토리 파일 불러오기
         uses: actions/checkout@v4 # 현재 리포지토리로 체크아웃
 
-      - name: Github Actions가 AWS 리소스(ECR, S3, CodeDeploy)에 접근할 수 있도록 인증정보 설정
+      - name: Github Actions가 AWS 리소스(ECR)에 접근할 수 있도록 인증정보 설정, 이 때 리전은 us-east-1
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION_NAME }}
+          aws-region: us-east-1
 
       - name: 멀티 플랫폼 빌드와 캐시 활용을 할 수 있는 도커 빌드X 설치
         uses: docker/setup-buildx-action@v3
 
       - name: AWS ECR에 로그인
         uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry-type: public
 
       - name: build/libs 폴더 생성
         run: |
@@ -108,6 +110,22 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
             -f ./docker/Dockerfile_Was_ECR \
             -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG \
             --push .
+
+  deploy:
+    name: 스프링부트 프로젝트 배포
+    runs-on: ubuntu-latest
+    needs: build_and_push_image
+
+    steps:
+      - name: 깃허브 리포지토리 파일 불러오기
+        uses: actions/checkout@v4
+
+      - name: Github Actions가 AWS 리소스(S3, CodeDeploy)에 접근할 수 있도록 인증정보 설정
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION_NAME }}
 
       - name: 배포 스크립트 폴더 및 파일 추가
         run: |
