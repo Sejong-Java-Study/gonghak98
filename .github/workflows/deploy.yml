@@ -103,8 +103,10 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
 
       - name: 이미지 빌드 후, ECR에 푸쉬
         run: |
-          docker buildx build --platform=linux/amd64 -f ./docker/Dockerfile_Was_ECR -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY}}:${{ env.IMAGE_TAG }} .
-          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          docker buildx build --platform=linux/amd64 \
+            -f ./docker/Dockerfile_Was_ECR \
+            -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY}}:${{ env.IMAGE_TAG }} \
+            --push .
 
       - name: 배포 스크립트 폴더 및 파일 추가
         run: |
