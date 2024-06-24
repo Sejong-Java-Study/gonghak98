@@ -85,10 +85,7 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
         uses: docker/setup-buildx-action@v3
 
       - name: AWS ECR에 로그인
-        id: login-ecr-public
         uses: aws-actions/amazon-ecr-login@v2
-        with:
-          registry-type: public
 
       - name: build/libs 폴더 생성
         run: |
@@ -102,8 +99,8 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
 
       - name: 이미지 빌드 후, ECR에 푸쉬
         env:
-          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
-          REGISTRY_ALIAS: ${{ secrets.REGISTRY_ALIAS }}
+          REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          REGISTRY_ALIAS: ${{ secrets.ECR_REGISTRY_ALIAS }}
           REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG: latest
         run: |
