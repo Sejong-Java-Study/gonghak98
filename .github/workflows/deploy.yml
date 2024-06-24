@@ -87,6 +87,8 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
       - name: AWS ECR에 로그인
         id: login-ecr-public
         uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry-type: public
 
       - name: build/libs 폴더 생성
         run: |
