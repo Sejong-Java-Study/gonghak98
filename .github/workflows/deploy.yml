@@ -124,7 +124,7 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION_NAME }}
 
       - name: 배포 스크립트 폴더 및 파일 추가
