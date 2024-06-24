@@ -72,7 +72,7 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
     name: 스프링부트 프로젝트 배포
     # 가장 최신 버전의 우분투를 러너(Github Actions 실행 환경)로 설정
     runs-on: ubuntu-latest # 상세 작업에 필수적으로 들어가야 하는 항목 : 어느 환경에서 실행되어야 하는지 정의
-    needs: test # test 작업이 끝난 후에 실행될 수 있도록 설정
+    needs: test_and_build # test_and_build 작업이 끝난 후에 실행될 수 있도록 설정
     
     steps:
       - name: 깃허브 리포지토리 파일 불러오기
@@ -91,7 +91,7 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
       - name: AWS ECR에 로그인
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: test 작업에서 업로드한 빌드 산출물 다운로드
+      - name: test_and_build 작업에서 업로드한 빌드 산출물 다운로드
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
