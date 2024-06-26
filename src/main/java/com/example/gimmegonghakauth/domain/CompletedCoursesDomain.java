@@ -43,7 +43,6 @@ public class CompletedCoursesDomain {
     private int year;
 
     @NotNull
-    @Range(min = 1, max = 2)
     @Column(name = "semester")
-    private int semester;
+    private String semester;
 }
