@@ -85,7 +85,7 @@ public class CompletedCoursesServiceDataTest {
             CompletedCoursesDomain.builder().
                 userDomain(userDao.findByStudentId(19011684L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
-                year(2023).semester(1).
+                year(2023).semester("1학기").
                 build();
 
         //기이수 과목 데이터2
@@ -93,7 +93,7 @@ public class CompletedCoursesServiceDataTest {
             CompletedCoursesDomain.builder().
                 userDomain(userDao.findByStudentId(19011684L).get()).
                 coursesDomain(coursesDao.findByCourseId(54321L)).
-                year(2023).semester(1).
+                year(2023).semester("1학기").
                 build();
 
         //기이수 과목 저장
@@ -132,7 +132,7 @@ public class CompletedCoursesServiceDataTest {
             CompletedCoursesDomain.builder().
                 userDomain(userDao.findByStudentId(19011684L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
-                year(2023).semester(1).
+                year(2023).semester("1학기").
                 build();
 
         completedCoursesDao.save(data1);
@@ -160,14 +160,14 @@ public class CompletedCoursesServiceDataTest {
             CompletedCoursesDomain.builder().
                 userDomain(userDao.findByStudentId(19011684L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
-                year(2023).semester(1).
+                year(2023).semester("1학기").
                 build();
         //기이수 과목 데이터 2
         CompletedCoursesDomain data2 =
             CompletedCoursesDomain.builder().
                 userDomain(userDao.findByStudentId(19011684L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
-                year(2023).semester(1).
+                year(2023).semester("1학기").
                 build();
 
         completedCoursesDao.save(data1);

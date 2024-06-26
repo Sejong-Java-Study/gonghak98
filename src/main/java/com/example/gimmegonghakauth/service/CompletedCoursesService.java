@@ -66,8 +66,7 @@ public class CompletedCoursesService {
             String yearAsString = dataFormatter.formatCellValue(row.getCell(1));
             Integer year = Integer.parseInt(yearAsString);  //년도
 
-            String semesterAsString = dataFormatter.formatCellValue(row.getCell(2));
-            Integer semester = Integer.parseInt(String.valueOf(semesterAsString.charAt(0))); //학기
+            String semester = dataFormatter.formatCellValue(row.getCell(2)); //학기
 
             String courseIdAsString = dataFormatter.formatCellValue(row.getCell(3));
             Long courseId = Long.parseLong(courseIdAsString); //학수번호

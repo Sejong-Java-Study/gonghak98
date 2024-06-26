@@ -174,22 +174,22 @@ public class InitData {
         //CompletedCourses
         CompletedCoursesDomain coursesDomain1 = CompletedCoursesDomain.builder()
             .year(2019)
-            .semester(1)
+            .semester("1학기")
             .coursesDomain(testCourse1)
             .userDomain(userDomain).build();
         CompletedCoursesDomain coursesDomain2 = CompletedCoursesDomain.builder()
             .year(2019)
-            .semester(1)
+            .semester("1학기")
             .coursesDomain(testCourse2)
             .userDomain(userDomain).build();
         CompletedCoursesDomain coursesDomain3 = CompletedCoursesDomain.builder()
             .year(2019)
-            .semester(1)
+            .semester("1학기")
             .coursesDomain(testCourse3)
             .userDomain(userDomain).build();
         CompletedCoursesDomain coursesDomain4 = CompletedCoursesDomain.builder()
             .year(2019)
-            .semester(1)
+            .semester("1학기")
             .coursesDomain(testCourse4)
             .userDomain(userDomain).build();
 
