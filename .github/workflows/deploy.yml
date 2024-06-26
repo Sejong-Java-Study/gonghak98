@@ -97,7 +97,7 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: ./build/libs/app.jar
+          path: ./build/libs/
 
       - name: 빌드 산출물 확인
         run: |
