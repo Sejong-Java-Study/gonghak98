@@ -99,6 +99,10 @@ jobs: # 해당 워크플로우에서 어떤 일이 수행되어야 하는지 정
           name: build-artifact
           path: ./build/libs/app.jar
 
+      - name: 빌드 산출물 확인
+        run: |
+          ls -l ./build/libs
+
       - name: 이미지 빌드 후, ECR에 푸쉬
         env:
           REGISTRY: ${{ secrets.ECR_REGISTRY }}
