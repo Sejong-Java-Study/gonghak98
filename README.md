@@ -74,7 +74,9 @@
 
 
 ## 🛠 기술 스택
-![image](https://github.com/gmltn9233/Gimme-Gonghak-Auth/assets/63588364/1f518ac6-a27d-4f08-9fb0-c773ba3119b6)
+
+![image](https://github.com/gmltn9233/Gimme-Gonghak-Auth/assets/63588364/24f6abdc-6515-43cf-bc65-3046e960bfe5)
+
 
 ## 💻인프라
 ![image](https://github.com/Sejong-Java-Study/Gimme-Gonghak-Auth/assets/63588364/cd0888eb-64e4-4d95-98b6-9e4464548300)
