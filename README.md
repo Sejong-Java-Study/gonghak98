@@ -55,10 +55,10 @@
         </tr>
         <tr>
             <td align="center">
-                <a href="https://github.com/jiseop121">@jiseop121</a>
+                <a href="https://github.com/whxogus215">@whxogus215</a>
             </td>
             <td align="center">
-                <a href="https://github.com/jiseop121">@jiseop121</a>
+                <a href="https://github.com/gmltn9233">@gmltn9233</a>
             </td>
             <td align="center">
                 <a href="https://github.com/jiseop121">@jiseop121</a>
