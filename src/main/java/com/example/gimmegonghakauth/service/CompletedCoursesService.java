@@ -15,9 +15,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -25,13 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+
 public class CompletedCoursesService {
 
     private final CompletedCoursesDao completedCoursesDao;
     private final CoursesDao coursesDao; // CoursesDao 변수 선언
     private final UserDao userDao;
 
-    @Autowired
     public CompletedCoursesService(CompletedCoursesDao completedCoursesDao, CoursesDao coursesDao,
         UserDao userDao) {
         this.completedCoursesDao = completedCoursesDao;
@@ -41,6 +41,7 @@ public class CompletedCoursesService {
 
     final int FIRST_ROW = 4;
 
+    @Transactional
     public void extractExcelFile(MultipartFile file, UserDetails userDetails)
         throws IOException { //엑셀 데이터 추출
         List<CompletedCoursesDomain> dataList = new ArrayList<>();
@@ -61,13 +62,11 @@ public class CompletedCoursesService {
 
         for (int i = FIRST_ROW; i < worksheet.getPhysicalNumberOfRows(); i++) { //데이터 추출
             Row row = worksheet.getRow(i);
-            CompletedCoursesDomain data = new CompletedCoursesDomain();
 
             String yearAsString = dataFormatter.formatCellValue(row.getCell(1));
             Integer year = Integer.parseInt(yearAsString);  //년도
 
-            String semesterAsString = dataFormatter.formatCellValue(row.getCell(2));
-            Integer semester = Integer.parseInt(String.valueOf(semesterAsString.charAt(0))); //학기
+            String semester = dataFormatter.formatCellValue(row.getCell(2)); //학기
 
             String courseIdAsString = dataFormatter.formatCellValue(row.getCell(3));
             Long courseId = Long.parseLong(courseIdAsString); //학수번호
@@ -77,7 +76,7 @@ public class CompletedCoursesService {
             if (coursesDomain == null){
                 continue;
             }
-            data = CompletedCoursesDomain.builder().userDomain(userDomain)
+            CompletedCoursesDomain data = CompletedCoursesDomain.builder().userDomain(userDomain)
                 .coursesDomain(coursesDomain).year(year).semester(semester).build();
 
             completedCoursesDao.save(data);
@@ -86,6 +85,7 @@ public class CompletedCoursesService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<CompletedCoursesDomain> getExcelList(UserDetails userDetails){
         List<CompletedCoursesDomain> dataList = new ArrayList<>();
         Long studentId = Long.parseLong(userDetails.getUsername());
@@ -131,6 +131,7 @@ public class CompletedCoursesService {
         return workbook;
     }
 
+    @Transactional
     public void checkUserDomain(UserDomain userDomain) {
         // CompletedCourses 테이블에서 파일을 업로드한 유저정보를 가지는 행들을 불러옴
         List<CompletedCoursesDomain> coursesList = completedCoursesDao.findByUserDomain(userDomain);

@@ -44,5 +44,7 @@ application*.properties
 ### VS Code ###
 .vscode/
 
+
 ### Ignore Files for Deploy ###
 scripts
+
