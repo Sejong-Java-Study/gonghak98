@@ -7,7 +7,6 @@ import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.CoursesDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.exception.FileException;
-import java.util.Optional;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -41,24 +40,38 @@ public class CompletedCoursesService {
 
     final int FIRST_ROW = 4;
 
-    @Transactional
     public void extractExcelFile(MultipartFile file, UserDetails userDetails)
-        throws IOException { //엑셀 데이터 추출
-        List<CompletedCoursesDomain> dataList = new ArrayList<>();
+        throws IOException, FileException { //엑셀 데이터 추출
+        //업로드 파일 검증
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-
         validateExcelFile(file, extension); //업로드 파일 검증
+
+        //DB에 해당 사용자의 기이수 과목 정보 확인
         Long studentId = Long.parseLong(userDetails.getUsername());
-        UserDomain userDomain = userDao.findByStudentId(studentId).get();
-        // 로그인한 유저
+        UserDomain user = userDao.findByStudentId(studentId).get();
+        checkUser(user);
 
-        checkUserDomain(userDomain);
-
+        ////엑셀 내용 검증
         Workbook workbook = creatWorkbook(file, extension);
         Sheet worksheet = workbook.getSheetAt(0);
         DataFormatter dataFormatter = new DataFormatter();
+        validateExcelContent(worksheet, dataFormatter);
 
-        validateExcelContent(worksheet, dataFormatter);//엑셀 내용 검증
+        //데이터 추출
+        ExtractData(worksheet, dataFormatter, user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CompletedCoursesDomain> getExcelList(UserDetails userDetails) {
+        Long studentId = Long.parseLong(userDetails.getUsername());
+        UserDomain userDomain = userDao.findByStudentId(studentId).get();
+
+        return completedCoursesDao.findByUserDomain(userDomain);
+    }
+
+    @Transactional
+    public void ExtractData(Sheet worksheet, DataFormatter dataFormatter, UserDomain userDomain) {
+        List<CompletedCoursesDomain> dataList = new ArrayList<>();
 
         for (int i = FIRST_ROW; i < worksheet.getPhysicalNumberOfRows(); i++) { //데이터 추출
             Row row = worksheet.getRow(i);
@@ -73,7 +86,7 @@ public class CompletedCoursesService {
 
             CoursesDomain coursesDomain = coursesDao.findByCourseId(
                 courseId);// 학수번호를 기반으로 Courses 테이블 검색
-            if (coursesDomain == null){
+            if (coursesDomain == null) {
                 continue;
             }
             CompletedCoursesDomain data = CompletedCoursesDomain.builder().userDomain(userDomain)
@@ -85,17 +98,9 @@ public class CompletedCoursesService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public List<CompletedCoursesDomain> getExcelList(UserDetails userDetails){
-        List<CompletedCoursesDomain> dataList = new ArrayList<>();
-        Long studentId = Long.parseLong(userDetails.getUsername());
-        UserDomain userDomain = userDao.findByStudentId(studentId).get();
-
-        return completedCoursesDao.findByUserDomain(userDomain);
-    }
 
     //업로드 파일 검증
-    public void validateExcelFile(MultipartFile file, String extension) throws FileException {
+    private void validateExcelFile(MultipartFile file, String extension) throws FileException {
         if (file.isEmpty()) { // 파일이 비어있으면
             throw new FileException("파일이 비어 있습니다.");
         }
@@ -105,7 +110,7 @@ public class CompletedCoursesService {
     }
 
     // 엑셀 내용 검증
-    public void validateExcelContent(Sheet workSheet, DataFormatter dataFormatter)
+    private void validateExcelContent(Sheet workSheet, DataFormatter dataFormatter)
         throws FileException {
         if (workSheet == null) {
             throw new FileException("엑셀파일이 비어있습니다.");
@@ -132,7 +137,7 @@ public class CompletedCoursesService {
     }
 
     @Transactional
-    public void checkUserDomain(UserDomain userDomain) {
+    public void checkUser(UserDomain userDomain) {
         // CompletedCourses 테이블에서 파일을 업로드한 유저정보를 가지는 행들을 불러옴
         List<CompletedCoursesDomain> coursesList = completedCoursesDao.findByUserDomain(userDomain);
         // List가 Empty 가 아니면 (해당 유저가 파일을 업로드한 적이 있으면)
