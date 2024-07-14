@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-
 public class CompletedCoursesService {
 
     private final CompletedCoursesDao completedCoursesDao;
@@ -71,7 +70,6 @@ public class CompletedCoursesService {
 
     @Transactional
     public void ExtractData(Sheet worksheet, DataFormatter dataFormatter, UserDomain userDomain) {
-        List<CompletedCoursesDomain> dataList = new ArrayList<>();
 
         for (int i = FIRST_ROW; i < worksheet.getPhysicalNumberOfRows(); i++) { //데이터 추출
             Row row = worksheet.getRow(i);
@@ -93,8 +91,6 @@ public class CompletedCoursesService {
                 .coursesDomain(coursesDomain).year(year).semester(semester).build();
 
             completedCoursesDao.save(data);
-
-            dataList.add(data);
         }
     }
 
