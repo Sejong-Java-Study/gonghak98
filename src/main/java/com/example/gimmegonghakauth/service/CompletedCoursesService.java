@@ -88,7 +88,10 @@ public class CompletedCoursesService {
                 continue;
             }
             CompletedCoursesDomain data = CompletedCoursesDomain.builder().userDomain(userDomain)
-                .coursesDomain(coursesDomain).year(year).semester(semester).build();
+                .coursesDomain(coursesDomain)
+                .year(year)
+                .semester(semester)
+                .build();
 
             completedCoursesDao.save(data);
         }
