@@ -57,7 +57,7 @@ public class CompletedCoursesService {
         validateExcelContent(worksheet, dataFormatter);
 
         //데이터 추출
-        ExtractData(worksheet, dataFormatter, user);
+        extractData(worksheet, dataFormatter, user);
     }
 
     @Transactional(readOnly = true)
@@ -69,7 +69,7 @@ public class CompletedCoursesService {
     }
 
     @Transactional
-    public void ExtractData(Sheet worksheet, DataFormatter dataFormatter, UserDomain userDomain) {
+    public void extractData(Sheet worksheet, DataFormatter dataFormatter, UserDomain userDomain) {
 
         for (int i = FIRST_ROW; i < worksheet.getPhysicalNumberOfRows(); i++) { //데이터 추출
             Row row = worksheet.getRow(i);
