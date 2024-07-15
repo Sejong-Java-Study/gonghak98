@@ -1,0 +1,3 @@
+[submodule "src/main/resources/submodule-properties"]
+	path = src/main/resources/submodule-properties
+	url = https://github.com/Sejong-Java-Study/gonghak98-properties-repo.git
