@@ -28,8 +28,6 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-application*.properties
-
 *.csv
 *.sql
 *.env
