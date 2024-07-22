@@ -117,7 +117,7 @@ public class CompletedCoursesServiceDataTest {
         UserDomain user = userDao.findByStudentId(19011684L).get();
 
         //데이터 확인
-        completedCoursesService.checkUserDomain(user);
+        completedCoursesService.checkUser(user);
 
         //해당 유저 검색
         List<CompletedCoursesDomain> deletedDataList = completedCoursesDao.findByUserDomain(user);
@@ -145,7 +145,7 @@ public class CompletedCoursesServiceDataTest {
         UserDomain user = userDao.findByStudentId(19011684L).get();
 
         //데이터 삭제
-        completedCoursesService.checkUserDomain(user);
+        completedCoursesService.checkUser(user);
 
         //해당 유저 검색
         List<CompletedCoursesDomain> deletedDataList = completedCoursesDao.findByUserDomain(user);
@@ -182,7 +182,7 @@ public class CompletedCoursesServiceDataTest {
         UserDomain user = userDao.findByStudentId(19011684L).get();
 
         //데이터 삭제
-        completedCoursesService.checkUserDomain(user);
+        completedCoursesService.checkUser(user);
 
         //해당 유저 검색
         List<CompletedCoursesDomain> deletedDataList = completedCoursesDao.findByUserDomain(user);
