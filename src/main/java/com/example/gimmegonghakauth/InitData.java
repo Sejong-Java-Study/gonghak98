@@ -19,6 +19,7 @@ import com.example.gimmegonghakauth.service.recommend.MajorName;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Profile("!(prod || release)")
 public class InitData {
 
     private final MajorsDao majorsDao;
@@ -144,14 +146,6 @@ public class InitData {
             .majorsDomain(elecInfoMajor).build();
         userDao.save(userDomainElec);
 
-        UserDomain userDomain2 = UserDomain.builder()
-            .email("testEmail@sju.ac.kr")
-            .name("testUser")
-            .password(passwordEncoder.encode("1234"))
-            .studentId(12345678L)
-            .majorsDomain(computerMajor).build();
-        userDao.save(userDomain2);
-
         //Courses
         CoursesDomain testCourse1 = CoursesDomain.builder()
             .courseId(1234L)
@@ -182,22 +176,22 @@ public class InitData {
         //CompletedCourses
         CompletedCoursesDomain coursesDomain1 = CompletedCoursesDomain.builder()
             .year(2019)
-            .semester(1)
+            .semester("1학기")
             .coursesDomain(testCourse1)
             .userDomain(userDomain).build();
         CompletedCoursesDomain coursesDomain2 = CompletedCoursesDomain.builder()
             .year(2019)
-            .semester(1)
+            .semester("1학기")
             .coursesDomain(testCourse2)
             .userDomain(userDomain).build();
         CompletedCoursesDomain coursesDomain3 = CompletedCoursesDomain.builder()
             .year(2019)
-            .semester(1)
+            .semester("1학기")
             .coursesDomain(testCourse3)
             .userDomain(userDomain).build();
         CompletedCoursesDomain coursesDomain4 = CompletedCoursesDomain.builder()
             .year(2019)
-            .semester(1)
+            .semester("1학기")
             .coursesDomain(testCourse4)
             .userDomain(userDomain).build();
 

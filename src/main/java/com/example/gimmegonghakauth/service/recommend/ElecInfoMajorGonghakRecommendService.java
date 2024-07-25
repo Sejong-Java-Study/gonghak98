@@ -15,6 +15,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class ElecInfoMajorGonghakRecommendService implements GonghakRecommendSer
     private final GonghakRepository gonghakRepository;
 
     //리팩토링 필요
+    @Transactional(readOnly = true)
     @Override
     public GonghakRecommendCoursesDto createRecommendCourses(UserDomain userDomain){
         GonghakRecommendCoursesDto gonghakRecommendCoursesDto = new GonghakRecommendCoursesDto();

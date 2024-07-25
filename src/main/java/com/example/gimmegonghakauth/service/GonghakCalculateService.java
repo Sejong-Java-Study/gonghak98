@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class GonghakCalculateService {
 
     private final GonghakRepository gonghakRepository;
 
+    @Transactional(readOnly = true)
     public Optional<GonghakResultDto> getResultRatio(UserDomain userDomain) {
         //standard
         Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(userDomain.getStudentId(), userDomain.getMajorsDomain());

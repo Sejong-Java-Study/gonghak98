@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -21,6 +23,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 @Nested
 @DisplayName("유저 컨트롤러 테스트")
+@ActiveProfiles("test")
+//@TestPropertySource(locations = "classpath:submodule-properties/application-test.properties")
 public class UserControllerTest {
 
     @Autowired
@@ -31,7 +35,7 @@ public class UserControllerTest {
     @DisplayName("회원가입시 비밀번호 일치 테스트 (일치)")
     public void testSignupWithMatchingPasswords() throws Exception {
         mockMvc.perform(post("/user/signup")
-                .param("studentId", "87654321")
+                .param("studentId", "19654321")
                 .param("password1", "password123")
                 .param("password2", "password123")
                 .param("email", "test@example.com")
@@ -47,7 +51,7 @@ public class UserControllerTest {
     @DisplayName("회원가입시 비밀번호 일치 테스트 (불일치)")
     void testSignupWithMisMatchedPasswords() throws Exception {
         mockMvc.perform(post("/user//signup")
-                .param("studentId", "11111111")
+                .param("studentId", "19111111")
                 .param("password1", "password123")
                 .param("password2", "mismatchedPassword")
                 .param("email", "test@example.com")
@@ -65,7 +69,7 @@ public class UserControllerTest {
     @DisplayName("회원가입시 중복 학번 테스트 (불일치)")
     void testDuplicatedStudentId() throws Exception {
         mockMvc.perform(post("/user//signup")
-                .param("studentId", "12345678")
+                .param("studentId", "19111111")
                 .param("password1", "password123")
                 .param("password2", "password123")
                 .param("email", "test@example.com")
@@ -82,10 +86,10 @@ public class UserControllerTest {
     @Transactional
     @Test //(주의) DB 내용기반으로 테스트됨
     @DisplayName("회원 탈퇴시 비밀번호 일치 테스트 (일치)")
-    @WithMockUser(username = "12345678", password = "1234", roles = "USER")
+    @WithMockUser(username = "19111111", password = "qwer", roles = "USER")
     public void testWithdrawalWithValidPassword() throws Exception {
         mockMvc.perform(post("/user//withdrawal")
-                .param("password", "1234")
+                .param("password", "qwer")
                 .with(csrf()))
             .andExpect(status().is3xxRedirection()) // 가정: 성공적인 탈퇴는 다른 페이지로 리디렉션됨
             .andExpect(redirectedUrl("/user/logout"));
@@ -94,7 +98,7 @@ public class UserControllerTest {
     @Transactional
     @Test //(주의) DB 내용기반으로 테스트됨
     @DisplayName("회원 탈퇴시 비밀번호 일치 테스트 (불일치)")
-    @WithMockUser(username = "12345678", password = "1234", roles = "USER")
+    @WithMockUser(username = "19111111", password = "qwer", roles = "USER")
     public void testWithdrawalWithInvalidPassword() throws Exception {
         mockMvc.perform(post("/user//withdrawal")
                 .param("password", "1235")
@@ -109,10 +113,10 @@ public class UserControllerTest {
     @Transactional
     @Test
     @DisplayName("비밀번호 변경 성공")
-    @WithMockUser(username = "12345678", password = "1234", roles = "USER")
+    @WithMockUser(username = "19111111", password = "qwer", roles = "USER")
     public void testChangePasswordSuccess() throws Exception {
         mockMvc.perform(post("/user/change/password")
-                .param("currentPassword", "1234")
+                .param("currentPassword", "qwer")
                 .param("newPassword1", "1111")
                 .param("newPassword2", "1111")
                 .with(csrf()))
@@ -123,10 +127,10 @@ public class UserControllerTest {
     @Transactional
     @Test
     @DisplayName("비밀번호 변경 실패(현재 비밀번호 불일치)")
-    @WithMockUser(username = "12345678", password = "1234", roles = "USER")
+    @WithMockUser(username = "19111111", password = "qwer", roles = "USER")
     public void testChangePasswordFail1() throws Exception {
         mockMvc.perform(post("/user/change/password")
-                .param("currentPassword", "1111")
+                .param("currentPassword", "1234")
                 .param("newPassword1", "1235")
                 .param("newPassword2", "1235")
                 .with(csrf()))
@@ -140,12 +144,12 @@ public class UserControllerTest {
     @Transactional
     @Test
     @DisplayName("비밀번호 변경 실패 (새 비밀번호와 현재 비밀번호와 일치)")
-    @WithMockUser(username = "12345678", password = "1234", roles = "USER")
+    @WithMockUser(username = "19111111", password = "qwer", roles = "USER")
     public void testChangePasswordFail2() throws Exception {
         mockMvc.perform(post("/user/change/password")
-                .param("currentPassword", "1234")
-                .param("newPassword1", "1234")
-                .param("newPassword2", "1234")
+                .param("currentPassword", "qwer")
+                .param("newPassword1", "qwer")
+                .param("newPassword2", "qwer")
                 .with(csrf()))
             .andExpect(MockMvcResultMatchers.view().name("user/changePassword"))
             .andExpect(MockMvcResultMatchers.model()
@@ -157,10 +161,10 @@ public class UserControllerTest {
     @Transactional
     @Test
     @DisplayName("비밀번호 변경 실패(새 비밀번호 재입력 불일치)")
-    @WithMockUser(username = "12345678", password = "1234", roles = "USER")
+    @WithMockUser(username = "19111111", password = "qwer", roles = "USER")
     public void testChangePasswordFail3() throws Exception {
         mockMvc.perform(post("/user/change/password")
-                .param("currentPassword", "1234")
+                .param("currentPassword", "qwer")
                 .param("newPassword1", "1111")
                 .param("newPassword2", "2222")
                 .with(csrf()))

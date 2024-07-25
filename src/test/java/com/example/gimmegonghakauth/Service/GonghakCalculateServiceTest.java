@@ -24,11 +24,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Import(CalculateTestConfig.class)
 @Slf4j
+@ActiveProfiles("test")
 class GonghakCalculateServiceTest {
 
     @Autowired

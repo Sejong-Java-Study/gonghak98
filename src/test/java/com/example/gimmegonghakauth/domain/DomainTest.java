@@ -9,7 +9,6 @@ import com.example.gimmegonghakauth.dao.GonghakCorusesDao;
 import com.example.gimmegonghakauth.dao.GonghakDao;
 import com.example.gimmegonghakauth.dao.GonghakRepository;
 import com.example.gimmegonghakauth.dao.MajorsDao;
-
 import com.example.gimmegonghakauth.domain.DomainTest.DomainTestConfig;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +22,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Import(DomainTestConfig.class)
+@ActiveProfiles("test")
 public class DomainTest {
 
     @Autowired
