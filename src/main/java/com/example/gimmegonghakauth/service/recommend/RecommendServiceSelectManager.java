@@ -19,6 +19,7 @@ public class RecommendServiceSelectManager {
     private final ApplicationContext applicationContext;
     private final UserDao userDao;
 
+    // 학과에 따른 추천 서비스를 설정한다.
     public GonghakRecommendService selectRecommendService(Long studentId){
         MajorsDomain majorsDomain = userDao.findByStudentId(studentId).get()
                 .getMajorsDomain();

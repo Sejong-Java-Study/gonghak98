@@ -26,16 +26,18 @@ public class GonghakCalculateService {
 
     @Transactional(readOnly = true)
     public Optional<GonghakResultDto> getResultRatio(UserDomain userDomain) {
-        //standard
+
+        // findStandard -> 학번 입학년도를 기준으로 해당 년도의 abeekType(영역별 구분),minCredit(영역별 인증학점) 불러온다.
         Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(userDomain.getStudentId(), userDomain.getMajorsDomain());
         log.info("standard = {}",standard.get().getStandards());
 
-        //default user abeek 학점 상태 map
+        // default user abeek 학점 상태 map
         Map<AbeekTypeConst, Double> userAbeekCredit = getUserAbeekCreditDefault(standard.get().getStandards());
 
         log.info("default user abeek 학점 상태 map userAbeekCredit = {}",userAbeekCredit);
 
-        //user 공학 상태 테이블
+        // user 공학 상태 테이블
+        // gonghakCourse 중 이수한 과목을 불러온다.
         List<GonghakCoursesByMajorDto> userCoursesByMajorByGonghakCoursesWithCompletedCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithCompletedCourses(
             userDomain.getStudentId(), userDomain.getMajorsDomain());
 
@@ -47,11 +49,13 @@ public class GonghakCalculateService {
             }
         );
 
-        //user
+        // user
+        // stackUserGonghakCredit -> abeekType에 맞게 이수한 총 학점을 계산한다.
         stackUserGonghakCredit(userCoursesByMajorByGonghakCoursesWithCompletedCourses, userAbeekCredit);
 
         log.info("학점 계산 후 학점 상태 map userAbeekCredit = {}",userAbeekCredit);
 
+        // getUserGonghakResultRatio -> 인증 상태(비율)를 계산한다.
         Map<AbeekTypeConst, ResultPointDto> userResultRatio = getUserGonghakResultRatio(userAbeekCredit, standard);
 
         log.info("비율 결과 userResultRatio = {}",userResultRatio);
@@ -62,9 +66,11 @@ public class GonghakCalculateService {
             }
         );
 
+        // 인증 상태(비율) return
         return Optional.of(new GonghakResultDto(userResultRatio));
     }
 
+    // default user abeek 학점 상태 map을 만들어 반환한다.
     private Map<AbeekTypeConst, Double> getUserAbeekCreditDefault(Map<AbeekTypeConst, Integer> standards) {
         Map<AbeekTypeConst, Double> userAbeekCredit = new ConcurrentHashMap<>();
         Arrays.stream(AbeekTypeConst.values()).forEach(abeekTypeConst -> {
@@ -75,6 +81,7 @@ public class GonghakCalculateService {
         return userAbeekCredit;
     }
 
+    // 인증 상태(비율)를 계산한다.
     private Map<AbeekTypeConst, ResultPointDto> getUserGonghakResultRatio(Map<AbeekTypeConst, Double> userAbeekCredit,
         Optional<GonghakStandardDto> standard) {
 
@@ -98,6 +105,7 @@ public class GonghakCalculateService {
         );
     }
 
+    // abeekType에 맞게 이수한 총 학점을 계산한다.
     private void stackUserGonghakCredit(
         List<GonghakCoursesByMajorDto> userCoursesByMajorByGonghakCoursesWithCompletedCourses,
         Map<AbeekTypeConst, Double> userAbeekCredit) {
@@ -117,6 +125,7 @@ public class GonghakCalculateService {
             stackCredit(AbeekTypeConst.MINIMUM_CERTI,gonghakCoursesByMajorDto, userAbeekCredit);
         });
     }
+
 
     private void stackCredit(AbeekTypeConst abeekTypeConst, GonghakCoursesByMajorDto gonghakCoursesByMajorDto,
         Map<AbeekTypeConst, Double> userAbeekCredit) {
