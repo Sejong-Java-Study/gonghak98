@@ -116,6 +116,8 @@ public class GonghakCalculateService {
                     stackCredit(AbeekTypeConst.MAJOR, gonghakCoursesByMajorDto, userAbeekCredit);break;
                 case 전문교양:
                     stackCredit(AbeekTypeConst.PROFESSIONAL_NON_MAJOR,gonghakCoursesByMajorDto, userAbeekCredit); break;
+                case 교양:
+                    stackCredit(AbeekTypeConst.NON_MAJOR,gonghakCoursesByMajorDto, userAbeekCredit); break;
                 case MSC:
                     stackCredit(AbeekTypeConst.MSC,gonghakCoursesByMajorDto, userAbeekCredit); break;
                 case BSM:

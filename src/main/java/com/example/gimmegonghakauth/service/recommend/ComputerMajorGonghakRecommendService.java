@@ -47,11 +47,15 @@ public class ComputerMajorGonghakRecommendService implements GonghakRecommendSer
         printLog(majorSubject);
 
         // 수강하지 않은 과목 중 "전문교양" 과목을 반환한다.
-        List<IncompletedCoursesDto> nonMajor = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+        List<IncompletedCoursesDto> professionalNonMajor = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
             CourseCategoryConst.전문교양, userDomain.getStudentId(), userDomain.getMajorsDomain()
         );
-        printLog(nonMajor);
+        printLog(professionalNonMajor);
 
+        // 수강하지 않은 과목 중 "교양" 과목을 반환한다.
+        List<IncompletedCoursesDto> nonMajor = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+            CourseCategoryConst.교양, userDomain.getStudentId(), userDomain.getMajorsDomain()
+        );
         // 수강하지 않은 과목 중 "BSM" 과목을 반환한다.
         List<IncompletedCoursesDto> bsm = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
             CourseCategoryConst.BSM, userDomain.getStudentId(), userDomain.getMajorsDomain()
@@ -75,6 +79,8 @@ public class ComputerMajorGonghakRecommendService implements GonghakRecommendSer
                             addOnlyDesignCreditOverZero(majorSubject, abeekRecommend);
                             break;
                         case PROFESSIONAL_NON_MAJOR:
+                            abeekRecommend.addAll(professionalNonMajor); break;
+                        case NON_MAJOR:
                             abeekRecommend.addAll(nonMajor); break;
                         case MINIMUM_CERTI:
                             abeekRecommend.addAll(bsm);
