@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
@@ -18,18 +17,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Slf4j
 @Component
 @Profile("!(prod || release)")
 public class InitFileData {
+
     private final MajorsDao majorsDao;
     private final CoursesDao coursesDao;
     private final GonghakCorusesDao gonghakCorusesDao;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
-    public void loadCoursesDataFromCSV()  throws IOException {
-        log.info("----set data----");
+    public void loadCoursesDataFromCSV() throws IOException {
         String csvFilePath = "src/main/java/com/example/gimmegonghakauth/19학년2학기_20학년1학기_컴공.csv";
         inputCoursesCsv(csvFilePath);
         csvFilePath = "src/main/java/com/example/gimmegonghakauth/19학년2학기_20학년1학기_전정통.csv";
@@ -49,19 +47,15 @@ public class InitFileData {
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
             // Skip the header line
-            String s = br.readLine();
-            log.info("first br.readLine() ={}",s);
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);
                 // Create and map GonghakCoursesDomain object
-                log.info("data= {}",data.toString());
                 try {
                     CoursesDomain course = mapToCoursesDomain(data);
-                    log.info("data= {}",course.toString());
                     // Save to repository
                     coursesDao.save(course);
-                }catch (Exception e){
+                } catch (Exception e) {
                     continue;
                 }
             }
@@ -70,7 +64,7 @@ public class InitFileData {
         }
     }
 
-    private CoursesDomain mapToCoursesDomain(String[] data){
+    private CoursesDomain mapToCoursesDomain(String[] data) {
         return CoursesDomain.builder()
             .courseId(Long.valueOf(data[0]))
             .name(data[2])
@@ -93,7 +87,7 @@ public class InitFileData {
                     GonghakCoursesDomain course = mapToGonghakCoursesDomain(data);
                     // Save to repository
                     gonghakCorusesDao.save(course);
-                }catch (Exception e){
+                } catch (Exception e) {
                     continue;
                 }
             }

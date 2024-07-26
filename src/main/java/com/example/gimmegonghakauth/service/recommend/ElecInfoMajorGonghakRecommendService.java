@@ -13,13 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ElecInfoMajorGonghakRecommendService implements GonghakRecommendService {
 
     private final GonghakRepository gonghakRepository;
@@ -27,19 +25,17 @@ public class ElecInfoMajorGonghakRecommendService implements GonghakRecommendSer
     //리팩토링 필요
     @Transactional(readOnly = true)
     @Override
-    public GonghakRecommendCoursesDto createRecommendCourses(UserDomain userDomain){
+    public GonghakRecommendCoursesDto createRecommendCourses(UserDomain userDomain) {
         GonghakRecommendCoursesDto gonghakRecommendCoursesDto = new GonghakRecommendCoursesDto();
 
         // findStandard -> 학번 입학년도를 기준으로 해당 년도의 abeekType(영역별 구분),minCredit(영역별 인증학점) 불러온다.
         Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(
             userDomain.getStudentId(), userDomain.getMajorsDomain());
 
-
         // 수강하지 않은 과목 중 "전선" 과목을 반환한다.
         List<IncompletedCoursesDto> majorSelective = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
             CourseCategoryConst.전선, userDomain.getStudentId(), userDomain.getMajorsDomain()
         );
-        printLog(majorSelective);
 
         // 수강하지 않은 과목 중 "전필" 과목을 반환한다.
         List<IncompletedCoursesDto> majorRequired = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
@@ -50,13 +46,11 @@ public class ElecInfoMajorGonghakRecommendService implements GonghakRecommendSer
         List<IncompletedCoursesDto> major = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
             CourseCategoryConst.전공, userDomain.getStudentId(), userDomain.getMajorsDomain()
         );
-        printLog(majorRequired);
 
         // 수강하지 않은 과목 중 "전문교양" 과목을 반환한다.
         List<IncompletedCoursesDto> professionalNonMajor = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
             CourseCategoryConst.전문교양, userDomain.getStudentId(), userDomain.getMajorsDomain()
         );
-        printLog(professionalNonMajor);
 
         // 수강하지 않은 과목 중 "교양" 과목을 반환한다.
         List<IncompletedCoursesDto> nonMajor = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
@@ -67,37 +61,41 @@ public class ElecInfoMajorGonghakRecommendService implements GonghakRecommendSer
         List<IncompletedCoursesDto> msc = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
             CourseCategoryConst.MSC, userDomain.getStudentId(), userDomain.getMajorsDomain()
         );
-        printLog(msc);
 
         // abeekType 별 추천 과목 List를 반환한다.
         Map<AbeekTypeConst, List<IncompletedCoursesDto>> coursesByAbeekTypeWithoutCompleteCourses = gonghakRecommendCoursesDto.getRecommendCoursesByAbeekType();
         Arrays.stream(AbeekTypeConst.values()).forEach(
             abeekType -> {
                 List<IncompletedCoursesDto> abeekRecommend = new ArrayList<>();
-                if(standard.get().getStandards().containsKey(abeekType)){
-                    switch (abeekType){
-                        case MSC :
-                            abeekRecommend.addAll(msc); break;
-                        case MAJOR :
+                if (standard.get().getStandards().containsKey(abeekType)) {
+                    switch (abeekType) {
+                        case MSC:
+                            abeekRecommend.addAll(msc);
+                            break;
+                        case MAJOR:
                             abeekRecommend.addAll(major);
                             abeekRecommend.addAll(majorRequired);
-                            abeekRecommend.addAll(majorSelective); break;
+                            abeekRecommend.addAll(majorSelective);
+                            break;
                         case DESIGN:
                             addOnlyDesignCreditOverZero(major, abeekRecommend);
                             addOnlyDesignCreditOverZero(majorRequired, abeekRecommend);
                             addOnlyDesignCreditOverZero(majorSelective, abeekRecommend);
                             break;
                         case PROFESSIONAL_NON_MAJOR:
-                            abeekRecommend.addAll(professionalNonMajor); break;
+                            abeekRecommend.addAll(professionalNonMajor);
+                            break;
                         case NON_MAJOR:
-                            abeekRecommend.addAll(nonMajor); break;
+                            abeekRecommend.addAll(nonMajor);
+                            break;
                         case MINIMUM_CERTI:
                             abeekRecommend.addAll(msc);
                             abeekRecommend.addAll(majorRequired);
                             abeekRecommend.addAll(majorSelective);
-                            abeekRecommend.addAll(nonMajor); break;
+                            abeekRecommend.addAll(nonMajor);
+                            break;
                     }
-                    coursesByAbeekTypeWithoutCompleteCourses.put(abeekType,abeekRecommend);
+                    coursesByAbeekTypeWithoutCompleteCourses.put(abeekType, abeekRecommend);
                 }
 
             }
@@ -111,18 +109,11 @@ public class ElecInfoMajorGonghakRecommendService implements GonghakRecommendSer
         List<IncompletedCoursesDto> abeekRecommend) {
         majorBasic.forEach(
             incompletedCoursesDto -> {
-                if(incompletedCoursesDto.getDesignCredit()>0){
+                if (incompletedCoursesDto.getDesignCredit() > 0) {
                     abeekRecommend.add(incompletedCoursesDto);
                 }
             }
         );
     }
 
-    private void printLog(List<IncompletedCoursesDto> incompletedCoursesDtoList){
-        log.info("-----------");
-        log.info("dto list size = {}",incompletedCoursesDtoList.size());
-        for (IncompletedCoursesDto incompletedCoursesDto : incompletedCoursesDtoList) {
-            log.info("courseName = {}",incompletedCoursesDto.getCourseName());
-        }
-    }
 }
