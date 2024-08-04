@@ -23,7 +23,6 @@ public class ComputerMajorGonghakRecommendService implements GonghakRecommendSer
 
     private final GonghakRepository gonghakRepository;
 
-    //리팩토링 필요
     @Override
     @Transactional(readOnly = true)
     public GonghakRecommendCoursesDto createRecommendCourses(UserDomain userDomain) {

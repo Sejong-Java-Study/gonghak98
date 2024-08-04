@@ -22,7 +22,6 @@ public class ElecInfoMajorGonghakRecommendService implements GonghakRecommendSer
 
     private final GonghakRepository gonghakRepository;
 
-    //리팩토링 필요
     @Transactional(readOnly = true)
     @Override
     public GonghakRecommendCoursesDto createRecommendCourses(UserDomain userDomain) {
