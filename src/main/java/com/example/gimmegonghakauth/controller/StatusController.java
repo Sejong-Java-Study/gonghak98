@@ -38,12 +38,6 @@ public class StatusController {
         // 컨트롤러가 UserDomain 객체를 가져오는 역할을 수행하고 있음.
         UserDomain student = userDao.findByStudentId(studentId).get();
 
-        /*if(student==null){
-            return "/gonghak/statusInputForm";
-        }*/
-
-        log.info("studentId= {}",student.getStudentId());
-
         readUserResultRatio(model, student);
         readUserRecommendCourses(model, studentId, student);
         return "gonghak/statusForm";
@@ -51,9 +45,10 @@ public class StatusController {
 
     // 사용자의 인증 현황 데이터를 가져온다.
     private void readUserResultRatio(Model model, UserDomain student) {
-        Map<AbeekTypeConst, ResultPointDto> userResultRatio = gonghakCalculateService.getResultRatio(student)
-                                                                                     .get()
-                                                                                     .getUserResultRatio();
+        Map<AbeekTypeConst, ResultPointDto> userResultRatio = gonghakCalculateService.getResultRatio(
+                student)
+            .get()
+            .getUserResultRatio();
         model.addAttribute("userResultRatio", userResultRatio);
     }
 
@@ -63,7 +58,7 @@ public class StatusController {
             studentId);
         Map<AbeekTypeConst, List<IncompletedCoursesDto>> recommendCoursesByAbeekType =
             gonghakRecommendService.createRecommendCourses(student)
-                                   .getRecommendCoursesByAbeekType();
+                .getRecommendCoursesByAbeekType();
         model.addAttribute("recommendCoursesByAbeekType", recommendCoursesByAbeekType);
     }
 
