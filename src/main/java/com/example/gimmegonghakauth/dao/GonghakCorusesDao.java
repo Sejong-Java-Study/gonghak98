@@ -23,7 +23,7 @@ public interface GonghakCorusesDao extends JpaRepository<GonghakCoursesDomain,Lo
 
     @Query("select new com.example.gimmegonghakauth.dto.IncompletedCoursesDto(GCD.coursesDomain.name, GCD.courseCategory, GCD.coursesDomain.credit, GCD.designCredit) from GonghakCoursesDomain GCD  "
         + "left join CompletedCoursesDomain GCCD on GCCD.coursesDomain = GCD.coursesDomain "
-        + "where GCD.majorsDomain = :majorsDomain and GCD.courseCategory = :courseCategory and GCCD.id is null and :studentId is not null")
-    List<IncompletedCoursesDto> findUserCoursesByMajorAndCourseCategoryAndGonghakCoursesWithoutCompleteCourses(@Param("courseCategory") CourseCategoryConst courseCategory, @Param("studentId") Long studentId, @Param("majorsDomain") MajorsDomain majorsDomain);
+        + "where GCD.majorsDomain = :majorsDomain and GCD.year = :year and GCD.courseCategory = :courseCategory and GCCD.id is null and :studentId is not null")
+    List<IncompletedCoursesDto> findUserCoursesByMajorAndCourseCategoryAndGonghakCoursesWithoutCompleteCourses(@Param("courseCategory") CourseCategoryConst courseCategory, @Param("studentId") Long studentId, @Param("majorsDomain") MajorsDomain majorsDomain, @Param("year") Long year);
 
 }
