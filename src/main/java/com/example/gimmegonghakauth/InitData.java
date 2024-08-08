@@ -214,7 +214,7 @@ public class InitData {
             .year(19).build();
 
         GonghakCoursesDomain gonghakCourses3 = GonghakCoursesDomain.builder()
-            .courseCategory(CourseCategoryConst.전선)
+            .courseCategory(CourseCategoryConst.전공)
             .majorsDomain(computerMajor)
             .designCredit(1.0)
             .coursesDomain(testCourse3)
@@ -222,7 +222,7 @@ public class InitData {
             .year(19).build();
 
         GonghakCoursesDomain gonghakCourses4 = GonghakCoursesDomain.builder()
-            .courseCategory(CourseCategoryConst.전필)
+            .courseCategory(CourseCategoryConst.전공)
             .majorsDomain(computerMajor)
             .designCredit(1.0)
             .coursesDomain(testCourse5)
