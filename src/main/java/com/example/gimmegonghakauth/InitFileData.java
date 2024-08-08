@@ -47,14 +47,11 @@ public class InitFileData {
         String cvsSplitBy = ",";
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
-            // Skip the header line
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);
-                // Create and map GonghakCoursesDomain object
                 try {
                     CoursesDomain course = mapToCoursesDomain(data);
-                    // Save to repository
                     coursesDao.save(course);
                 } catch (Exception e) {
                     continue;
@@ -78,16 +75,13 @@ public class InitFileData {
         String cvsSplitBy = ",";
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
-            // Skip the header line
             br.readLine();
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);
-                // Create and map GonghakCoursesDomain object
                 try {
                     Optional<GonghakCoursesDomain> course = mapToGonghakCoursesDomain(data);
                     if (course.isPresent()) {
-                        // Save to repository only if the Optional contains a value
                         gonghakCorusesDao.save(course.get());
                     }
                 } catch (Exception e) {
@@ -101,10 +95,8 @@ public class InitFileData {
 
     private Optional<GonghakCoursesDomain> mapToGonghakCoursesDomain(String[] data) {
 
-        // 존재하지 않는 course 라면 Optional.empty 반환
         CoursesDomain courseDomain = coursesDao.findByName(data[6].replaceAll("\\s+", ""));
         if (courseDomain == null) {
-            // Return an empty Optional if courseDomain is null
             return Optional.empty();
         }
 
@@ -122,7 +114,6 @@ public class InitFileData {
                 courseCategory = "전공";
                 break;
             default:
-                // 기본적으로는 변경하지 않고 원래 값을 유지
                 break;
         }
 
@@ -135,5 +126,6 @@ public class InitFileData {
             .designCredit(Double.parseDouble(data[8]))
             .build();
 
+        return Optional.of(gonghakCourse);
     }
 }
