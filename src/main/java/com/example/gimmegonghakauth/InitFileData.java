@@ -9,8 +9,8 @@ import com.example.gimmegonghakauth.domain.GonghakCoursesDomain;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
@@ -18,18 +18,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Slf4j
 @Component
 @Profile("!(prod || release)")
 public class InitFileData {
+
     private final MajorsDao majorsDao;
     private final CoursesDao coursesDao;
     private final GonghakCorusesDao gonghakCorusesDao;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
-    public void loadCoursesDataFromCSV()  throws IOException {
-        log.info("----set data----");
+    public void loadCoursesDataFromCSV() throws IOException {
         String csvFilePath = "src/main/java/com/example/gimmegonghakauth/19학년2학기_20학년1학기_컴공.csv";
         inputCoursesCsv(csvFilePath);
         csvFilePath = "src/main/java/com/example/gimmegonghakauth/19학년2학기_20학년1학기_전정통.csv";
@@ -48,20 +47,13 @@ public class InitFileData {
         String cvsSplitBy = ",";
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
-            // Skip the header line
-            String s = br.readLine();
-            log.info("first br.readLine() ={}",s);
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);
-                // Create and map GonghakCoursesDomain object
-                log.info("data= {}",data.toString());
                 try {
                     CoursesDomain course = mapToCoursesDomain(data);
-                    log.info("data= {}",course.toString());
-                    // Save to repository
                     coursesDao.save(course);
-                }catch (Exception e){
+                } catch (Exception e) {
                     continue;
                 }
             }
@@ -70,7 +62,7 @@ public class InitFileData {
         }
     }
 
-    private CoursesDomain mapToCoursesDomain(String[] data){
+    private CoursesDomain mapToCoursesDomain(String[] data) {
         return CoursesDomain.builder()
             .courseId(Long.valueOf(data[0]))
             .name(data[2])
@@ -83,17 +75,16 @@ public class InitFileData {
         String cvsSplitBy = ",";
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
-            // Skip the header line
             br.readLine();
 
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);
-                // Create and map GonghakCoursesDomain object
                 try {
-                    GonghakCoursesDomain course = mapToGonghakCoursesDomain(data);
-                    // Save to repository
-                    gonghakCorusesDao.save(course);
-                }catch (Exception e){
+                    Optional<GonghakCoursesDomain> course = mapToGonghakCoursesDomain(data);
+                    if (course.isPresent()) {
+                        gonghakCorusesDao.save(course.get());
+                    }
+                } catch (Exception e) {
                     continue;
                 }
             }
@@ -102,16 +93,39 @@ public class InitFileData {
         }
     }
 
-    private GonghakCoursesDomain mapToGonghakCoursesDomain(String[] data) {
-        // Assuming data format is consistent and matches the domain structure
-        // Adjust indices according to your CSV file's column order
-        return GonghakCoursesDomain.builder()
+    private Optional<GonghakCoursesDomain> mapToGonghakCoursesDomain(String[] data) {
+
+        CoursesDomain courseDomain = coursesDao.findByName(data[6].replaceAll("\\s+", ""));
+        if (courseDomain == null) {
+            return Optional.empty();
+        }
+
+        // course_category_const
+        String courseCategory = data[4];
+
+        switch (courseCategory) {
+            case "중핵필수", "교양필수", "교양선택", "교양선택I", "교양":
+                courseCategory = "전문교양";
+                break;
+            case "전공기초교양", "학문기초교양":
+                courseCategory = "BSM";
+                break;
+            case "전공필수", "전공선택", "전공(설계)", "전공주제", "전공기초":
+                courseCategory = "전공";
+                break;
+            default:
+                break;
+        }
+
+        GonghakCoursesDomain gonghakCourse = GonghakCoursesDomain.builder()
             .year(Integer.parseInt(data[0]))
             .majorsDomain(majorsDao.findByMajor(data[2]))
-            .coursesDomain(coursesDao.findByName(data[6]))
-            .courseCategory(CourseCategoryConst.valueOf(data[4]))
-            .passCategory(data[5])
+            .coursesDomain(courseDomain)
+            .courseCategory(CourseCategoryConst.valueOf(courseCategory))
+            .passCategory(data[5].substring(0, 2))
             .designCredit(Double.parseDouble(data[8]))
             .build();
+
+        return Optional.of(gonghakCourse);
     }
 }
