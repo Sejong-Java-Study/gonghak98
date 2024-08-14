@@ -32,17 +32,17 @@ public class ElecInfoMajorGonghakRecommendService implements GonghakRecommendSer
             userDomain.getStudentId(), userDomain.getMajorsDomain());
 
         // 수강하지 않은 과목 중 "전문 교양" 과목을 반환한다.
-        List<IncompletedCoursesDto> professionalNonMajor = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+        List<IncompletedCoursesDto> professionalNonMajor = gonghakRepository.findUserIncompletedCourses(
             CourseCategoryConst.전문교양, userDomain.getStudentId(), userDomain.getMajorsDomain()
         );
 
         // 수강하지 않은 과목 중 "전공" 과목을 반환한다.
-        List<IncompletedCoursesDto> major = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+        List<IncompletedCoursesDto> major = gonghakRepository.findUserIncompletedCourses(
             CourseCategoryConst.전공, userDomain.getStudentId(), userDomain.getMajorsDomain()
         );
 
         // 수강하지 않은 과목 중 "MSC" 과목을 반환한다.
-        List<IncompletedCoursesDto> msc = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+        List<IncompletedCoursesDto> msc = gonghakRepository.findUserIncompletedCourses(
             CourseCategoryConst.MSC, userDomain.getStudentId(), userDomain.getMajorsDomain()
         );
 
