@@ -24,7 +24,7 @@ public class GonghakDao implements GonghakRepository{
 
     private static final int DIVIDER = 1000000;
     private final AbeekDao abeekDao;
-    private final GonghakCorusesDao gonghakCorusesDao;
+    private final GonghakCoursesDao gonghakCoursesDao;
 
     @Override
     public AbeekDomain save(AbeekDomain abeekDomain) {
@@ -44,14 +44,14 @@ public class GonghakDao implements GonghakRepository{
     @Override
     public List<GonghakCoursesByMajorDto> findUserCoursesByMajorByGonghakCoursesWithCompletedCourses(
         Long studentId, MajorsDomain majorsDomain) {
-        return gonghakCorusesDao.findUserCoursesByMajorAndGonghakCoursesWithCompletedCourses(studentId,majorsDomain.getId());
+        return gonghakCoursesDao.findUserCoursesByMajorAndGonghakCoursesWithCompletedCourses(studentId,majorsDomain.getId());
     }
 
     //
     @Override
     public List<IncompletedCoursesDto> findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
         CourseCategoryConst courseCategory, Long studentId, MajorsDomain majorsDomain) {
-        return gonghakCorusesDao.findUserCoursesByMajorAndCourseCategoryAndGonghakCoursesWithoutCompleteCourses(
+        return gonghakCoursesDao.findUserCoursesByMajorAndCourseCategoryAndGonghakCoursesWithoutCompleteCourses(
             courseCategory, studentId, majorsDomain, studentId/DIVIDER);
     }
 
