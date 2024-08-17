@@ -24,7 +24,7 @@ public class GonghakDao implements GonghakRepository{
 
     private static final int DIVIDER = 1000000;
     private final AbeekDao abeekDao;
-    private final GonghakCorusesDao gonghakCorusesDao;
+    private final GonghakCoursesDao gonghakCoursesDao;
 
     @Override
     public AbeekDomain save(AbeekDomain abeekDomain) {
@@ -42,17 +42,16 @@ public class GonghakDao implements GonghakRepository{
 
     // gonghakCourse 중 이수한 과목을 불러온다.
     @Override
-    public List<GonghakCoursesByMajorDto> findUserCoursesByMajorByGonghakCoursesWithCompletedCourses(
+    public List<GonghakCoursesByMajorDto> findUserCompletedCourses(
         Long studentId, MajorsDomain majorsDomain) {
-        return gonghakCorusesDao.findUserCoursesByMajorAndGonghakCoursesWithCompletedCourses(studentId,majorsDomain.getId());
+        return gonghakCoursesDao.findUserCompletedCourses(studentId,majorsDomain.getId());
     }
 
-    //
+    // gonghakCourse 중 이수하지 않은 과목을 불러온다.
     @Override
-    public List<IncompletedCoursesDto> findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+    public List<IncompletedCoursesDto> findUserIncompletedCourses(
         CourseCategoryConst courseCategory, Long studentId, MajorsDomain majorsDomain) {
-        return gonghakCorusesDao.findUserCoursesByMajorAndCourseCategoryAndGonghakCoursesWithoutCompleteCourses(
-            courseCategory, studentId, majorsDomain, studentId/DIVIDER);
+        return gonghakCoursesDao.findUserIncompletedCourses(courseCategory, studentId, majorsDomain, studentId/DIVIDER);
     }
 
     private Optional<GonghakStandardDto> changeToGonghakStandardDto(MajorsDomain majorsDomain, int year) {

@@ -54,7 +54,7 @@ class GonghakRepositoryTest {
     @Test
     @DisplayName("dao 메서드 상태 출력")
     void displayDaoMethod(){
-        List<IncompletedCoursesDto> withoutCompleteCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+        List<IncompletedCoursesDto> withoutCompleteCourses = gonghakRepository.findUserIncompletedCourses(
                 CourseCategoryConst.전공, COM_TEST_STUDENT_ID, COM_TEST_MAJORDOMAIN
         );
 
@@ -64,7 +64,7 @@ class GonghakRepositoryTest {
                 }
         );
 
-        List<GonghakCoursesByMajorDto> withCompletedCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithCompletedCourses(
+        List<GonghakCoursesByMajorDto> withCompletedCourses = gonghakRepository.findUserCompletedCourses(
                 COM_TEST_STUDENT_ID, COM_TEST_MAJORDOMAIN
         );
 
@@ -89,7 +89,7 @@ class GonghakRepositoryTest {
     @Test
     @DisplayName("findUserCoursesByMajorByGonghakCoursesWithCompletedCourses 테스트 ")
     void findUserCoursesByMajorByGonghakCoursesWithCompletedCoursesTest() {
-        List<GonghakCoursesByMajorDto> userDataForCalculate = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithCompletedCourses(
+        List<GonghakCoursesByMajorDto> userDataForCalculate = gonghakRepository.findUserCompletedCourses(
                 COM_TEST_STUDENT_ID, COM_TEST_MAJORDOMAIN);
 
         log.info("userDataForCalculate size = {}",userDataForCalculate.size());
@@ -122,7 +122,7 @@ class GonghakRepositoryTest {
 
         Arrays.stream(CourseCategoryConst.values()).forEach(
                 courseCategory -> {
-                    List<IncompletedCoursesDto> testCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+                    List<IncompletedCoursesDto> testCourses = gonghakRepository.findUserIncompletedCourses(
                             CourseCategoryConst.전공,
                             COM_TEST_STUDENT_ID,
                             COM_TEST_MAJORDOMAIN

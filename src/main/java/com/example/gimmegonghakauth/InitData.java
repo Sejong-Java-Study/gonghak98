@@ -5,7 +5,7 @@ import com.example.gimmegonghakauth.constant.CourseCategoryConst;
 import com.example.gimmegonghakauth.dao.AbeekDao;
 import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
 import com.example.gimmegonghakauth.dao.CoursesDao;
-import com.example.gimmegonghakauth.dao.GonghakCorusesDao;
+import com.example.gimmegonghakauth.dao.GonghakCoursesDao;
 import com.example.gimmegonghakauth.dao.MajorsDao;
 import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.AbeekDomain;
@@ -33,7 +33,7 @@ public class InitData {
     private final AbeekDao abeekDao;
     private final CompletedCoursesDao completedCoursesDao;
     private final CoursesDao coursesDao;
-    private final GonghakCorusesDao gonghakCorusesDao;
+    private final GonghakCoursesDao gonghakCoursesDao;
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
 
@@ -229,10 +229,10 @@ public class InitData {
             .passCategory("인선")
             .year(19).build();
 
-        gonghakCorusesDao.save(gonghakCourses1);
-        gonghakCorusesDao.save(gonghakCourses2);
-        gonghakCorusesDao.save(gonghakCourses3);
-        gonghakCorusesDao.save(gonghakCourses4);
+        gonghakCoursesDao.save(gonghakCourses1);
+        gonghakCoursesDao.save(gonghakCourses2);
+        gonghakCoursesDao.save(gonghakCourses3);
+        gonghakCoursesDao.save(gonghakCourses4);
     }
 
 

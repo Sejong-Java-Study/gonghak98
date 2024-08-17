@@ -2,7 +2,7 @@ package com.example.gimmegonghakauth;
 
 import com.example.gimmegonghakauth.constant.CourseCategoryConst;
 import com.example.gimmegonghakauth.dao.CoursesDao;
-import com.example.gimmegonghakauth.dao.GonghakCorusesDao;
+import com.example.gimmegonghakauth.dao.GonghakCoursesDao;
 import com.example.gimmegonghakauth.dao.MajorsDao;
 import com.example.gimmegonghakauth.domain.CoursesDomain;
 import com.example.gimmegonghakauth.domain.GonghakCoursesDomain;
@@ -24,7 +24,7 @@ public class InitFileData {
 
     private final MajorsDao majorsDao;
     private final CoursesDao coursesDao;
-    private final GonghakCorusesDao gonghakCorusesDao;
+    private final GonghakCoursesDao gonghakCoursesDao;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -82,7 +82,7 @@ public class InitFileData {
                 try {
                     Optional<GonghakCoursesDomain> course = mapToGonghakCoursesDomain(data);
                     if (course.isPresent()) {
-                        gonghakCorusesDao.save(course.get());
+                        gonghakCoursesDao.save(course.get());
                     }
                 } catch (Exception e) {
                     continue;

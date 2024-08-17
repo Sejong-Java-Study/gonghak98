@@ -35,7 +35,7 @@ public class GonghakCalculateService {
 
         // user 공학 상태 테이블
         // gonghakCourse 중 이수한 과목을 불러온다.
-        List<GonghakCoursesByMajorDto> userCoursesByMajorByGonghakCoursesWithCompletedCourses = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithCompletedCourses(
+        List<GonghakCoursesByMajorDto> userCoursesByMajorByGonghakCoursesWithCompletedCourses = gonghakRepository.findUserCompletedCourses(
             userDomain.getStudentId(), userDomain.getMajorsDomain());
 
         // user
