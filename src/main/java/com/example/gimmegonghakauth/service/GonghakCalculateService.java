@@ -25,9 +25,9 @@ public class GonghakCalculateService {
     @Transactional(readOnly = true)
     public Optional<GonghakResultDto> getResultRatio(UserDomain userDomain) {
 
-        // findStandard -> 학번 입학년도를 기준으로 해당 년도의 abeekType(영역별 구분),minCredit(영역별 인증학점) 불러온다.
+        // findLatestStandard -> 학번 입학년도를 기준으로 해당 년도의 abeekType(영역별 구분),minCredit(영역별 인증학점) 불러온다.
         Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(
-            userDomain.getStudentId(), userDomain.getMajorsDomain());
+            userDomain.getMajorsDomain());
 
         // default user abeek 학점 상태 map
         Map<AbeekTypeConst, Double> userAbeekCredit = getUserAbeekCreditDefault(
