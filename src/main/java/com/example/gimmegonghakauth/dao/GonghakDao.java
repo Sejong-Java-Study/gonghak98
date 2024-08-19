@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class GonghakDao implements GonghakRepository{
 
     private static final int DIVIDER = 1000000;
-    private static final int YEAR = 24;
+    private static final int LATEST_YEAR = 24;
     private final AbeekDao abeekDao;
     private final GonghakCoursesDao gonghakCoursesDao;
 
@@ -36,7 +36,7 @@ public class GonghakDao implements GonghakRepository{
     // 최신년도의 abeekType(영역별 구분),minCredit(영역별 인증학점) 불러온다.
     @Override
     public Optional<GonghakStandardDto> findStandard(MajorsDomain majorsDomain){
-        return changeToGonghakStandardDto(majorsDomain, YEAR);
+        return changeToGonghakStandardDto(majorsDomain, LATEST_YEAR);
     }
 
     // gonghakCourse 중 이수한 과목을 불러온다.
