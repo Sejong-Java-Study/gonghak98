@@ -17,6 +17,7 @@ import com.example.gimmegonghakauth.domain.MajorsDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.service.recommend.MajorName;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
@@ -31,11 +32,17 @@ public class InitData {
 
     private final MajorsDao majorsDao;
     private final AbeekDao abeekDao;
-    private final CompletedCoursesDao completedCoursesDao;
-    private final CoursesDao coursesDao;
-    private final GonghakCoursesDao gonghakCoursesDao;
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${admin1}")
+    private Long admin1;
+
+    @Value("${admin2}")
+    private Long admin2;
+
+    @Value("${admin3}")
+    private Long admin3;
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -46,8 +53,16 @@ public class InitData {
         MajorsDomain elecInfoMajor = MajorsDomain.builder()
             .id(2L)
             .major(MajorName.ELEC_INFO.getName()).build();
+        MajorsDomain softwareMajor = MajorsDomain.builder()
+            .id(3L)
+            .major(MajorName.SOFTWARE.getName()).build();
+        MajorsDomain dataScienceMajor = MajorsDomain.builder()
+            .id(4L)
+            .major(MajorName.DATA_SCIENCE.getName()).build();
         majorsDao.save(computerMajor);
         majorsDao.save(elecInfoMajor);
+        majorsDao.save(softwareMajor);
+        majorsDao.save(dataScienceMajor);
 
         //24학년도 computerMajor
         AbeekDomainBuilder abeek1 = AbeekDomain.builder()
@@ -125,114 +140,107 @@ public class InitData {
         abeekDao.save(abeek24.build());
         abeekDao.save(abeek25.build());
 
+        //24학년도 소프트웨어
+        AbeekDomainBuilder abeek31 = AbeekDomain.builder()
+            .abeekType(AbeekTypeConst.BSM)
+            .majorsDomain(softwareMajor)
+            .note("this is a test note")
+            .year(24)
+            .minCredit(18);
+        AbeekDomainBuilder abeek32 = AbeekDomain.builder()
+            .abeekType(AbeekTypeConst.PROFESSIONAL_NON_MAJOR)
+            .majorsDomain(softwareMajor)
+            .note("this is a test note")
+            .year(24)
+            .minCredit(14);
+        AbeekDomainBuilder abeek33 = AbeekDomain.builder()
+            .abeekType(AbeekTypeConst.DESIGN)
+            .majorsDomain(softwareMajor)
+            .note("this is a test note")
+            .year(24)
+            .minCredit(12);
+        AbeekDomainBuilder abeek34 = AbeekDomain.builder()
+            .abeekType(AbeekTypeConst.MAJOR)
+            .majorsDomain(softwareMajor)
+            .note("this is a test note")
+            .year(24)
+            .minCredit(45);
+        AbeekDomainBuilder abeek35 = AbeekDomain.builder()
+            .abeekType(AbeekTypeConst.MINIMUM_CERTI)
+            .majorsDomain(softwareMajor)
+            .note("this is a test note")
+            .year(24)
+            .minCredit(77);
+
+        abeekDao.save(abeek31.build());
+        abeekDao.save(abeek32.build());
+        abeekDao.save(abeek33.build());
+        abeekDao.save(abeek34.build());
+        abeekDao.save(abeek35.build());
+
+        //24학년도 데이터사이언스
+        AbeekDomainBuilder abeek41 = AbeekDomain.builder()
+            .abeekType(AbeekTypeConst.BSM)
+            .majorsDomain(dataScienceMajor)
+            .note("this is a test note")
+            .year(24)
+            .minCredit(15);
+        AbeekDomainBuilder abeek42 = AbeekDomain.builder()
+            .abeekType(AbeekTypeConst.PROFESSIONAL_NON_MAJOR)
+            .majorsDomain(dataScienceMajor)
+            .note("this is a test note")
+            .year(24)
+            .minCredit(14);
+        AbeekDomainBuilder abeek43 = AbeekDomain.builder()
+            .abeekType(AbeekTypeConst.DESIGN)
+            .majorsDomain(dataScienceMajor)
+            .note("this is a test note")
+            .year(24)
+            .minCredit(9);
+        AbeekDomainBuilder abeek44 = AbeekDomain.builder()
+            .abeekType(AbeekTypeConst.MAJOR)
+            .majorsDomain(dataScienceMajor)
+            .note("this is a test note")
+            .year(24)
+            .minCredit(45);
+        AbeekDomainBuilder abeek45 = AbeekDomain.builder()
+            .abeekType(AbeekTypeConst.MINIMUM_CERTI)
+            .majorsDomain(dataScienceMajor)
+            .note("this is a test note")
+            .year(24)
+            .minCredit(74);
+
+        abeekDao.save(abeek41.build());
+        abeekDao.save(abeek42.build());
+        abeekDao.save(abeek43.build());
+        abeekDao.save(abeek44.build());
+        abeekDao.save(abeek45.build());
+
         //User
-        UserDomain userDomain = UserDomain.builder()
-            .email("testEmail@sju.ac.kr")
+        UserDomain user1 = UserDomain.builder()
+            .email("testEmail1@sju.ac.kr")
+            .name("조태현")
+            .password(passwordEncoder.encode("qwer"))
+            .studentId(admin1)
+            .majorsDomain(elecInfoMajor).build();
+        userDao.save(user1);
+
+        UserDomain user2 = UserDomain.builder()
+            .email("testEmail2@sju.ac.kr")
+            .name("이희수")
+            .password(passwordEncoder.encode("qwer"))
+            .studentId(admin2)
+            .majorsDomain(dataScienceMajor).build();
+        userDao.save(user2);
+
+        UserDomain user3 = UserDomain.builder()
+            .email("testEmail3@sju.ac.kr")
             .name("홍지섭")
             .password(passwordEncoder.encode("qwer"))
-            .studentId(19011706L)
+            .studentId(admin3)
             .majorsDomain(computerMajor).build();
-        userDao.save(userDomain);
+        userDao.save(user3);
 
-        UserDomain userDomainElec = UserDomain.builder()
-            .email("testEmail123@sju.ac.kr")
-            .name("전통이")
-            .password(passwordEncoder.encode("qwer"))
-            .studentId(19111111L)
-            .majorsDomain(elecInfoMajor).build();
-        userDao.save(userDomainElec);
-
-        //Courses
-        CoursesDomain testCourse1 = CoursesDomain.builder()
-            .courseId(1234L)
-            .credit(3)
-            .name("testCourse1").build();
-        CoursesDomain testCourse2 = CoursesDomain.builder()
-            .courseId(2345L)
-            .credit(4)
-            .name("testCourse2").build();
-        CoursesDomain testCourse3 = CoursesDomain.builder()
-            .courseId(9000L)
-            .credit(5)
-            .name("testCourse3").build();
-        CoursesDomain testCourse4 = CoursesDomain.builder()
-            .courseId(9001L)
-            .credit(3)
-            .name("testCourse4").build();
-        CoursesDomain testCourse5 = CoursesDomain.builder()
-            .courseId(9002L)
-            .credit(3)
-            .name("testCourse5").build();
-        coursesDao.save(testCourse1);
-        coursesDao.save(testCourse2);
-        coursesDao.save(testCourse3);
-        coursesDao.save(testCourse4);
-        coursesDao.save(testCourse5);
-
-        //CompletedCourses
-        CompletedCoursesDomain coursesDomain1 = CompletedCoursesDomain.builder()
-            .year(19)
-            .semester("1학기")
-            .coursesDomain(testCourse1)
-            .userDomain(userDomain).build();
-        CompletedCoursesDomain coursesDomain2 = CompletedCoursesDomain.builder()
-            .year(19)
-            .semester("1학기")
-            .coursesDomain(testCourse2)
-            .userDomain(userDomain).build();
-        CompletedCoursesDomain coursesDomain3 = CompletedCoursesDomain.builder()
-            .year(19)
-            .semester("1학기")
-            .coursesDomain(testCourse3)
-            .userDomain(userDomain).build();
-        CompletedCoursesDomain coursesDomain4 = CompletedCoursesDomain.builder()
-            .year(19)
-            .semester("1학기")
-            .coursesDomain(testCourse4)
-            .userDomain(userDomain).build();
-
-        completedCoursesDao.save(coursesDomain1);
-        completedCoursesDao.save(coursesDomain2);
-        completedCoursesDao.save(coursesDomain3);
-        completedCoursesDao.save(coursesDomain4);
-
-        //gonghakCourses
-        GonghakCoursesDomain gonghakCourses1 = GonghakCoursesDomain.builder()
-            .courseCategory(CourseCategoryConst.BSM)
-            .majorsDomain(computerMajor)
-            .designCredit(0.0)
-            .coursesDomain(testCourse1)
-            .passCategory("인필")
-            .year(19).build();
-
-        GonghakCoursesDomain gonghakCourses2 = GonghakCoursesDomain.builder()
-            .courseCategory(CourseCategoryConst.BSM)
-            .majorsDomain(computerMajor)
-            .designCredit(0.0)
-            .coursesDomain(testCourse2)
-            .passCategory("인필")
-            .year(19).build();
-
-        GonghakCoursesDomain gonghakCourses3 = GonghakCoursesDomain.builder()
-            .courseCategory(CourseCategoryConst.전공)
-            .majorsDomain(computerMajor)
-            .designCredit(1.0)
-            .coursesDomain(testCourse3)
-            .passCategory("인선")
-            .year(19).build();
-
-        GonghakCoursesDomain gonghakCourses4 = GonghakCoursesDomain.builder()
-            .courseCategory(CourseCategoryConst.전공)
-            .majorsDomain(computerMajor)
-            .designCredit(1.0)
-            .coursesDomain(testCourse5)
-            .passCategory("인선")
-            .year(19).build();
-
-        gonghakCoursesDao.save(gonghakCourses1);
-        gonghakCoursesDao.save(gonghakCourses2);
-        gonghakCoursesDao.save(gonghakCourses3);
-        gonghakCoursesDao.save(gonghakCourses4);
     }
 
 
