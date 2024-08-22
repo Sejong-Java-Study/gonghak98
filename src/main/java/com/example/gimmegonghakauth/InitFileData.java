@@ -29,7 +29,7 @@ public class InitFileData {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void loadCoursesDataFromCSV() throws IOException {
-        String csvFilePath = "src/main/java/com/example/gimmegonghakauth/Course.csv";
+        String csvFilePath = "src/main/java/com/example/gimmegonghakauth/course.csv";
         inputCoursesCsv(csvFilePath);
 
         csvFilePath = "src/main/java/com/example/gimmegonghakauth/gonghak_course.csv";

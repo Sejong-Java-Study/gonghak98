@@ -13,7 +13,7 @@ public interface CoursesDao extends JpaRepository<CoursesDomain, Long> {
 
     CoursesDomain findByName(String name);
 
-    // 띄워쓰기를 제외한 course.name 과 비교해서 반환하는 쿼리문
+    // 띄어쓰기를 제외한 course.name 과 비교해서 반환하는 쿼리문
     @Query(value ="select * from course where REPLACE(name, ' ', '') = :name", nativeQuery = true)
     CoursesDomain findByNameIgnoreSpaces(@Param("name") String name);
 }
