@@ -29,16 +29,10 @@ public class InitFileData {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void loadCoursesDataFromCSV() throws IOException {
-        String csvFilePath = "src/main/java/com/example/gimmegonghakauth/19학년2학기_20학년1학기_컴공.csv";
-        inputCoursesCsv(csvFilePath);
-        csvFilePath = "src/main/java/com/example/gimmegonghakauth/19학년2학기_20학년1학기_전정통.csv";
-        inputCoursesCsv(csvFilePath);
-        csvFilePath = "src/main/java/com/example/gimmegonghakauth/19학년2학기_20학년1학기_대양.csv";
+        String csvFilePath = "src/main/java/com/example/gimmegonghakauth/course.csv";
         inputCoursesCsv(csvFilePath);
 
-        csvFilePath = "src/main/java/com/example/gimmegonghakauth/computerMajorGonghakCourses2019Test.csv";
-        inputGonghakCoursesCsv(csvFilePath);
-        csvFilePath = "src/main/java/com/example/gimmegonghakauth/elecInfoMajorGonghakCourses2019Test.csv";
+        csvFilePath = "src/main/java/com/example/gimmegonghakauth/gonghak_course.csv";
         inputGonghakCoursesCsv(csvFilePath);
     }
 
@@ -80,7 +74,7 @@ public class InitFileData {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);
                 try {
-                    Optional<GonghakCoursesDomain> course = mapToGonghakCoursesDomain(data);
+                    Optional<GonghakCoursesDomain> course = mapToGonghakCourses(data);
                     if (course.isPresent()) {
                         gonghakCoursesDao.save(course.get());
                     }
@@ -93,9 +87,10 @@ public class InitFileData {
         }
     }
 
+    // raw file 입력 용
     private Optional<GonghakCoursesDomain> mapToGonghakCoursesDomain(String[] data) {
 
-        CoursesDomain courseDomain = coursesDao.findByName(data[6].replaceAll("\\s+", ""));
+        CoursesDomain courseDomain = coursesDao.findByNameIgnoreSpaces(data[6].replaceAll("\\s+", ""));
         if (courseDomain == null) {
             return Optional.empty();
         }
@@ -124,6 +119,20 @@ public class InitFileData {
             .courseCategory(CourseCategoryConst.valueOf(courseCategory))
             .passCategory(data[5].substring(0, 2))
             .designCredit(Double.parseDouble(data[8]))
+            .build();
+
+        return Optional.of(gonghakCourse);
+    }
+
+    // 실제 DB csv file 입력용
+    private Optional<GonghakCoursesDomain> mapToGonghakCourses(String[] data) {
+        GonghakCoursesDomain gonghakCourse = GonghakCoursesDomain.builder()
+            .year(Integer.parseInt(data[1]))
+            .majorsDomain(majorsDao.findById(Long.parseLong(data[4])).get())
+            .coursesDomain(coursesDao.findByCourseId(Long.parseLong(data[2])))
+            .courseCategory(CourseCategoryConst.valueOf(data[5]))
+            .passCategory(data[6])
+            .designCredit(Double.parseDouble(data[0]))
             .build();
 
         return Optional.of(gonghakCourse);
