@@ -49,37 +49,37 @@ public class InitData {
         majorsDao.save(computerMajor);
         majorsDao.save(elecInfoMajor);
 
-        //19학년도 computerMajor
+        //24학년도 computerMajor
         AbeekDomainBuilder abeek1 = AbeekDomain.builder()
             .abeekType(AbeekTypeConst.BSM)
             .majorsDomain(computerMajor)
             .note("this is a test note")
-            .year(19)
+            .year(24)
             .minCredit(18);
         AbeekDomainBuilder abeek2 = AbeekDomain.builder()
             .abeekType(AbeekTypeConst.PROFESSIONAL_NON_MAJOR)
             .majorsDomain(computerMajor)
             .note("this is a test note")
-            .year(19)
+            .year(24)
             .minCredit(14);
         AbeekDomainBuilder abeek3 = AbeekDomain.builder()
             .abeekType(AbeekTypeConst.DESIGN)
             .majorsDomain(computerMajor)
             .note("this is a test note")
-            .year(19)
-            .minCredit(12);
+            .year(24)
+            .minCredit(10);
         AbeekDomainBuilder abeek4 = AbeekDomain.builder()
             .abeekType(AbeekTypeConst.MAJOR)
             .majorsDomain(computerMajor)
             .note("this is a test note")
-            .year(19)
-            .minCredit(60);
+            .year(24)
+            .minCredit(45);
         AbeekDomainBuilder abeek5 = AbeekDomain.builder()
             .abeekType(AbeekTypeConst.MINIMUM_CERTI)
             .majorsDomain(computerMajor)
             .note("this is a test note")
-            .year(19)
-            .minCredit(92);
+            .year(24)
+            .minCredit(77);
 
         abeekDao.save(abeek1.build());
         abeekDao.save(abeek2.build());
@@ -87,37 +87,37 @@ public class InitData {
         abeekDao.save(abeek4.build());
         abeekDao.save(abeek5.build());
 
-        //19학년도 전정통
+        //24학년도 전정통
         AbeekDomainBuilder abeek21 = AbeekDomain.builder()
             .abeekType(AbeekTypeConst.MSC)
             .majorsDomain(elecInfoMajor)
             .note("this is a test note")
-            .year(19)
-            .minCredit(30);
+            .year(24)
+            .minCredit(27);
         AbeekDomainBuilder abeek22 = AbeekDomain.builder()
             .abeekType(AbeekTypeConst.PROFESSIONAL_NON_MAJOR)
             .majorsDomain(elecInfoMajor)
             .note("this is a test note")
-            .year(19)
+            .year(24)
             .minCredit(14);
         AbeekDomainBuilder abeek23 = AbeekDomain.builder()
             .abeekType(AbeekTypeConst.DESIGN)
             .majorsDomain(elecInfoMajor)
             .note("this is a test note")
-            .year(19)
+            .year(24)
             .minCredit(9);
         AbeekDomainBuilder abeek24 = AbeekDomain.builder()
             .abeekType(AbeekTypeConst.MAJOR)
             .majorsDomain(elecInfoMajor)
             .note("this is a test note")
-            .year(19)
-            .minCredit(54);
+            .year(24)
+            .minCredit(45);
         AbeekDomainBuilder abeek25 = AbeekDomain.builder()
             .abeekType(AbeekTypeConst.MINIMUM_CERTI)
             .majorsDomain(elecInfoMajor)
             .note("this is a test note")
-            .year(19)
-            .minCredit(98);
+            .year(24)
+            .minCredit(86);
 
         abeekDao.save(abeek21.build());
         abeekDao.save(abeek22.build());

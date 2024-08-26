@@ -78,7 +78,7 @@ class GonghakRepositoryTest {
     @Test
     @DisplayName("GonghakStandardDto 5가지 상태 모두 포함되어있는지 확인")
     void findStandardKeySetTest() {
-        Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(COM_TEST_STUDENT_ID, COM_TEST_MAJORDOMAIN);
+        Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(COM_TEST_MAJORDOMAIN);
         log.info("testStandard status ={}", standard.get().getStandards());
         Map<AbeekTypeConst, Integer> testStandard = standard.get().getStandards();
         assertThat(testStandard.keySet()).contains(AbeekTypeConst.BSM,AbeekTypeConst.PROFESSIONAL_NON_MAJOR,AbeekTypeConst.DESIGN,AbeekTypeConst.MAJOR,AbeekTypeConst.MINIMUM_CERTI);
@@ -140,9 +140,7 @@ class GonghakRepositoryTest {
     @Test
     @DisplayName("findStandard가 없을 때 - Wrong Major")
     void findStandardWrongMajorDomainTest(){
-        Optional<GonghakStandardDto> wrongStandard = gonghakRepository.findStandard(
-                COM_TEST_STUDENT_ID,
-                WRONG_TEST_MAJORDOMAIN);
+        Optional<GonghakStandardDto> wrongStandard = gonghakRepository.findStandard(WRONG_TEST_MAJORDOMAIN);
         assertThat(wrongStandard.get().getStandards().isEmpty()).isEqualTo(true);
     }
 }

@@ -15,7 +15,7 @@ public interface GonghakRepository {
 
     AbeekDomain save(AbeekDomain abeekDomain);
 
-    Optional<GonghakStandardDto> findStandard(Long studentId, MajorsDomain majorsDomain);
+    Optional<GonghakStandardDto> findStandard(MajorsDomain majorsDomain);
 
     List<GonghakCoursesByMajorDto> findUserCompletedCourses(Long studentId, MajorsDomain majorsDomain);
 
