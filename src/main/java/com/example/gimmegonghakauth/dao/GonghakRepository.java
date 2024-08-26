@@ -15,11 +15,11 @@ public interface GonghakRepository {
 
     AbeekDomain save(AbeekDomain abeekDomain);
 
-    Optional<GonghakStandardDto> findStandard(Long studentId, MajorsDomain majorsDomain);
+    Optional<GonghakStandardDto> findStandard(MajorsDomain majorsDomain);
 
-    List<GonghakCoursesByMajorDto> findUserCoursesByMajorByGonghakCoursesWithCompletedCourses(Long studentId, MajorsDomain majorsDomain);
+    List<GonghakCoursesByMajorDto> findUserCompletedCourses(Long studentId, MajorsDomain majorsDomain);
 
-    List<IncompletedCoursesDto> findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+    List<IncompletedCoursesDto> findUserIncompletedCourses(
         CourseCategoryConst courseCategory,Long studentId, MajorsDomain majorsDomain);
 
 }

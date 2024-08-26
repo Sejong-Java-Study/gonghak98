@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.example.gimmegonghakauth.Service.GonghakCalculateServiceTest.CalculateTestConfig;
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
 import com.example.gimmegonghakauth.dao.AbeekDao;
-import com.example.gimmegonghakauth.dao.GonghakCorusesDao;
+import com.example.gimmegonghakauth.dao.GonghakCoursesDao;
 import com.example.gimmegonghakauth.dao.GonghakDao;
 import com.example.gimmegonghakauth.dao.GonghakRepository;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
@@ -51,11 +51,11 @@ class GonghakCalculateServiceTest {
     @RequiredArgsConstructor
     static class CalculateTestConfig{
         private final AbeekDao abeekDao;
-        private final GonghakCorusesDao gonghakCorusesDao;
+        private final GonghakCoursesDao gonghakCoursesDao;
 
         @Bean
         public GonghakRepository gonghakRepository(){
-            return new GonghakDao(abeekDao,gonghakCorusesDao);
+            return new GonghakDao(abeekDao, gonghakCoursesDao);
         }
 
         @Bean

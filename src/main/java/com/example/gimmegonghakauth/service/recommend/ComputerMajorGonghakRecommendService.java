@@ -29,21 +29,20 @@ public class ComputerMajorGonghakRecommendService implements GonghakRecommendSer
         GonghakRecommendCoursesDto gonghakRecommendCoursesDto = new GonghakRecommendCoursesDto();
 
         // findStandard -> 학번 입학년도를 기준으로 해당 년도의 abeekType(영역별 구분),minCredit(영역별 인증학점) 불러온다.
-        Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(
-            userDomain.getStudentId(), userDomain.getMajorsDomain());
+        Optional<GonghakStandardDto> standard = gonghakRepository.findStandard(userDomain.getMajorsDomain());
 
         // 수강하지 않은 과목 중 "전문 교양" 과목을 반환한다.
-        List<IncompletedCoursesDto> professionalNonMajor = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+        List<IncompletedCoursesDto> professionalNonMajor = gonghakRepository.findUserIncompletedCourses(
             CourseCategoryConst.전문교양, userDomain.getStudentId(), userDomain.getMajorsDomain()
         );
 
         // 수강하지 않은 과목 중 "전공" 과목을 반환한다.
-        List<IncompletedCoursesDto> major = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+        List<IncompletedCoursesDto> major = gonghakRepository.findUserIncompletedCourses(
             CourseCategoryConst.전공, userDomain.getStudentId(), userDomain.getMajorsDomain()
         );
 
         // 수강하지 않은 과목 중 "BSM" 과목을 반환한다.
-        List<IncompletedCoursesDto> bsm = gonghakRepository.findUserCoursesByMajorByGonghakCoursesWithoutCompleteCourses(
+        List<IncompletedCoursesDto> bsm = gonghakRepository.findUserIncompletedCourses(
             CourseCategoryConst.BSM, userDomain.getStudentId(), userDomain.getMajorsDomain()
         );
 
