@@ -43,7 +43,7 @@ public class GonghakDao implements GonghakRepository{
     @Override
     public List<GonghakCoursesByMajorDto> findUserCompletedCourses(
         Long studentId, MajorsDomain majorsDomain) {
-        return gonghakCoursesDao.findUserCompletedCourses(studentId,majorsDomain.getId());
+        return gonghakCoursesDao.findUserCompletedCourses(studentId,majorsDomain.getId(), studentId/DIVIDER);
     }
 
     // gonghakCourse 중 이수하지 않은 과목을 불러온다.
