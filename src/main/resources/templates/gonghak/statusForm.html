@@ -32,7 +32,7 @@
             </thead>
             <tbody>
             <tr th:each="resultRatio : ${userResultRatio}">
-              <td th:text="${resultRatio.getKey()}"></td>
+              <td th:text="${resultRatio.getKey().getTypeMessage()}"></td>
               <td th:text="${resultRatio.value.getUserPoint()}"></td>
               <td th:text="${resultRatio.value.getStandardPoint()}"></td>
               <td>
@@ -76,7 +76,7 @@
         <div class="py-5 text-center" th:each="recommendCourse : ${recommendCoursesByAbeekType}">
 
           <div th:if="${not #lists.isEmpty(recommendCourse.getValue())}">
-            <h3 th:text="${recommendCourse.getKey()}">type</h3>
+            <h2 th:text="${recommendCourse.getKey().getTypeMessage()}">type</h2>
             <div style="margin-bottom: 50px">
               <div class="table-container m-3"
                    style="max-height: 500px; overflow-y: auto; margin-top: 30px">
