@@ -15,7 +15,7 @@ public class CustomCompletedCoursesDaoImpl implements CustomCompletedCoursesDao 
 
     @Override
     public void saveAll(List<CompletedCoursesDomain> completedCourses) {
-        String sql = "insert into completed_course (semester, user_id, year) values (?,?,?)";
+        String sql = "insert into completed_course (course_id, semester, user_id, year) values (?,?,?,?)";
 
         jdbcTemplate.batchUpdate(
             sql,
@@ -23,9 +23,10 @@ public class CustomCompletedCoursesDaoImpl implements CustomCompletedCoursesDao 
                 @Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException {
                     CompletedCoursesDomain course = completedCourses.get(i);
-                    ps.setString(1,course.getSemester());
-                    ps.setLong(2, course.getUserDomain().getId());
-                    ps.setInt(3,course.getYear());
+                    ps.setLong(1, course.getCoursesDomain().getCourseId());
+                    ps.setString(2, course.getSemester());
+                    ps.setLong(3, course.getUserDomain().getId());
+                    ps.setInt(4, course.getYear());
                 }
 
                 @Override
