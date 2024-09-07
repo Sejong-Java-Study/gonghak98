@@ -63,18 +63,18 @@ public class UserService {
         return true;
     }
 
-    public boolean checkPassword(UserJoinDto userJoinDto) {
+    private boolean checkPassword(UserJoinDto userJoinDto) {
         if (!userJoinDto.getPassword1().equals(userJoinDto.getPassword2())) {
             return true;
         }
         return false;
     }
 
-    public boolean checkStudentId(String studentId) {
+    private boolean checkStudentId(String studentId) {
         return userRepository.existsByStudentId(Long.parseLong(studentId));
     }
 
-    public boolean checkEmail(String email) {
+    private boolean checkEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 
