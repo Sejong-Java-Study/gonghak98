@@ -71,10 +71,10 @@ public class CompletedCoursesServiceDataTest {
     @BeforeEach
     public void setUser() {
         //유저 Entity save
-        UserDomain user = UserDomain.builder().studentId(19011684L)
-            .password("1234").email("test@gmail.com")
+        UserDomain user = UserDomain.builder().studentId(19111111L)
+            .password("qwer").email("test@gmail.com")
             .majorsDomain(majorsDao.findByMajor("컴퓨터공학과"))
-            .name("이희수")
+            .name("testUser")
             .build();
         userDao.save(user);
     }
@@ -85,7 +85,7 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터1
         CompletedCoursesDomain data1 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19011684L).get()).
+                userDomain(userDao.findByStudentId(19111111L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(23).semester("1학기").
                 build();
@@ -93,7 +93,7 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터2
         CompletedCoursesDomain data2 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19011684L).get()).
+                userDomain(userDao.findByStudentId(19111111L).get()).
                 coursesDomain(coursesDao.findByCourseId(54321L)).
                 year(23).semester("1학기").
                 build();
@@ -107,14 +107,14 @@ public class CompletedCoursesServiceDataTest {
         dataList.add(data1);
         dataList.add(data2);
 
-        UserDomain user = userDao.findByStudentId(19011684L).get();
+        UserDomain user = userDao.findByStudentId(19111111L).get();
         assertEquals(dataList, completedCoursesDao.findByUserDomain(user));
     }
 
     @Test
     @DisplayName("재업로드 테스트1(첫 업로드)")
     public void testUserUploadStatus1() {
-        UserDomain user = userDao.findByStudentId(19011684L).get();
+        UserDomain user = userDao.findByStudentId(19111111L).get();
 
         //데이터 확인
         completedCoursesService.checkUser(user);
@@ -132,7 +132,7 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터 1
         CompletedCoursesDomain data1 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19011684L).get()).
+                userDomain(userDao.findByStudentId(19111111L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(23).semester("1학기").
                 build();
@@ -142,7 +142,7 @@ public class CompletedCoursesServiceDataTest {
         List<CompletedCoursesDomain> dataList = new ArrayList<>();
         dataList.add(data1);
 
-        UserDomain user = userDao.findByStudentId(19011684L).get();
+        UserDomain user = userDao.findByStudentId(19111111L).get();
 
         //데이터 삭제
         completedCoursesService.checkUser(user);
@@ -160,14 +160,14 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터 1
         CompletedCoursesDomain data1 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19011684L).get()).
+                userDomain(userDao.findByStudentId(19111111L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(23).semester("1학기").
                 build();
         //기이수 과목 데이터 2
         CompletedCoursesDomain data2 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19011684L).get()).
+                userDomain(userDao.findByStudentId(19111111L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(23).semester("1학기").
                 build();
@@ -179,7 +179,7 @@ public class CompletedCoursesServiceDataTest {
         dataList.add(data1);
         dataList.add(data2);
 
-        UserDomain user = userDao.findByStudentId(19011684L).get();
+        UserDomain user = userDao.findByStudentId(19111111L).get();
 
         //데이터 삭제
         completedCoursesService.checkUser(user);
