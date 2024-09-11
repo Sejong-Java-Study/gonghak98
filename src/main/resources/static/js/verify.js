@@ -2,7 +2,7 @@ function sendVerificationEmail() {
   var email = document.getElementById("email").value;
   var xhr = new XMLHttpRequest();
   if (!email) {
-    alert("세종대학교 이메일을 입력하세요.");
+    alert("세종대학교 이메일(@sju.ac.kr)을 입력하세요.");
     return;
   }
   xhr.open("POST", "/user/send-verification-email", true);
