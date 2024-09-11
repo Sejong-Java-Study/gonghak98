@@ -7,6 +7,10 @@ import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.CoursesDomain;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.exception.FileException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -19,11 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
+@Slf4j
 public class CompletedCoursesService {
 
     private final CompletedCoursesDao completedCoursesDao;
@@ -70,33 +71,33 @@ public class CompletedCoursesService {
 
     @Transactional
     public void extractData(Sheet worksheet, DataFormatter dataFormatter, UserDomain userDomain) {
+        List<CompletedCoursesDomain> completedCoursesList = new ArrayList<>();  // 저장할 엔티티 리스트 생성
 
         for (int i = FIRST_ROW; i < worksheet.getPhysicalNumberOfRows(); i++) { //데이터 추출
             Row row = worksheet.getRow(i);
 
             String yearAsString = dataFormatter.formatCellValue(row.getCell(1));
-            int year = Integer.parseInt(yearAsString)%100;  //년도
+            int year = Integer.parseInt(yearAsString) % 100;  //년도
 
             String semester = dataFormatter.formatCellValue(row.getCell(2)); //학기
 
             String courseIdAsString = dataFormatter.formatCellValue(row.getCell(3));
             Long courseId = courseIdToLong(courseIdAsString); //학수번호
 
-            CoursesDomain coursesDomain = coursesDao.findByCourseId(
-                courseId);// 학수번호를 기반으로 Courses 테이블 검색
+            CoursesDomain coursesDomain = coursesDao.findByCourseId(courseId);// 학수번호를 기반으로 Courses 테이블 검색
             if (coursesDomain == null) {
                 continue;
             }
-            CompletedCoursesDomain data = CompletedCoursesDomain.builder().userDomain(userDomain)
-                .coursesDomain(coursesDomain)
-                .year(year)
-                .semester(semester)
-                .build();
-
-            completedCoursesDao.save(data);
+            CompletedCoursesDomain data = CompletedCoursesDomain.builder()
+                                                                .userDomain(userDomain)
+                                                                .coursesDomain(coursesDomain)
+                                                                .year(year)
+                                                                .semester(semester)
+                                                                .build();
+            completedCoursesList.add(data);  // 엔티티를 리스트에 추가
         }
+        completedCoursesDao.saveAll(completedCoursesList);  // 한 번에 전체 엔티티 저장
     }
-
 
     //업로드 파일 검증
     private void validateExcelFile(MultipartFile file, String extension) throws FileException {
@@ -152,6 +153,4 @@ public class CompletedCoursesService {
         }
         return Long.parseLong(courseIdAsString);
     }
-
-
 }
