@@ -6,6 +6,12 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link"
+             href="https://elastic-march-a0d.notion.site/gonghak98-8b1448883b524b7aa4af14f19f60e162?pvs=4">
+            사용가이드
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"
              href="https://docs.google.com/forms/d/e/1FAIpQLSfM38sJnft8zp778OIHx2dkURLLs3pAqbti7vXfzZRrO-HGpQ/viewform">
             피드백하기
           </a>
@@ -15,9 +21,6 @@
         </li>
         <li>
           <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/signup}">회원가입</a>
         </li>
       </ul>
     </div>

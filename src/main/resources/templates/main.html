@@ -1,20 +1,52 @@
 <html layout:decorate="~{layout/layout}">
 <div layout:fragment="content" class="container my-3 text-center">
-  <div style="margin-top: 100px;margin-bottom: 200px">
-    <img src ="/static/images/image3.png" style ="width: 120px; height: 120px ">
-    <p style="font-family: IBM Plex Mono; font-weight: 500; color:white; font-size : 100px">Sejong Auth</p>
+  <div style="margin-top: 10vh; margin-bottom: 20vh">
+    <img src="/static/images/image3.png" style="width: 15vw; height: auto; max-width: 120px; max-height: 120px">
+    <p style="font-family: IBM Plex Mono; font-weight: 500; color:white; font-size: calc(4vw + 40px);">Sejong Auth</p>
   </div>
   <div>
-    <p style="font-family: IBM Plex Mono; color:white; font-weight: 400; font-size: 30px">* 세종대학교 공학인증 요건 검사 사이트. </p>
+    <p style="font-family: IBM Plex Mono; color:white; font-weight: 400; font-size: calc(1.5vw + 10px);">* 세종대학교 공학인증 요건 검사 사이트.</p>
   </div>
-  <div style="margin-bottom: 100px">
-    <p style="font-family: IBM Plex Mono; color:white; font-weight: 400; font-size: 30px">* Engineering Certification Inspection Service of Sejong University.</p>
+  <div style="margin-bottom: 10vh">
+    <p style="font-family: IBM Plex Mono; color:white; font-weight: 400; font-size: calc(1.5vw + 10px);">* Engineering Certification Inspection Service of Sejong University.</p>
   </div>
-  <div style="margin-bottom:50px">
-    <p style="font-family: IBM Plex Mono; color:white; font-weight: 400; font-size: 30px">Press start to continue _</p>
+  <div style="margin-bottom:5vh">
+    <p style="font-family: IBM Plex Mono; color:white; font-weight: 400; font-size: calc(1.5vw + 10px);">Press start to continue _</p>
   </div>
-  <div style="margin-bottom: 50px">
-    <button class ="btn-lg" style="font-family: IBM Plex Mono; font-weight: 400; font-size: 30px; height: 60px; width: 180px" onclick="location.href='/user/login'">Start</button>
+  <div style="margin-bottom: 5vh">
+    <button class="btn-lg" style="font-family: IBM Plex Mono; font-weight: 400; font-size: calc(1.5vw + 10px); height: 60px; width: 180px" onclick="location.href='/user/login'">Start</button>
   </div>
 </div>
+
+<style>
+  /* 반응형을 위한 미디어 쿼리 추가 */
+  @media (max-width: 768px) {
+    div {
+      margin-top: 5vh;
+      margin-bottom: 5vh;
+    }
+    img {
+      width: 40vw;
+      height: auto;
+    }
+    p {
+      font-size: calc(2.5vw + 20px);
+    }
+    button {
+      width: 100%;
+      height: 50px;
+      font-size: calc(2vw + 10px);
+    }
+  }
+
+  @media (max-width: 576px) {
+    p {
+      font-size: calc(3vw + 20px);
+    }
+    img {
+      width: 50vw;
+      height: auto;
+    }
+  }
+</style>
 </html>
