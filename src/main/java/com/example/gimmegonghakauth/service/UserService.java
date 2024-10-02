@@ -4,9 +4,10 @@ import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
 import com.example.gimmegonghakauth.dao.UserDao;
 import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
+import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.ChangePasswordDto;
 import com.example.gimmegonghakauth.dto.UserJoinDto;
-import com.example.gimmegonghakauth.domain.UserDomain;
+import com.example.gimmegonghakauth.exception.UserNotFoundException;
 import java.util.List;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,6 +42,17 @@ public class UserService {
         return user;
     }
 
+    public UserDomain updatePassword(UserDomain user, ChangePasswordDto dto) {
+        user.updatePassword(passwordEncoder.encode(dto.getNewPassword1()));
+        userDao.save(user);
+        return user;
+    }
+
+    public UserDomain getByStudentId(Long studentId) {
+        return userDao.findByStudentId(studentId)
+            .orElseThrow(() -> new UserNotFoundException(studentId));
+    }
+
     public boolean joinValidation(UserJoinDto userJoinDto, BindingResult bindingResult) {
         if (checkPassword(userJoinDto)) {
             bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지 않습니다.");
@@ -68,7 +80,7 @@ public class UserService {
         return userDao.existsByStudentId(Long.parseLong(studentId));
     }
 
-    public boolean checkEmail(String email){
+    public boolean checkEmail(String email) {
         return userDao.existsByEmail(email);
     }
 
