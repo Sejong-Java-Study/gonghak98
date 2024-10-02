@@ -42,8 +42,8 @@ public class UserService {
         return user;
     }
 
-    public UserDomain updatePassword(UserDomain user, ChangePasswordDto dto) {
-        user.updatePassword(passwordEncoder.encode(dto.getNewPassword1()));
+    public UserDomain updatePassword(UserDomain user, String newPassword) {
+        user.updatePassword(passwordEncoder.encode(newPassword));
         userDao.save(user);
         return user;
     }

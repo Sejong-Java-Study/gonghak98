@@ -113,7 +113,7 @@ public class UserController {
         if (!userService.changePasswordValidation(changePasswordDto, bindingResult, user)) {
             return "user/changePassword"; //비밀번호 변경 검증
         }
-        userService.updatePassword(user, changePasswordDto);
+        userService.updatePassword(user, changePasswordDto.getNewPassword1());
         //비밀번호 변경
         return "redirect:/user/login"; //성공적인 비밀번호 변경시 로그인 페이지로 이동
     }
