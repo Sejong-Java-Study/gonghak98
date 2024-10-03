@@ -8,34 +8,28 @@ import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.ChangePasswordDto;
 import com.example.gimmegonghakauth.dto.UserJoinDto;
 import com.example.gimmegonghakauth.exception.UserNotFoundException;
+import com.example.gimmegonghakauth.service.port.UserEncoder;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserDao userDao;
-
     private final CompletedCoursesDao completedCoursesDao;
-    private final PasswordEncoder passwordEncoder;
-
-    public UserService(UserDao userDao, CompletedCoursesDao completedCoursesDao,
-        PasswordEncoder passwordEncoder) {
-        this.userDao = userDao;
-        this.completedCoursesDao = completedCoursesDao;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final UserEncoder userEncoder;
 
     public UserDomain create(String _studentId, String password, String email,
         MajorsDomain majorsDomain, String name) {
         Long studentId = Long.parseLong(_studentId);
         UserDomain user = UserDomain.builder()
-            .studentId(studentId).password(passwordEncoder.encode(password))
+            .studentId(studentId).password(userEncoder.encode(password))
             .email(email).majorsDomain(majorsDomain).name(name)
             .build();
         userDao.save(user);
@@ -43,7 +37,7 @@ public class UserService {
     }
 
     public UserDomain updatePassword(UserDomain user, String newPassword) {
-        user.updatePassword(passwordEncoder.encode(newPassword));
+        user.updatePassword(userEncoder.encode(newPassword));
         userDao.save(user);
         return user;
     }
@@ -90,7 +84,7 @@ public class UserService {
         UserDomain user = userDao.findByStudentId(studentId)
             .orElseThrow(() -> new UsernameNotFoundException("학번이 존재하지 않습니다."));
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        if (userEncoder.matches(password, user.getPassword())) {
             List<CompletedCoursesDomain> coursesList = completedCoursesDao.findByUserDomain(user);
             if (!coursesList.isEmpty()) {
                 // CompletedCourses 테이블에서 해당하는 행들을 삭제
@@ -107,12 +101,12 @@ public class UserService {
         BindingResult bindingResult, UserDomain user) {
         String password = user.getPassword();
         String inputPassword = changePasswordDto.getCurrentPassword();
-        if (!passwordEncoder.matches(inputPassword, password)) { //입력한 패스워드가 현재 패스워드와 일치하지 않을 경우
+        if (!userEncoder.matches(inputPassword, password)) { //입력한 패스워드가 현재 패스워드와 일치하지 않을 경우
             bindingResult.rejectValue("currentPassword", "currentPasswordInCorrect",
                 "현재 패스워드가 일치하지 않습니다.");
             return false;
         }
-        if (passwordEncoder.matches(changePasswordDto.getNewPassword1(),
+        if (userEncoder.matches(changePasswordDto.getNewPassword1(),
             password)) { //입력한 새 패스워드가 현재 패스워드와 일치하는 경우
             bindingResult.rejectValue("newPassword1", "sameCurrentPassword",
                 "현재 패스워드와 다른 패스워드를 입력해주세요.");
@@ -126,5 +120,4 @@ public class UserService {
         }
         return true;
     }
-
 }
