@@ -3,12 +3,11 @@ package com.example.gimmegonghakauth.Service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.gimmegonghakauth.domain.UserDomain;
-import com.example.gimmegonghakauth.dto.ChangePasswordDto;
 import com.example.gimmegonghakauth.service.UserService;
+import com.example.gimmegonghakauth.service.port.UserEncoder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +24,6 @@ class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Test
     void create로_유저를_생성할_수_있다() {
         //givne, when
@@ -41,12 +37,12 @@ class UserServiceTest {
     void updatePassword로_유저의_비밀번호를_변경할_수_있다() {
         //given
         UserDomain user = userService.create(String.valueOf(id), password, email, null, name);
-        String newPassword = passwordEncoder.encode("test123");
+        String newPassword = "test123";
 
         //when
         UserDomain updatedUser = userService.updatePassword(user, newPassword);
 
         //then
-        assertThat(updatedUser.getPassword()).isEqualTo(newPassword);
+        assertThat(updatedUser.getPassword()).isEqualTo("Fake" + newPassword);
     }
 }
