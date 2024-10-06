@@ -6,11 +6,12 @@ import com.example.gimmegonghakauth.constant.AbeekTypeConst;
 import com.example.gimmegonghakauth.constant.CourseCategoryConst;
 import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
-import com.example.gimmegonghakauth.domain.UserDomain;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.GonghakCoursesByMajorDto;
 import com.example.gimmegonghakauth.dto.GonghakStandardDto;
 import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;
 import com.example.gimmegonghakauth.service.recommend.MajorName;
+import com.example.gimmegonghakauth.user.infrastructure.UserRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +42,7 @@ class GonghakRepositoryTest {
     @Autowired
     private CompletedCoursesDao completedCoursesDao;
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
     @Autowired
     private CoursesDao coursesDao;
 
@@ -69,7 +70,7 @@ class GonghakRepositoryTest {
             .majorsDomain(majorsDao.findByMajor("컴퓨터공학과"))
             .name("testUser")
             .build();
-        userDao.save(user);
+        userRepository.save(user);
 
         CompletedCoursesDomain course1 = CompletedCoursesDomain.builder()
             .coursesDomain(coursesDao.findByName("Capstone디자인(산학협력프로젝트)"))

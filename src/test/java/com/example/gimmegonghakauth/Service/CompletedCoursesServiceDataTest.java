@@ -3,14 +3,11 @@ package com.example.gimmegonghakauth.Service;
 import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
 import com.example.gimmegonghakauth.dao.CoursesDao;
 import com.example.gimmegonghakauth.dao.MajorsDao;
-import com.example.gimmegonghakauth.dao.UserDao;
+import com.example.gimmegonghakauth.user.infrastructure.UserRepository;
 import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.CoursesDomain;
-import com.example.gimmegonghakauth.domain.MajorsDomain;
-import com.example.gimmegonghakauth.domain.UserDomain;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
 import com.example.gimmegonghakauth.service.CompletedCoursesService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,12 +15,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -43,7 +37,7 @@ public class CompletedCoursesServiceDataTest {
     private MajorsDao majorsDao;
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Autowired
     private CompletedCoursesDao completedCoursesDao;
@@ -76,7 +70,7 @@ public class CompletedCoursesServiceDataTest {
             .majorsDomain(majorsDao.findByMajor("컴퓨터공학과"))
             .name("testUser")
             .build();
-        userDao.save(user);
+        userRepository.save(user);
     }
 
     @Test
@@ -85,7 +79,7 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터1
         CompletedCoursesDomain data1 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19111111L).get()).
+                userDomain(userRepository.findByStudentId(19111111L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(23).semester("1학기").
                 build();
@@ -93,7 +87,7 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터2
         CompletedCoursesDomain data2 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19111111L).get()).
+                userDomain(userRepository.findByStudentId(19111111L).get()).
                 coursesDomain(coursesDao.findByCourseId(54321L)).
                 year(23).semester("1학기").
                 build();
@@ -107,14 +101,14 @@ public class CompletedCoursesServiceDataTest {
         dataList.add(data1);
         dataList.add(data2);
 
-        UserDomain user = userDao.findByStudentId(19111111L).get();
+        UserDomain user = userRepository.findByStudentId(19111111L).get();
         assertEquals(dataList, completedCoursesDao.findByUserDomain(user));
     }
 
     @Test
     @DisplayName("재업로드 테스트1(첫 업로드)")
     public void testUserUploadStatus1() {
-        UserDomain user = userDao.findByStudentId(19111111L).get();
+        UserDomain user = userRepository.findByStudentId(19111111L).get();
 
         //데이터 확인
         completedCoursesService.checkUser(user);
@@ -132,7 +126,7 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터 1
         CompletedCoursesDomain data1 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19111111L).get()).
+                userDomain(userRepository.findByStudentId(19111111L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(23).semester("1학기").
                 build();
@@ -142,7 +136,7 @@ public class CompletedCoursesServiceDataTest {
         List<CompletedCoursesDomain> dataList = new ArrayList<>();
         dataList.add(data1);
 
-        UserDomain user = userDao.findByStudentId(19111111L).get();
+        UserDomain user = userRepository.findByStudentId(19111111L).get();
 
         //데이터 삭제
         completedCoursesService.checkUser(user);
@@ -160,14 +154,14 @@ public class CompletedCoursesServiceDataTest {
         //기이수 과목 데이터 1
         CompletedCoursesDomain data1 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19111111L).get()).
+                userDomain(userRepository.findByStudentId(19111111L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(23).semester("1학기").
                 build();
         //기이수 과목 데이터 2
         CompletedCoursesDomain data2 =
             CompletedCoursesDomain.builder().
-                userDomain(userDao.findByStudentId(19111111L).get()).
+                userDomain(userRepository.findByStudentId(19111111L).get()).
                 coursesDomain(coursesDao.findByCourseId(12345L)).
                 year(23).semester("1학기").
                 build();
@@ -179,7 +173,7 @@ public class CompletedCoursesServiceDataTest {
         dataList.add(data1);
         dataList.add(data2);
 
-        UserDomain user = userDao.findByStudentId(19111111L).get();
+        UserDomain user = userRepository.findByStudentId(19111111L).get();
 
         //데이터 삭제
         completedCoursesService.checkUser(user);

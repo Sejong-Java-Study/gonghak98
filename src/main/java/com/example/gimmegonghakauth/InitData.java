@@ -1,20 +1,13 @@
 package com.example.gimmegonghakauth;
 
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
-import com.example.gimmegonghakauth.constant.CourseCategoryConst;
 import com.example.gimmegonghakauth.dao.AbeekDao;
-import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
-import com.example.gimmegonghakauth.dao.CoursesDao;
-import com.example.gimmegonghakauth.dao.GonghakCoursesDao;
 import com.example.gimmegonghakauth.dao.MajorsDao;
-import com.example.gimmegonghakauth.dao.UserDao;
+import com.example.gimmegonghakauth.user.infrastructure.UserRepository;
 import com.example.gimmegonghakauth.domain.AbeekDomain;
 import com.example.gimmegonghakauth.domain.AbeekDomain.AbeekDomainBuilder;
-import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
-import com.example.gimmegonghakauth.domain.CoursesDomain;
-import com.example.gimmegonghakauth.domain.GonghakCoursesDomain;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
-import com.example.gimmegonghakauth.domain.UserDomain;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
 import com.example.gimmegonghakauth.service.recommend.MajorName;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +25,7 @@ public class InitData {
 
     private final MajorsDao majorsDao;
     private final AbeekDao abeekDao;
-    private final UserDao userDao;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${admin1}")
@@ -223,7 +216,7 @@ public class InitData {
             .password(passwordEncoder.encode("qwer"))
             .studentId(admin1)
             .majorsDomain(elecInfoMajor).build();
-        userDao.save(user1);
+        userRepository.save(user1);
 
         UserDomain user2 = UserDomain.builder()
             .email("testEmail2@sju.ac.kr")
@@ -231,7 +224,7 @@ public class InitData {
             .password(passwordEncoder.encode("qwer"))
             .studentId(admin2)
             .majorsDomain(dataScienceMajor).build();
-        userDao.save(user2);
+        userRepository.save(user2);
 
         UserDomain user3 = UserDomain.builder()
             .email("testEmail3@sju.ac.kr")
@@ -239,7 +232,7 @@ public class InitData {
             .password(passwordEncoder.encode("qwer"))
             .studentId(admin3)
             .majorsDomain(computerMajor).build();
-        userDao.save(user3);
+        userRepository.save(user3);
 
     }
 

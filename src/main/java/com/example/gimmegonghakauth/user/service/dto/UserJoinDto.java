@@ -1,4 +1,4 @@
-package com.example.gimmegonghakauth.dto;
+package com.example.gimmegonghakauth.user.service.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

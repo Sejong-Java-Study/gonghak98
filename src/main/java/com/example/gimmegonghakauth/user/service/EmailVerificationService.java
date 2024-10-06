@@ -1,4 +1,4 @@
-package com.example.gimmegonghakauth.service;
+package com.example.gimmegonghakauth.user.service;
 
 import com.example.gimmegonghakauth.constant.UnivCertTypeConst;
 import com.example.gimmegonghakauth.constant.UnivcertErrorMessageConst;

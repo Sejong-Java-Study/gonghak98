@@ -1,8 +1,8 @@
 package com.example.gimmegonghakauth.service;
 
-import com.example.gimmegonghakauth.dao.UserDao;
-import com.example.gimmegonghakauth.domain.UserDomain;
-import com.example.gimmegonghakauth.domain.UserRole;
+import com.example.gimmegonghakauth.user.infrastructure.UserRepository;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
+import com.example.gimmegonghakauth.user.domain.UserRole;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserSecurityService implements UserDetailsService {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
     @Value("${admin1}")
     private Long admin1;
@@ -62,7 +62,7 @@ public class UserSecurityService implements UserDetailsService {
         try {
             Long studentId = Long.parseLong(username);
             // parseLong 과정에서 변환할 수 없다면 exception
-            Optional<UserDomain> _siteUser = this.userDao.findByStudentId(studentId);
+            Optional<UserDomain> _siteUser = this.userRepository.findByStudentId(studentId);
             if (_siteUser.isEmpty()) {
                 throw new UsernameNotFoundException("사용자를 찾을 수 없습니다");
             }

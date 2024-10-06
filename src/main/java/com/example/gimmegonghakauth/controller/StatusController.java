@@ -1,8 +1,8 @@
 package com.example.gimmegonghakauth.controller;
 
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
-import com.example.gimmegonghakauth.dao.UserDao;
-import com.example.gimmegonghakauth.domain.UserDomain;
+import com.example.gimmegonghakauth.user.infrastructure.UserRepository;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.GonghakResultDto.ResultPointDto;
 import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;
 import com.example.gimmegonghakauth.service.GonghakCalculateService;
@@ -27,7 +27,7 @@ public class StatusController {
 
     private final GonghakCalculateService gonghakCalculateService;
     private final RecommendServiceSelectManager recommendServiceSelectManager;
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
     // 사용자의 공학인증 현황과 추천 과목을 가져온다.
     @GetMapping("/status")
@@ -36,7 +36,7 @@ public class StatusController {
         Long studentId = Long.parseLong(userDetails.getUsername());
 
         // 컨트롤러가 UserDomain 객체를 가져오는 역할을 수행하고 있음.
-        UserDomain student = userDao.findByStudentId(studentId).get();
+        UserDomain student = userRepository.findByStudentId(studentId).get();
 
         readUserResultRatio(model, student);
         readUserRecommendCourses(model, studentId, student);

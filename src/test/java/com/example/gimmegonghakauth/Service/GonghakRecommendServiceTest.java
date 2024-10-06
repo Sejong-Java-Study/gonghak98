@@ -3,8 +3,8 @@ package com.example.gimmegonghakauth.Service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
-import com.example.gimmegonghakauth.dao.UserDao;
-import com.example.gimmegonghakauth.domain.UserDomain;
+import com.example.gimmegonghakauth.user.infrastructure.UserRepository;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;
 import com.example.gimmegonghakauth.dto.LoginDto;
 import com.example.gimmegonghakauth.service.recommend.ComputerMajorGonghakRecommendService;
@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 class GonghakRecommendServiceTest {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Autowired
     private RecommendServiceSelectManager recommendServiceSelectManager;
@@ -46,7 +46,7 @@ class GonghakRecommendServiceTest {
 
     @Test
     void createRecommendCoursesTest(){
-        UserDomain testUser = userDao.findByStudentId(COM_TEST_STUDENT_ID).get();
+        UserDomain testUser = userRepository.findByStudentId(COM_TEST_STUDENT_ID).get();
 
         GonghakRecommendService comGonghakRecommendService = recommendServiceSelectManager.selectRecommendService(
             new LoginDto(COM_TEST_STUDENT_ID).getStudentId());

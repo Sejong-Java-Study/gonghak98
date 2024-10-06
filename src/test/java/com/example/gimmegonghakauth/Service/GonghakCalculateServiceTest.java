@@ -9,7 +9,7 @@ import com.example.gimmegonghakauth.dao.GonghakCoursesDao;
 import com.example.gimmegonghakauth.dao.GonghakDao;
 import com.example.gimmegonghakauth.dao.GonghakRepository;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
-import com.example.gimmegonghakauth.domain.UserDomain;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.GonghakResultDto.ResultPointDto;
 import com.example.gimmegonghakauth.service.GonghakCalculateService;
 import java.util.Map;

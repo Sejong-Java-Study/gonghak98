@@ -1,11 +1,10 @@
-package com.example.gimmegonghakauth.controller;
+package com.example.gimmegonghakauth.user.controller;
 
 import com.example.gimmegonghakauth.dao.MajorsDao;
-import com.example.gimmegonghakauth.dao.UserDao;
-import com.example.gimmegonghakauth.domain.UserDomain;
-import com.example.gimmegonghakauth.dto.ChangePasswordDto;
-import com.example.gimmegonghakauth.dto.UserJoinDto;
-import com.example.gimmegonghakauth.service.UserService;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
+import com.example.gimmegonghakauth.user.service.dto.ChangePasswordDto;
+import com.example.gimmegonghakauth.user.service.dto.UserJoinDto;
+import com.example.gimmegonghakauth.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,15 +28,13 @@ public class UserController {
 
     private final UserService userService;
     private final MajorsDao majorsDao;
-    private final UserDao userDao;
-    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("")
     public String userInformation(Model model, Authentication authentication){
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Long studentId = Long.parseLong(userDetails.getUsername());
-        UserDomain user = userDao.findByStudentId(studentId).get();
+        UserDomain user = userService.getByStudentId(studentId);
         model.addAttribute("user",user);
 
         return "user/information";
@@ -110,15 +106,14 @@ public class UserController {
         BindingResult bindingResult, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Long studentId = Long.parseLong(userDetails.getUsername());
-        UserDomain user = userDao.findByStudentId(studentId).get();
+        UserDomain user = userService.getByStudentId(studentId);
         if (bindingResult.hasErrors()) {
             return "user/changePassword";
         }
         if (!userService.changePasswordValidation(changePasswordDto, bindingResult, user)) {
             return "user/changePassword"; //비밀번호 변경 검증
         }
-        user.updatePassword(passwordEncoder.encode(changePasswordDto.getNewPassword1()));
-        userDao.save(user);
+        userService.updatePassword(user, changePasswordDto.getNewPassword1());
         //비밀번호 변경
         return "redirect:/user/login"; //성공적인 비밀번호 변경시 로그인 페이지로 이동
     }

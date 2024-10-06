@@ -1,7 +1,7 @@
-package com.example.gimmegonghakauth.controller;
+package com.example.gimmegonghakauth.user.controller;
 
-import com.example.gimmegonghakauth.dto.UserJoinDto;
-import com.example.gimmegonghakauth.service.EmailVerificationService;
+import com.example.gimmegonghakauth.user.service.dto.UserJoinDto;
+import com.example.gimmegonghakauth.user.service.EmailVerificationService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

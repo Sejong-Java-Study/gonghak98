@@ -1,44 +1,50 @@
-package com.example.gimmegonghakauth.service;
+package com.example.gimmegonghakauth.user.service;
 
 import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
-import com.example.gimmegonghakauth.dao.UserDao;
+import com.example.gimmegonghakauth.user.infrastructure.UserRepository;
 import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
-import com.example.gimmegonghakauth.dto.ChangePasswordDto;
-import com.example.gimmegonghakauth.dto.UserJoinDto;
-import com.example.gimmegonghakauth.domain.UserDomain;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
+import com.example.gimmegonghakauth.user.service.dto.ChangePasswordDto;
+import com.example.gimmegonghakauth.user.service.dto.UserJoinDto;
+import com.example.gimmegonghakauth.exception.UserNotFoundException;
+import com.example.gimmegonghakauth.user.service.port.UserEncoder;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    private final UserDao userDao;
-
+    private final UserRepository userRepository;
     private final CompletedCoursesDao completedCoursesDao;
-    private final PasswordEncoder passwordEncoder;
-
-    public UserService(UserDao userDao, CompletedCoursesDao completedCoursesDao,
-        PasswordEncoder passwordEncoder) {
-        this.userDao = userDao;
-        this.completedCoursesDao = completedCoursesDao;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final UserEncoder userEncoder;
 
     public UserDomain create(String _studentId, String password, String email,
         MajorsDomain majorsDomain, String name) {
         Long studentId = Long.parseLong(_studentId);
         UserDomain user = UserDomain.builder()
-            .studentId(studentId).password(passwordEncoder.encode(password))
+            .studentId(studentId).password(userEncoder.encode(password))
             .email(email).majorsDomain(majorsDomain).name(name)
             .build();
-        userDao.save(user);
+        userRepository.save(user);
         return user;
+    }
+
+    public UserDomain updatePassword(UserDomain user, String newPassword) {
+        user.updatePassword(userEncoder.encode(newPassword));
+        userRepository.save(user);
+        return user;
+    }
+
+    public UserDomain getByStudentId(Long studentId) {
+        return userRepository.findByStudentId(studentId)
+            .orElseThrow(() -> new UserNotFoundException(studentId));
     }
 
     public boolean joinValidation(UserJoinDto userJoinDto, BindingResult bindingResult) {
@@ -57,34 +63,34 @@ public class UserService {
         return true;
     }
 
-    public boolean checkPassword(UserJoinDto userJoinDto) {
+    private boolean checkPassword(UserJoinDto userJoinDto) {
         if (!userJoinDto.getPassword1().equals(userJoinDto.getPassword2())) {
             return true;
         }
         return false;
     }
 
-    public boolean checkStudentId(String studentId) {
-        return userDao.existsByStudentId(Long.parseLong(studentId));
+    private boolean checkStudentId(String studentId) {
+        return userRepository.existsByStudentId(Long.parseLong(studentId));
     }
 
-    public boolean checkEmail(String email){
-        return userDao.existsByEmail(email);
+    private boolean checkEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
     public boolean withdrawal(String _studentId, String password) {
         Long studentId = Long.parseLong(_studentId);
 
-        UserDomain user = userDao.findByStudentId(studentId)
+        UserDomain user = userRepository.findByStudentId(studentId)
             .orElseThrow(() -> new UsernameNotFoundException("학번이 존재하지 않습니다."));
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        if (userEncoder.matches(password, user.getPassword())) {
             List<CompletedCoursesDomain> coursesList = completedCoursesDao.findByUserDomain(user);
             if (!coursesList.isEmpty()) {
                 // CompletedCourses 테이블에서 해당하는 행들을 삭제
                 completedCoursesDao.deleteAllInBatch(coursesList);
             } //해당 유저를 참조하는 CompletedCourses 테이블 먼저 삭제
-            userDao.delete(user);
+            userRepository.delete(user);
             return true;
         } else {
             return false;
@@ -95,12 +101,12 @@ public class UserService {
         BindingResult bindingResult, UserDomain user) {
         String password = user.getPassword();
         String inputPassword = changePasswordDto.getCurrentPassword();
-        if (!passwordEncoder.matches(inputPassword, password)) { //입력한 패스워드가 현재 패스워드와 일치하지 않을 경우
+        if (!userEncoder.matches(inputPassword, password)) { //입력한 패스워드가 현재 패스워드와 일치하지 않을 경우
             bindingResult.rejectValue("currentPassword", "currentPasswordInCorrect",
                 "현재 패스워드가 일치하지 않습니다.");
             return false;
         }
-        if (passwordEncoder.matches(changePasswordDto.getNewPassword1(),
+        if (userEncoder.matches(changePasswordDto.getNewPassword1(),
             password)) { //입력한 새 패스워드가 현재 패스워드와 일치하는 경우
             bindingResult.rejectValue("newPassword1", "sameCurrentPassword",
                 "현재 패스워드와 다른 패스워드를 입력해주세요.");
@@ -114,5 +120,4 @@ public class UserService {
         }
         return true;
     }
-
 }

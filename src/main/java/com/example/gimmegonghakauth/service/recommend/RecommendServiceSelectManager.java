@@ -2,7 +2,7 @@ package com.example.gimmegonghakauth.service.recommend;
 
 import static com.example.gimmegonghakauth.service.recommend.MajorName.*;
 
-import com.example.gimmegonghakauth.dao.UserDao;
+import com.example.gimmegonghakauth.user.infrastructure.UserRepository;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
@@ -15,11 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecommendServiceSelectManager {
 
     private final ApplicationContext applicationContext;
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
     // 학과에 따른 추천 서비스를 설정한다.
     public GonghakRecommendService selectRecommendService(Long studentId) {
-        MajorsDomain majorsDomain = userDao.findByStudentId(studentId).get()
+        MajorsDomain majorsDomain = userRepository.findByStudentId(studentId).get()
             .getMajorsDomain();
         if (majorsDomain.getMajor().contains(ELEC_INFO.getName())) {
             return applicationContext.getBean("elecInfoMajorGonghakRecommendService",
