@@ -1,6 +1,6 @@
 package com.example.gimmegonghakauth.controller;
 
-import com.example.gimmegonghakauth.dto.UserJoinDto;
+import com.example.gimmegonghakauth.user.service.dto.UserJoinDto;
 import com.example.gimmegonghakauth.service.EmailVerificationService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;

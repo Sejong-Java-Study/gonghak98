@@ -4,7 +4,7 @@ import com.example.gimmegonghakauth.dao.MajorsDao;
 import com.example.gimmegonghakauth.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.ChangePasswordDto;
 import com.example.gimmegonghakauth.dto.UserJoinDto;
-import com.example.gimmegonghakauth.service.UserService;
+import com.example.gimmegonghakauth.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
