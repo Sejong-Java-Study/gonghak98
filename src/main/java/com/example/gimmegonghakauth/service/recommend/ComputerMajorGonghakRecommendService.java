@@ -4,7 +4,7 @@ package com.example.gimmegonghakauth.service.recommend;
 import com.example.gimmegonghakauth.constant.AbeekTypeConst;
 import com.example.gimmegonghakauth.constant.CourseCategoryConst;
 import com.example.gimmegonghakauth.dao.GonghakRepository;
-import com.example.gimmegonghakauth.domain.UserDomain;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
 import com.example.gimmegonghakauth.dto.GonghakRecommendCoursesDto;
 import com.example.gimmegonghakauth.dto.GonghakStandardDto;
 import com.example.gimmegonghakauth.dto.IncompletedCoursesDto;

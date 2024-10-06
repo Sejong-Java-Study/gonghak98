@@ -1,6 +1,6 @@
 package com.example.gimmegonghakauth.user.infrastructure;
 
-import com.example.gimmegonghakauth.service.port.UserEncoder;
+import com.example.gimmegonghakauth.user.service.port.UserEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

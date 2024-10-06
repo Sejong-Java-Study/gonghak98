@@ -1,5 +1,6 @@
 package com.example.gimmegonghakauth.domain;
 
+import com.example.gimmegonghakauth.user.domain.UserDomain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

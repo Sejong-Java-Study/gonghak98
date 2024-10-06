@@ -1,4 +1,4 @@
-package com.example.gimmegonghakauth.service.port;
+package com.example.gimmegonghakauth.user.service.port;
 
 public interface UserEncoder {
 

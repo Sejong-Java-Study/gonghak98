@@ -1,9 +1,9 @@
-package com.example.gimmegonghakauth.controller;
+package com.example.gimmegonghakauth.user.controller;
 
 import com.example.gimmegonghakauth.dao.MajorsDao;
-import com.example.gimmegonghakauth.domain.UserDomain;
-import com.example.gimmegonghakauth.dto.ChangePasswordDto;
-import com.example.gimmegonghakauth.dto.UserJoinDto;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
+import com.example.gimmegonghakauth.user.service.dto.ChangePasswordDto;
+import com.example.gimmegonghakauth.user.service.dto.UserJoinDto;
 import com.example.gimmegonghakauth.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

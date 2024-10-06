@@ -1,14 +1,14 @@
-package com.example.gimmegonghakauth.service;
+package com.example.gimmegonghakauth.user.service;
 
 import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
-import com.example.gimmegonghakauth.dao.UserDao;
+import com.example.gimmegonghakauth.user.infrastructure.UserRepository;
 import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.MajorsDomain;
-import com.example.gimmegonghakauth.domain.UserDomain;
-import com.example.gimmegonghakauth.dto.ChangePasswordDto;
-import com.example.gimmegonghakauth.dto.UserJoinDto;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
+import com.example.gimmegonghakauth.user.service.dto.ChangePasswordDto;
+import com.example.gimmegonghakauth.user.service.dto.UserJoinDto;
 import com.example.gimmegonghakauth.exception.UserNotFoundException;
-import com.example.gimmegonghakauth.service.port.UserEncoder;
+import com.example.gimmegonghakauth.user.service.port.UserEncoder;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +21,7 @@ import org.springframework.validation.BindingResult;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
     private final CompletedCoursesDao completedCoursesDao;
     private final UserEncoder userEncoder;
 
@@ -32,18 +32,18 @@ public class UserService {
             .studentId(studentId).password(userEncoder.encode(password))
             .email(email).majorsDomain(majorsDomain).name(name)
             .build();
-        userDao.save(user);
+        userRepository.save(user);
         return user;
     }
 
     public UserDomain updatePassword(UserDomain user, String newPassword) {
         user.updatePassword(userEncoder.encode(newPassword));
-        userDao.save(user);
+        userRepository.save(user);
         return user;
     }
 
     public UserDomain getByStudentId(Long studentId) {
-        return userDao.findByStudentId(studentId)
+        return userRepository.findByStudentId(studentId)
             .orElseThrow(() -> new UserNotFoundException(studentId));
     }
 
@@ -71,17 +71,17 @@ public class UserService {
     }
 
     public boolean checkStudentId(String studentId) {
-        return userDao.existsByStudentId(Long.parseLong(studentId));
+        return userRepository.existsByStudentId(Long.parseLong(studentId));
     }
 
     public boolean checkEmail(String email) {
-        return userDao.existsByEmail(email);
+        return userRepository.existsByEmail(email);
     }
 
     public boolean withdrawal(String _studentId, String password) {
         Long studentId = Long.parseLong(_studentId);
 
-        UserDomain user = userDao.findByStudentId(studentId)
+        UserDomain user = userRepository.findByStudentId(studentId)
             .orElseThrow(() -> new UsernameNotFoundException("학번이 존재하지 않습니다."));
 
         if (userEncoder.matches(password, user.getPassword())) {
@@ -90,7 +90,7 @@ public class UserService {
                 // CompletedCourses 테이블에서 해당하는 행들을 삭제
                 completedCoursesDao.deleteAllInBatch(coursesList);
             } //해당 유저를 참조하는 CompletedCourses 테이블 먼저 삭제
-            userDao.delete(user);
+            userRepository.delete(user);
             return true;
         } else {
             return false;

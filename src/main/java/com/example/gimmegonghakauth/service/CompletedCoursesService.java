@@ -2,10 +2,10 @@ package com.example.gimmegonghakauth.service;
 
 import com.example.gimmegonghakauth.dao.CompletedCoursesDao;
 import com.example.gimmegonghakauth.dao.CoursesDao;
-import com.example.gimmegonghakauth.dao.UserDao;
+import com.example.gimmegonghakauth.user.infrastructure.UserRepository;
 import com.example.gimmegonghakauth.domain.CompletedCoursesDomain;
 import com.example.gimmegonghakauth.domain.CoursesDomain;
-import com.example.gimmegonghakauth.domain.UserDomain;
+import com.example.gimmegonghakauth.user.domain.UserDomain;
 import com.example.gimmegonghakauth.exception.FileException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,13 +29,13 @@ public class CompletedCoursesService {
 
     private final CompletedCoursesDao completedCoursesDao;
     private final CoursesDao coursesDao; // CoursesDao 변수 선언
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
     public CompletedCoursesService(CompletedCoursesDao completedCoursesDao, CoursesDao coursesDao,
-        UserDao userDao) {
+        UserRepository userRepository) {
         this.completedCoursesDao = completedCoursesDao;
         this.coursesDao = coursesDao; // 생성자를 통한 CoursesDao 초기화
-        this.userDao = userDao;
+        this.userRepository = userRepository;
     }
 
     final int FIRST_ROW = 4;
@@ -48,7 +48,7 @@ public class CompletedCoursesService {
 
         //DB에 해당 사용자의 기이수 과목 정보 확인
         Long studentId = Long.parseLong(userDetails.getUsername());
-        UserDomain user = userDao.findByStudentId(studentId).get();
+        UserDomain user = userRepository.findByStudentId(studentId).get();
         checkUser(user);
 
         ////엑셀 내용 검증
@@ -64,7 +64,7 @@ public class CompletedCoursesService {
     @Transactional(readOnly = true)
     public List<CompletedCoursesDomain> getExcelList(UserDetails userDetails) {
         Long studentId = Long.parseLong(userDetails.getUsername());
-        UserDomain userDomain = userDao.findByStudentId(studentId).get();
+        UserDomain userDomain = userRepository.findByStudentId(studentId).get();
 
         return completedCoursesDao.findByUserDomain(userDomain);
     }

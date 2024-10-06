@@ -1,6 +1,6 @@
 package com.example.gimmegonghakauth.mock;
 
-import com.example.gimmegonghakauth.service.port.UserEncoder;
+import com.example.gimmegonghakauth.user.service.port.UserEncoder;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

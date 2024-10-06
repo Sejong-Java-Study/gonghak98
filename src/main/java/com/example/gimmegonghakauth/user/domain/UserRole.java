@@ -1,4 +1,4 @@
-package com.example.gimmegonghakauth.domain;
+package com.example.gimmegonghakauth.user.domain;
 
 import lombok.Getter;
 import org.apache.catalina.User;
