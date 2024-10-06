@@ -19,7 +19,7 @@ public class FakeUserEncoder implements UserEncoder {
 
     @Override
     public boolean matches(String rawPassword, String encodedPassword) {
-        String password = rawPassword + PREFIX;
+        String password = PREFIX + rawPassword;
         if (password.equals(encodedPassword)) {
             return true;
         }

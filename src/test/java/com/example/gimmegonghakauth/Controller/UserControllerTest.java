@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.gimmegonghakauth.dao.MajorsDao;
+import com.example.gimmegonghakauth.mock.FakeUserEncoder;
 import com.example.gimmegonghakauth.user.infrastructure.UserRepository;
 import com.example.gimmegonghakauth.user.domain.UserDomain;
 import jakarta.transaction.Transactional;
@@ -43,7 +44,7 @@ public class UserControllerTest {
 
     @BeforeEach
     public void setUser() {
-        String encodedPassword = new BCryptPasswordEncoder().encode("qwer");
+        String encodedPassword = new FakeUserEncoder().encode("qwer");
 
         UserDomain user = UserDomain.builder().studentId(19111111L)
             .password(encodedPassword).email("test@sju.com")
