@@ -148,8 +148,12 @@ public class CompletedCoursesService {
     }
 
     private Long courseIdToLong(String courseIdAsString) {
-        if (courseIdAsString.charAt(0) == 'P') {
-            courseIdAsString = '0' + courseIdAsString.substring(1);
+        if (!Character.isDigit(courseIdAsString.charAt(0))){
+            if (courseIdAsString.charAt(0) == 'P'){
+                courseIdAsString = '0' + courseIdAsString.substring(1);
+            } else{
+                return 0L;
+            }
         }
         return Long.parseLong(courseIdAsString);
     }
