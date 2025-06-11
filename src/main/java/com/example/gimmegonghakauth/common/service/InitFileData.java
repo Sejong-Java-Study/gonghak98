@@ -1,25 +1,29 @@
 package com.example.gimmegonghakauth.common.service;
 
 import com.example.gimmegonghakauth.common.constant.CourseCategoryConst;
+import com.example.gimmegonghakauth.common.domain.CoursesDomain;
 import com.example.gimmegonghakauth.common.infrastructure.CoursesDao;
 import com.example.gimmegonghakauth.common.infrastructure.MajorsDao;
-import com.example.gimmegonghakauth.common.domain.CoursesDomain;
 import com.example.gimmegonghakauth.status.domain.GonghakCoursesDomain;
 import com.example.gimmegonghakauth.status.infrastructure.GonghakCoursesDao;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
 @Profile("!(prod || release)")
+@Slf4j
 public class InitFileData {
 
     private final MajorsDao majorsDao;
@@ -29,26 +33,38 @@ public class InitFileData {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void loadCoursesDataFromCSV() throws IOException {
-        String csvFilePath = "src/main/java/com/example/gimmegonghakauth/course.csv";
-        inputCoursesCsv(csvFilePath);
+        String courseCsvClasspath = "csv/course.csv";
+        String gonghakCourseCsvClasspath = "csv/gonghak_course.csv";
 
-        csvFilePath = "src/main/java/com/example/gimmegonghakauth/gonghak_course.csv";
-        inputGonghakCoursesCsv(csvFilePath);
+        try (InputStream courseInputStream = new ClassPathResource(
+            courseCsvClasspath).getInputStream()) {
+            inputCoursesCsv(courseInputStream);
+        } catch (IOException e) {
+            log.error("course.csv 로드 실패 : {}", e.getMessage());
+            throw new IllegalArgumentException("클래스 패스로부터 csv 파일 로딩 실패", e);
+        }
+
+        try (InputStream gonghakCourseInputStream = new ClassPathResource(
+            gonghakCourseCsvClasspath).getInputStream()) {
+            inputGonghakCoursesCsv(gonghakCourseInputStream);
+        } catch (IOException e) {
+            log.error("gonghak_course.csv 로드 실패 : {}", e.getMessage());
+            throw new IllegalArgumentException("클래스 패스로부터 csv 파일 로딩 실패", e);
+        }
     }
 
-    private void inputCoursesCsv(String csvFilePath) throws IOException {
+    private void inputCoursesCsv(InputStream inputStream) throws IOException {
         String line;
         String cvsSplitBy = ",";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
-
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);
                 try {
                     CoursesDomain course = mapToCoursesDomain(data);
                     coursesDao.save(course);
                 } catch (Exception e) {
-                    continue;
+                    log.error("error contents : {}", line);
                 }
             }
         } catch (IOException e) {
@@ -58,28 +74,25 @@ public class InitFileData {
 
     private CoursesDomain mapToCoursesDomain(String[] data) {
         return CoursesDomain.builder()
-                .courseId(Long.valueOf(data[0]))
-                .name(data[2])
-                .credit(Integer.parseInt(data[3]))
-                .build();
+            .courseId(Long.valueOf(data[0]))
+            .name(data[2])
+            .credit(Integer.parseInt(data[3]))
+            .build();
     }
 
-    private void inputGonghakCoursesCsv(String csvFilePath) {
+    private void inputGonghakCoursesCsv(InputStream inputStream) {
         String line;
         String cvsSplitBy = ",";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
-            br.readLine();
-
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            br.readLine(); // 첫 번째 헤더 라인 건너뛰기
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(cvsSplitBy);
                 try {
                     Optional<GonghakCoursesDomain> course = mapToGonghakCourses(data);
-                    if (course.isPresent()) {
-                        gonghakCoursesDao.save(course.get());
-                    }
+                    course.ifPresent(gonghakCoursesDao::save);
                 } catch (Exception e) {
-                    continue;
+                    log.error("error contents : {}", line);
                 }
             }
         } catch (IOException e) {
@@ -90,7 +103,8 @@ public class InitFileData {
     // raw file 입력 용
     private Optional<GonghakCoursesDomain> mapToGonghakCoursesDomain(String[] data) {
 
-        CoursesDomain courseDomain = coursesDao.findByNameIgnoreSpaces(data[6].replaceAll("\\s+", ""));
+        CoursesDomain courseDomain = coursesDao.findByNameIgnoreSpaces(
+            data[6].replaceAll("\\s+", ""));
         if (courseDomain == null) {
             return Optional.empty();
         }
@@ -113,13 +127,13 @@ public class InitFileData {
         }
 
         GonghakCoursesDomain gonghakCourse = GonghakCoursesDomain.builder()
-                .year(Integer.parseInt(data[0]))
-                .majorsDomain(majorsDao.findByMajor(data[2]))
-                .coursesDomain(courseDomain)
-                .courseCategory(CourseCategoryConst.valueOf(courseCategory))
-                .passCategory(data[5].substring(0, 2))
-                .designCredit(Double.parseDouble(data[8]))
-                .build();
+            .year(Integer.parseInt(data[0]))
+            .majorsDomain(majorsDao.findByMajor(data[2]))
+            .coursesDomain(courseDomain)
+            .courseCategory(CourseCategoryConst.valueOf(courseCategory))
+            .passCategory(data[5].substring(0, 2))
+            .designCredit(Double.parseDouble(data[8]))
+            .build();
 
         return Optional.of(gonghakCourse);
     }
@@ -127,13 +141,13 @@ public class InitFileData {
     // 실제 DB csv file 입력용
     private Optional<GonghakCoursesDomain> mapToGonghakCourses(String[] data) {
         GonghakCoursesDomain gonghakCourse = GonghakCoursesDomain.builder()
-                .year(Integer.parseInt(data[1]))
-                .majorsDomain(majorsDao.findById(Long.parseLong(data[4])).get())
-                .coursesDomain(coursesDao.findByCourseId(Long.parseLong(data[2])))
-                .courseCategory(CourseCategoryConst.valueOf(data[5]))
-                .passCategory(data[6])
-                .designCredit(Double.parseDouble(data[0]))
-                .build();
+            .year(Integer.parseInt(data[1]))
+            .majorsDomain(majorsDao.findById(Long.parseLong(data[4])).get())
+            .coursesDomain(coursesDao.findByCourseId(Long.parseLong(data[2])))
+            .courseCategory(CourseCategoryConst.valueOf(data[5]))
+            .passCategory(data[6])
+            .designCredit(Double.parseDouble(data[0]))
+            .build();
 
         return Optional.of(gonghakCourse);
     }
